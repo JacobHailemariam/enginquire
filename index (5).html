@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EngInQuire — First-Year Engineering, Decoded</title>
+<meta name="description" content="Pre-semester engineering review sessions and free study resources by high-GPA upper-years at Schulich, University of Calgary." />
+
+<!-- ============================================================
+     EngInQuire — single-file tabbed website
+     Built by: Jacob Hailemariam & Tom Kurian
+
+     QUICK EDIT MAP — search the file for these labels:
+        EDIT:NAV        nav labels
+        EDIT:HOME       homepage hero + highlights
+        EDIT:ABOUT      about / mission copy
+        EDIT:SESSIONS   session cards + prices
+        EDIT:RESOURCES  free resource cards
+        EDIT:TEAM       bios, credentials, photos
+        EDIT:CONTACT    email / socials / linktree
+        EDIT:BOOKING    booking + payment hookup
+        THEME           the :root block at the top of the style section
+
+     Photos go in the same folder as index.html.
+============================================================ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Plus Jakarta Sans = clean geometric headings; Manrope = body; JetBrains Mono = technical accents -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   THEME — edit these variables to re-skin the entire site
+============================================================ */
+:root {
+  /* ---- Deep brown base ---- */
+  --espresso:  #241409;   /* darkest — page base, deep sections */
+  --walnut:    #36210f;   /* dark brown panels */
+  --coffee:    #4a2e16;   /* medium-dark cards */
+  --bark:      #5e3a1d;   /* lighter brown */
+  --cocoa:     #7a4f2c;   /* warm mid brown */
+
+  /* ---- Accent colors ---- */
+  --gold:      #e0a93f;   /* primary accent — warm gold */
+  --gold-soft: #f0c976;   /* light gold */
+  --terra:     #cf6a3c;   /* terracotta — CTAs, energy */
+  --teal:      #4d8b7f;   /* muted teal — secondary accent */
+  --teal-soft: #6fa89c;
+
+  /* ---- Neutrals / cream ---- */
+  --cream:     #f3e7d0;
+  --parchment: #e8d7b8;
+  --sand:      #d4bd95;
+
+  /* ---- Text ---- */
+  --text-light: #f3e7d0;
+  --text-dim:   #c9b186;
+  --text-mute:  #9a865f;
+
+  /* Fonts */
+  --font-head: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'Manrope', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --max: 1180px;
+  --radius: 10px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior:smooth; }
+
+body {
+  font-family:var(--font-body);
+  background:var(--espresso);
+  color:var(--text-light);
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Texture: subtle radial warmth + grain so it's never flat/white */
+body::before{
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(1200px 800px at 15% -10%, rgba(224,169,63,0.10), transparent 60%),
+    radial-gradient(1000px 700px at 100% 10%, rgba(77,139,127,0.08), transparent 55%),
+    radial-gradient(900px 900px at 50% 120%, rgba(207,106,60,0.08), transparent 60%);
+}
+body::after{
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  opacity:0.35; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' seed='7'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+}
+
+.app { position:relative; z-index:2; }
+
+/* ============================================================
+   NAVIGATION (sticky, tab-style)
+============================================================ */
+header.nav{
+  position:sticky; top:0; z-index:100;
+  background:rgba(36,20,9,0.82);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(224,169,63,0.18);
+}
+.nav-inner{
+  max-width:var(--max); margin:0 auto;
+  padding:0.9rem 1.6rem;
+  display:flex; align-items:center; justify-content:space-between;
+  position:relative;
+}
+.brand{
+  font-family:var(--font-head);
+  font-weight:800; font-size:1.4rem;
+  color:var(--cream); letter-spacing:-0.02em;
+  cursor:pointer; user-select:none;
+  display:flex; align-items:center; gap:0.1rem;
+}
+.brand .in{ color:var(--gold); }
+.brand .spark{
+  width:8px; height:8px; border-radius:50%;
+  background:var(--terra); margin:0 3px;
+  box-shadow:0 0 10px var(--terra);
+}
+
+.tabs{ display:flex; gap:0.3rem; align-items:center; }
+.tab{
+  font-family:var(--font-head);
+  font-weight:600; font-size:0.9rem;
+  color:var(--text-dim);
+  background:none; border:none; cursor:pointer;
+  padding:0.55rem 0.95rem; border-radius:7px;
+  transition:all 0.18s; letter-spacing:0.01em;
+}
+.tab:hover{ color:var(--cream); background:rgba(224,169,63,0.10); }
+.tab.active{ color:var(--espresso); background:var(--gold); }
+
+.nav-cta{
+  font-family:var(--font-head); font-weight:700; font-size:0.88rem;
+  background:var(--terra); color:var(--cream);
+  border:none; cursor:pointer;
+  padding:0.6rem 1.15rem; border-radius:7px; margin-left:0.5rem;
+  transition:all 0.18s;
+}
+.nav-cta:hover{ background:var(--gold); color:var(--espresso); transform:translateY(-1px); }
+
+.menu-btn{ display:none; background:none; border:none; color:var(--cream); font-size:1.5rem; cursor:pointer; }
+
+/* ============================================================
+   PAGES
+============================================================ */
+.page{ display:none; animation:fade 0.45s ease; }
+.page.active{ display:block; }
+@keyframes fade{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+
+.wrap{ max-width:var(--max); margin:0 auto; padding:0 1.6rem; }
+
+.eyebrow{
+  font-family:var(--font-mono); font-size:0.74rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--gold); display:inline-flex; align-items:center; gap:0.55rem;
+}
+.eyebrow::before{ content:''; width:1.8rem; height:1px; background:var(--gold); }
+
+h1,h2,h3,h4{ font-family:var(--font-head); font-weight:700; line-height:1.12; letter-spacing:-0.02em; color:var(--cream); }
+h1{ font-size:clamp(2.4rem,5.5vw,4rem); font-weight:800; }
+h2{ font-size:clamp(1.8rem,3.5vw,2.6rem); }
+h3{ font-size:1.3rem; }
+h4{ font-size:1.05rem; }
+
+.lead{ font-size:1.12rem; color:var(--text-dim); line-height:1.7; }
+.section-pad{ padding:4.5rem 0; }
+
+/* ============================================================
+   HOME
+============================================================ */
+.hero{
+  padding:4.5rem 0 3.5rem;
+  display:grid; grid-template-columns:1.45fr 1fr; gap:3rem; align-items:center;
+}
+.hero h1{ margin:1.1rem 0 1.3rem; }
+.hero h1 .gold{ color:var(--gold); }
+.hero h1 .em{ font-style:italic; font-weight:500; color:var(--terra); }
+.hero .lead{ max-width:520px; margin-bottom:2rem; }
+
+.btn-row{ display:flex; gap:0.9rem; flex-wrap:wrap; }
+.btn{
+  font-family:var(--font-head); font-weight:700; font-size:0.92rem;
+  padding:0.85rem 1.5rem; border-radius:8px; border:none; cursor:pointer;
+  text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem;
+  transition:all 0.2s;
+}
+.btn-primary{ background:var(--gold); color:var(--espresso); }
+.btn-primary:hover{ background:var(--gold-soft); transform:translateY(-2px); box-shadow:0 8px 24px rgba(224,169,63,0.25); }
+.btn-ghost{ background:transparent; color:var(--cream); border:1.5px solid rgba(243,231,208,0.35); }
+.btn-ghost:hover{ border-color:var(--gold); color:var(--gold); }
+.btn-terra{ background:var(--terra); color:var(--cream); }
+.btn-terra:hover{ background:var(--gold); color:var(--espresso); transform:translateY(-2px); }
+.btn .arr{ transition:transform 0.2s; }
+.btn:hover .arr{ transform:translateX(4px); }
+
+/* Hero stat panel */
+.hero-panel{
+  background:linear-gradient(160deg, var(--walnut), var(--coffee));
+  border:1px solid rgba(224,169,63,0.22);
+  border-radius:16px; padding:1.8rem;
+  box-shadow:0 20px 50px rgba(0,0,0,0.35);
+}
+.hero-panel .panel-label{
+  font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.15em;
+  text-transform:uppercase; color:var(--gold); margin-bottom:1.2rem;
+}
+.stat-row{ display:flex; align-items:center; justify-content:space-between; padding:0.85rem 0; border-bottom:1px solid rgba(224,169,63,0.14); }
+.stat-row:last-child{ border-bottom:none; }
+.stat-name{ font-size:0.92rem; color:var(--text-dim); }
+.stat-name b{ color:var(--cream); font-weight:600; display:block; font-family:var(--font-head); }
+.stat-val{ font-family:var(--font-head); font-weight:800; font-size:1.9rem; }
+.stat-val.g{ color:var(--gold); }
+.stat-val.t{ color:var(--teal-soft); }
+.stat-val.r{ color:var(--terra); }
+
+/* Highlight strip */
+.highlights{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem;
+  margin-top:1rem;
+}
+.hl-card{
+  background:var(--walnut); border:1px solid rgba(224,169,63,0.15);
+  border-radius:var(--radius); padding:1.5rem;
+  transition:all 0.25s;
+}
+.hl-card:hover{ transform:translateY(-4px); border-color:var(--gold); }
+.hl-card .hl-ic{
+  width:42px; height:42px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.2rem; margin-bottom:1rem; font-family:var(--font-mono);
+}
+.hl-ic.gold{ background:rgba(224,169,63,0.16); color:var(--gold); }
+.hl-ic.teal{ background:rgba(77,139,127,0.18); color:var(--teal-soft); }
+.hl-ic.terra{ background:rgba(207,106,60,0.18); color:var(--terra); }
+.hl-card h4{ margin-bottom:0.45rem; }
+.hl-card p{ font-size:0.9rem; color:var(--text-dim); }
+
+/* generic two-tone band */
+.band{ background:var(--walnut); border-top:1px solid rgba(224,169,63,0.14); border-bottom:1px solid rgba(224,169,63,0.14); }
+
+/* Steps (how it works) */
+.steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:2.5rem; }
+.step{ position:relative; padding-top:1rem; }
+.step .num{ font-family:var(--font-head); font-weight:800; font-size:2.5rem; color:rgba(224,169,63,0.28); line-height:1; }
+.step h4{ margin:0.4rem 0 0.5rem; }
+.step p{ font-size:0.92rem; color:var(--text-dim); }
+
+/* ============================================================
+   ABOUT
+============================================================ */
+.about-grid{ display:grid; grid-template-columns:1fr 1.25fr; gap:3.5rem; align-items:start; }
+.quote-card{
+  background:linear-gradient(160deg,var(--coffee),var(--walnut));
+  border-left:3px solid var(--gold);
+  border-radius:12px; padding:2rem;
+}
+.quote-card .q{ font-family:var(--font-head); font-weight:600; font-size:1.35rem; line-height:1.4; color:var(--cream); margin-bottom:1.2rem; }
+.quote-card .a{ font-family:var(--font-mono); font-size:0.76rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); }
+.about-body p{ margin-bottom:1.1rem; color:var(--text-dim); font-size:1.04rem; line-height:1.75; }
+.about-body p strong{ color:var(--cream); font-weight:600; }
+
+.values{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; margin-top:1rem; }
+.value{ background:var(--walnut); border:1px solid rgba(224,169,63,0.15); border-radius:var(--radius); padding:1.4rem; }
+.value .v-tag{ font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:0.6rem; }
+.value.gold .v-tag{ color:var(--gold); }
+.value.teal .v-tag{ color:var(--teal-soft); }
+.value.terra .v-tag{ color:var(--terra); }
+.value h4{ margin-bottom:0.4rem; }
+.value p{ font-size:0.88rem; color:var(--text-dim); }
+
+/* ============================================================
+   SESSIONS
+============================================================ */
+.sess-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:2.5rem; }
+.sess{
+  background:var(--walnut); border:1px solid rgba(224,169,63,0.16);
+  border-radius:14px; padding:1.9rem; position:relative; overflow:hidden;
+  transition:all 0.28s; display:flex; flex-direction:column;
+}
+.sess::before{ content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--gold); transform:scaleX(0); transform-origin:left; transition:transform 0.3s; }
+.sess:hover::before{ transform:scaleX(1); }
+.sess:hover{ transform:translateY(-5px); border-color:var(--gold); box-shadow:0 16px 40px rgba(0,0,0,0.3); }
+.sess.feat{ background:linear-gradient(165deg,var(--coffee),var(--walnut)); border-color:var(--gold); }
+.sess.feat::before{ transform:scaleX(1); background:var(--terra); }
+
+.sess-tag{ align-self:flex-start; font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.3rem 0.7rem; border-radius:5px; margin-bottom:1.1rem; }
+.sess-tag.gold{ background:rgba(224,169,63,0.18); color:var(--gold); }
+.sess-tag.terra{ background:var(--terra); color:var(--cream); }
+.sess-tag.teal{ background:rgba(77,139,127,0.2); color:var(--teal-soft); }
+.sess h3{ margin-bottom:0.5rem; }
+.sess .desc{ font-size:0.9rem; color:var(--text-dim); margin-bottom:1.3rem; min-height:2.7rem; }
+
+.price{ display:flex; align-items:baseline; gap:0.4rem; padding-bottom:1.2rem; margin-bottom:1.2rem; border-bottom:1px dashed rgba(224,169,63,0.22); }
+.price .tbd{ font-family:var(--font-head); font-weight:700; font-size:1.5rem; color:var(--gold); }
+.price .note{ font-family:var(--font-mono); font-size:0.74rem; color:var(--text-mute); }
+
+.feats{ list-style:none; margin-bottom:1.6rem; flex-grow:1; }
+.feats li{ padding:0.38rem 0 0.38rem 1.4rem; position:relative; font-size:0.9rem; color:var(--text-light); }
+.feats li::before{ content:'→'; position:absolute; left:0; color:var(--gold); font-family:var(--font-mono); }
+
+/* pricing-undetermined banner */
+.notice{
+  margin-top:2.5rem; background:rgba(77,139,127,0.12);
+  border:1px solid rgba(77,139,127,0.3); border-radius:12px;
+  padding:1.3rem 1.6rem; display:flex; gap:1rem; align-items:center;
+}
+.notice .ic{ font-size:1.4rem; }
+.notice p{ font-size:0.92rem; color:var(--text-dim); }
+.notice b{ color:var(--teal-soft); }
+
+/* ============================================================
+   RESOURCES
+============================================================ */
+.res-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; margin-top:2.5rem; }
+.res{
+  background:var(--walnut); border:1px solid rgba(224,169,63,0.15);
+  border-radius:12px; padding:1.7rem; transition:all 0.25s; cursor:pointer;
+}
+.res:hover{ transform:translateY(-4px); border-color:var(--gold); background:var(--coffee); }
+.res .rn{ font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.08em; margin-bottom:0.8rem; }
+.res.gold .rn{ color:var(--gold); }
+.res.teal .rn{ color:var(--teal-soft); }
+.res.terra .rn{ color:var(--terra); }
+.res h4{ margin-bottom:0.5rem; }
+.res p{ font-size:0.88rem; color:var(--text-dim); margin-bottom:1rem; line-height:1.6; }
+.res .status{ font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.05em; color:var(--gold); }
+
+/* ============================================================
+   TEAM
+============================================================ */
+.team-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:2.5rem; }
+.member{
+  background:linear-gradient(165deg,var(--walnut),var(--coffee));
+  border:1px solid rgba(224,169,63,0.16); border-radius:14px;
+  padding:1.8rem; display:grid; grid-template-columns:130px 1fr; gap:1.5rem; align-items:start;
+}
+.photo{
+  width:130px; height:165px; border-radius:10px;
+  background:var(--espresso); border:1.5px dashed rgba(224,169,63,0.4);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  font-family:var(--font-mono); font-size:0.66rem; color:var(--gold);
+  letter-spacing:0.06em; text-align:center; gap:0.4rem; overflow:hidden;
+}
+.photo .pic-ic{ font-size:1.5rem; opacity:0.55; }
+.member h3{ margin-bottom:0.15rem; }
+.role{ font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold); margin-bottom:0.9rem; }
+.role.teal{ color:var(--teal-soft); }
+.bio{ font-size:0.9rem; color:var(--text-dim); line-height:1.62; margin-bottom:1rem; }
+.creds{ display:flex; flex-wrap:wrap; gap:0.45rem; }
+.cred{ font-family:var(--font-mono); font-size:0.68rem; background:var(--espresso); border:1px solid rgba(224,169,63,0.22); padding:0.28rem 0.6rem; border-radius:5px; color:var(--text-dim); }
+.cred.g{ border-color:rgba(224,169,63,0.45); color:var(--gold); }
+
+/* ============================================================
+   CONTACT
+============================================================ */
+.contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start; }
+.contact-methods{ display:flex; flex-direction:column; gap:1rem; }
+.cmethod{
+  display:flex; align-items:center; gap:1rem; padding:1.1rem 1.3rem;
+  background:var(--walnut); border:1px solid rgba(224,169,63,0.16);
+  border-radius:10px; text-decoration:none; color:var(--text-light); transition:all 0.2s;
+}
+.cmethod:hover{ border-color:var(--gold); transform:translateX(4px); }
+.cmethod .ci{ width:40px; height:40px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-weight:600; flex-shrink:0; }
+.cmethod .ci.gold{ background:rgba(224,169,63,0.18); color:var(--gold); }
+.cmethod .ci.teal{ background:rgba(77,139,127,0.2); color:var(--teal-soft); }
+.cmethod .ci.terra{ background:rgba(207,106,60,0.2); color:var(--terra); }
+.cmethod .cl{ font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-mute); }
+.cmethod .cv{ font-size:0.98rem; color:var(--cream); font-weight:500; }
+
+/* ============================================================
+   BOOKING MODAL
+============================================================ */
+.modal-overlay{
+  position:fixed; inset:0; z-index:1000; display:none;
+  background:rgba(20,11,4,0.75); backdrop-filter:blur(6px);
+  align-items:center; justify-content:center; padding:1.5rem;
+}
+.modal-overlay.open{ display:flex; animation:fade 0.25s; }
+.modal{
+  background:linear-gradient(165deg,var(--coffee),var(--walnut));
+  border:1px solid rgba(224,169,63,0.3); border-radius:16px;
+  max-width:460px; width:100%; padding:2.2rem; position:relative;
+  box-shadow:0 30px 70px rgba(0,0,0,0.5);
+}
+.modal .close{ position:absolute; top:1rem; right:1.2rem; background:none; border:none; color:var(--text-dim); font-size:1.6rem; cursor:pointer; line-height:1; }
+.modal .close:hover{ color:var(--gold); }
+.modal h3{ margin-bottom:0.4rem; }
+.modal .msub{ font-size:0.9rem; color:var(--text-dim); margin-bottom:1.6rem; }
+.field{ margin-bottom:1.1rem; }
+.field label{ display:block; font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold); margin-bottom:0.4rem; }
+.field input, .field select{
+  width:100%; padding:0.75rem 0.9rem; border-radius:8px;
+  background:var(--espresso); border:1px solid rgba(224,169,63,0.25);
+  color:var(--cream); font-family:var(--font-body); font-size:0.95rem;
+}
+.field input:focus, .field select:focus{ outline:none; border-color:var(--gold); }
+.modal .btn{ width:100%; justify-content:center; margin-top:0.5rem; }
+.modal .fineprint{ font-size:0.78rem; color:var(--text-mute); margin-top:1rem; text-align:center; line-height:1.5; }
+
+/* ============================================================
+   FOOTER
+============================================================ */
+footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); padding:2.8rem 1.6rem 2rem; text-align:center; margin-top:3rem; }
+.foot-brand{ font-family:var(--font-head); font-weight:800; font-size:1.3rem; color:var(--cream); margin-bottom:0.4rem; }
+.foot-brand .in{ color:var(--gold); }
+.foot-tag{ font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-mute); }
+.foot-div{ width:50px; height:1px; background:var(--gold); margin:1.4rem auto; opacity:0.5; }
+.foot-meta{ font-size:0.82rem; color:var(--text-mute); }
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width:880px){
+  .tabs{ position:absolute; top:100%; left:0; right:0; flex-direction:column; align-items:stretch; background:var(--walnut); padding:1rem; gap:0.3rem; display:none; border-bottom:1px solid rgba(224,169,63,0.2); }
+  .tabs.open{ display:flex; }
+  .tab{ text-align:left; }
+  .nav-cta{ margin-left:0; }
+  .menu-btn{ display:block; }
+  .hero{ grid-template-columns:1fr; }
+  .highlights, .steps, .values, .sess-grid, .res-grid{ grid-template-columns:1fr; }
+  .about-grid, .team-grid, .contact-grid{ grid-template-columns:1fr; }
+  .member{ grid-template-columns:1fr; }
+  .photo{ width:130px; }
+}
+@media (prefers-reduced-motion:reduce){ *{ animation-duration:0.01ms!important; transition-duration:0.01ms!important; } }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand" onclick="go('home')">
+      Eng<span class="spark"></span><span class="in">In</span>Quire
+    </div>
+    <button class="menu-btn" onclick="document.querySelector('.tabs').classList.toggle('open')">☰</button>
+    <!-- EDIT:NAV — tab labels (data-page must match a .page id) -->
+    <nav class="tabs">
+      <button class="tab active" data-page="home"      onclick="go('home')">Home</button>
+      <button class="tab"        data-page="about"     onclick="go('about')">About</button>
+      <button class="tab"        data-page="sessions"  onclick="go('sessions')">Sessions</button>
+      <button class="tab"        data-page="resources" onclick="go('resources')">Resources</button>
+      <button class="tab"        data-page="team"      onclick="go('team')">The Team</button>
+      <button class="tab"        data-page="contact"   onclick="go('contact')">Contact</button>
+      <button class="nav-cta" onclick="openBooking('')">Book a Session</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ===================== HOME ===================== -->
+<section class="page active" id="home">
+  <div class="wrap hero">
+    <!-- EDIT:HOME -->
+    <div>
+      <span class="eyebrow">Schulich · UCalgary · Class of 2030</span>
+      <h1>First-year engineering, <span class="gold">decoded</span> by people who <span class="em">just did it</span>.</h1>
+      <p class="lead">EngInQuire runs pre-semester review sessions and free study resources for incoming Schulich engineering students — built by two upper-years who finished first year with 3.9+ GPAs and remember exactly what tripped people up.</p>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="openBooking('')">Book a session <span class="arr">→</span></button>
+        <button class="btn btn-ghost" onclick="go('resources')">Free resources</button>
+      </div>
+    </div>
+    <div class="hero-panel">
+      <div class="panel-label">// the people teaching you</div>
+      <div class="stat-row">
+        <span class="stat-name">Jacob<b>Electrical + Computer Eng.</b></span>
+        <span class="stat-val g">3.97</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Tom<b>Mechanical Eng. + Energy &amp; Env.</b></span>
+        <span class="stat-val t">3.94</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-name">Fresh experience<b>Not faded memories</b></span>
+        <span class="stat-val r">1 yr</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="band section-pad">
+    <div class="wrap">
+      <span class="eyebrow">What we do</span>
+      <div class="highlights" style="margin-top:1.5rem;">
+        <div class="hl-card">
+          <div class="hl-ic gold">◎</div>
+          <h4>Pre-semester sessions</h4>
+          <p>Focused in-person reviews that compress the first six weeks of confusion into one afternoon — before classes even start.</p>
+        </div>
+        <div class="hl-card">
+          <div class="hl-ic teal">❋</div>
+          <h4>Free resources</h4>
+          <p>Guides, schedules, and weekly tips published all summer — most of what helped us wasn't behind a paywall.</p>
+        </div>
+        <div class="hl-card">
+          <div class="hl-ic terra">↗</div>
+          <h4>Real mentorship</h4>
+          <p>Honest advice from students one year ahead, not a faceless service. Replies come from actual people.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap section-pad">
+    <span class="eyebrow">How it works</span>
+    <div class="steps">
+      <div class="step">
+        <div class="num">01</div>
+        <h4>Reserve your spot</h4>
+        <p>Pick a session date and join the list. We keep groups small (~15) so every question gets answered.</p>
+      </div>
+      <div class="step">
+        <div class="num">02</div>
+        <h4>Show up &amp; learn</h4>
+        <p>Three focused hours on the courses and habits that decide first-semester GPA, plus a printed cheat-sheet to take home.</p>
+      </div>
+      <div class="step">
+        <div class="num">03</div>
+        <h4>Start ahead</h4>
+        <p>Walk into September already knowing the unwritten rules — and keep getting our free resources all year.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section class="page" id="about">
+  <div class="wrap section-pad">
+    <span class="eyebrow">About EngInQuire</span>
+    <h2 style="margin:0.8rem 0 2.5rem; max-width:760px;">We're not a tutoring company. We're the upper-years you wish you'd known the summer before first year.</h2>
+    <!-- EDIT:ABOUT -->
+    <div class="about-grid">
+      <div class="quote-card">
+        <p class="q">"First semester isn't hard because the material is impossible. It's hard because nobody tells you how it actually works."</p>
+        <p class="a">— Jacob &amp; Tom, Founders</p>
+      </div>
+      <div class="about-body">
+        <p>The grading curves, the unspoken study habits, the gap between high-school studying and engineering studying, the courses that quietly decide your GPA before midterms even hit — <strong>that's the stuff that catches people off guard.</strong></p>
+        <p>We finished first year at Schulich with 3.97 and 3.94 GPAs while doing engineering research, coaching, and building real projects. We remember exactly what we wish someone had sat us down and explained in August.</p>
+        <p><strong>EngInQuire is that conversation, structured</strong> — pre-semester review sessions for students who want to start ahead, plus free resources that make the rest of the year less of a guessing game.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:3.5rem;">
+      <span class="eyebrow">What we stand for</span>
+      <div class="values">
+        <div class="value gold">
+          <div class="v-tag">// no fluff</div>
+          <h4>Straight talk</h4>
+          <p>Real schedules, real mistakes, real advice. Nothing aspirational that doesn't actually work.</p>
+        </div>
+        <div class="value teal">
+          <div class="v-tag">// accessible</div>
+          <h4>Free where it counts</h4>
+          <p>The core knowledge stays free. Sessions are for those who want structured, in-person depth.</p>
+        </div>
+        <div class="value terra">
+          <div class="v-tag">// fresh</div>
+          <h4>One year ahead</h4>
+          <p>We just lived it. The memory is fresh, the courses are current, the advice is relevant.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SESSIONS ===================== -->
+<section class="page" id="sessions">
+  <div class="wrap section-pad">
+    <span class="eyebrow">Pre-semester sessions</span>
+    <h2 style="margin:0.8rem 0 0.6rem;">Start the year already ahead.</h2>
+    <p class="lead" style="max-width:680px;">In-person sessions that turn the first six weeks of confusion into one focused afternoon. Pricing is being finalized — reserve a spot now and you'll be first to know.</p>
+
+    <!-- EDIT:SESSIONS — update dates, prices, features. Copy a .sess block to add another. -->
+    <div class="sess-grid">
+      <div class="sess">
+        <span class="sess-tag gold">Aug 18 – 22</span>
+        <h3>Session One</h3>
+        <p class="desc">For local and early-arrival students. Smaller cohort, more one-on-one time.</p>
+        <div class="price"><span class="tbd">Price TBD</span><span class="note">/ announced soon</span></div>
+        <ul class="feats">
+          <li>3-hour in-person session</li>
+          <li>Two anchor first-semester courses</li>
+          <li>Printed cheat-sheet handout</li>
+          <li>Q&amp;A with two 3.9+ students</li>
+          <li>Small group · ~15 max</li>
+        </ul>
+        <button class="btn btn-ghost" onclick="openBooking('Session One — Aug 18–22')">Reserve spot <span class="arr">→</span></button>
+      </div>
+
+      <div class="sess feat">
+        <span class="sess-tag terra">Aug 26 – 29</span>
+        <h3>Session Two</h3>
+        <p class="desc">For international students and anyone who missed Session 1. Same content, refined.</p>
+        <div class="price"><span class="tbd">Price TBD</span><span class="note">/ announced soon</span></div>
+        <ul class="feats">
+          <li>3-hour in-person session</li>
+          <li>Two anchor first-semester courses</li>
+          <li>Printed cheat-sheet handout</li>
+          <li>Refined from Session 1 feedback</li>
+          <li>Small group · ~15 max</li>
+        </ul>
+        <button class="btn btn-terra" onclick="openBooking('Session Two — Aug 26–29')">Reserve spot <span class="arr">→</span></button>
+      </div>
+
+      <div class="sess">
+        <span class="sess-tag teal">Coming soon</span>
+        <h3>1-on-1 Mentorship</h3>
+        <p class="desc">Monthly check-ins through first semester. Limited spots, opens after the group sessions.</p>
+        <div class="price"><span class="tbd">Price TBD</span><span class="note">/ later in 2026</span></div>
+        <ul class="feats">
+          <li>1 hr / month video call</li>
+          <li>Course-specific guidance</li>
+          <li>Async question access</li>
+          <li>Study-system review</li>
+        </ul>
+        <button class="btn btn-ghost" onclick="openBooking('1-on-1 Mentorship — interest')">Express interest <span class="arr">→</span></button>
+      </div>
+    </div>
+
+    <div class="notice">
+      <span class="ic">🛈</span>
+      <p><b>Pricing not set yet.</b> We're still finalizing what's fair for students. Reserve a spot with no commitment — you'll get the price and payment details by email before anything is due.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RESOURCES ===================== -->
+<section class="page" id="resources">
+  <div class="wrap section-pad">
+    <span class="eyebrow">Free resources</span>
+    <h2 style="margin:0.8rem 0 0.6rem;">What you get without paying a cent.</h2>
+    <p class="lead" style="max-width:680px;">Most of what helped us hit 3.9+ GPAs wasn't behind a paywall — it was just hard to find. We're publishing it here, free, throughout the summer.</p>
+
+    <!-- EDIT:RESOURCES — flip status to "Available now" + wrap card in <a href="..."> when published -->
+    <div class="res-grid">
+      <div class="res gold">
+        <div class="rn">01 / Guide</div>
+        <h4>First-Semester Survival PDF</h4>
+        <p>A short guide to the courses, the unwritten rules, and the habits we wish we'd had on day one.</p>
+        <div class="status">→ Coming July 2026</div>
+      </div>
+      <div class="res teal">
+        <div class="rn">02 / Reels</div>
+        <h4>Weekly Tips on Instagram</h4>
+        <p>Short videos covering one specific tactic or course concept, every single week.</p>
+        <div class="status">→ Live @enginquire</div>
+      </div>
+      <div class="res terra">
+        <div class="rn">03 / Schedule</div>
+        <h4>Sample 4.0 Week</h4>
+        <p>How we actually structured our weeks — study, gym, research, sleep. Real, not aspirational.</p>
+        <div class="status">→ Coming August 2026</div>
+      </div>
+      <!-- replaced "note-taking templates" with a simpler FAQ resource -->
+      <div class="res gold">
+        <div class="rn">04 / FAQ</div>
+        <h4>Incoming Student FAQ</h4>
+        <p>Straight answers to the questions every first-year asks — laptops, textbooks, course load, and more.</p>
+        <div class="status">→ Coming July 2026</div>
+      </div>
+      <div class="res teal">
+        <div class="rn">05 / Community</div>
+        <h4>Q&amp;A in our DMs</h4>
+        <p>Got a question right now? Message us on Instagram — we answer incoming students for free.</p>
+        <div class="status">→ Always open</div>
+      </div>
+      <div class="res terra">
+        <div class="rn">06 / List</div>
+        <h4>Course Difficulty Tier List</h4>
+        <p>An honest ranking of first-year courses by how much they'll actually demand from you.</p>
+        <div class="status">→ Coming August 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TEAM ===================== -->
+<section class="page" id="team">
+  <div class="wrap section-pad">
+    <span class="eyebrow">The Team</span>
+    <h2 style="margin:0.8rem 0 0.4rem;">Two students, two paths, one philosophy.</h2>
+    <p class="lead" style="max-width:640px;">Both finished first year near the top of the class — here's who's actually teaching you.</p>
+
+    <!-- EDIT:TEAM — to add a photo, replace the .photo <div> with:
+         <img src="jacob.jpg" alt="Jacob" class="photo" style="object-fit:cover;"> -->
+    <div class="team-grid">
+      <div class="member">
+        <div class="photo"><span class="pic-ic">⊹</span>PHOTO<br>130 × 165</div>
+        <div>
+          <h3>Jacob Hailemariam</h3>
+          <div class="role">Co-Founder · Electrical Eng. + Computer Eng. Minor</div>
+          <p class="bio">A machine-learning researcher heading into the tech field. Jacob is an NSERC-funded undergraduate researcher building deep-learning models for LiDAR–hyperspectral sensor fusion, with a first-author paper in the works. Outside research he designs PCBs and writes embedded firmware on an electric-motorsport team. He's aiming squarely at the ML and tech industry — and finished first year at 3.97 while building things he actually cared about, proof that depth and grades aren't a trade-off.</p>
+          <div class="creds">
+            <span class="cred g">GPA 3.97</span>
+            <span class="cred">NSERC Researcher</span>
+            <span class="cred">Machine Learning</span>
+            <span class="cred">PyTorch</span>
+            <span class="cred">PCB / Altium</span>
+            <span class="cred">Schulich Dean's Scholar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="member">
+        <div class="photo"><span class="pic-ic">⊹</span>PHOTO<br>130 × 165</div>
+        <div>
+          <h3>Tom Kurian</h3>
+          <div class="role teal">Co-Founder · Mechanical Eng. + Energy &amp; Environment Minor</div>
+          <p class="bio">High-school valedictorian with a 99% IB average in math, physics, and chemistry. Tom is an asphalt-materials lab technician at the University of Calgary, running sample prep, controlled testing, and data collection alongside graduate researchers and faculty. He also coaches kids' sports through Sportball and tutored math, chemistry, and physics through high school — so explaining hard things simply is second nature.</p>
+          <div class="creds">
+            <span class="cred g">GPA 3.94</span>
+            <span class="cred">Asphalt Lab Technician</span>
+            <span class="cred">Schulich Dean's Scholar</span>
+            <span class="cred">Valedictorian</span>
+            <span class="cred">IB 99%</span>
+            <span class="cred">Sports Coach</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section class="page" id="contact">
+  <div class="wrap section-pad">
+    <span class="eyebrow">Get in touch</span>
+    <h2 style="margin:0.8rem 0 2.5rem;">Have a question? Want to be first on the list?</h2>
+    <!-- EDIT:CONTACT -->
+    <div class="contact-grid">
+      <div>
+        <p class="lead" style="margin-bottom:1.6rem;">We're two students, not a company — replies come from real people, usually within a day. Reach out about sessions, free resources, or anything about engineering at Schulich.</p>
+        <button class="btn btn-primary" onclick="openBooking('')">Book a session <span class="arr">→</span></button>
+      </div>
+      <div class="contact-methods">
+        <a href="mailto:enginquire7@gmail.com" class="cmethod">
+          <span class="ci gold">@</span>
+          <span><span class="cl">Email</span><br><span class="cv">enginquire7@gmail.com</span></span>
+        </a>
+        <!-- EDIT: replace # with your real Instagram URL -->
+        <a href="#" target="_blank" rel="noopener" class="cmethod">
+          <span class="ci terra">IG</span>
+          <span><span class="cl">Instagram</span><br><span class="cv">@enginquire</span></span>
+        </a>
+        <!-- EDIT: replace # with your Linktree URL -->
+        <a href="#" target="_blank" rel="noopener" class="cmethod">
+          <span class="ci teal">⌘</span>
+          <span><span class="cl">Linktree</span><br><span class="cv">all our links →</span></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="foot-brand">Eng<span class="in">In</span>Quire</div>
+  <div class="foot-tag">First-year engineering, decoded.</div>
+  <div class="foot-div"></div>
+  <div class="foot-meta">Calgary, AB · Built by Jacob &amp; Tom · © 2026</div>
+</footer>
+
+</div><!-- /.app -->
+
+<!-- ===================== BOOKING MODAL ===================== -->
+<!-- EDIT:BOOKING — see the big comment in the <script> for how to
+     connect Stripe / a Google Form / e-transfer when you go live. -->
+<div class="modal-overlay" id="bookingModal" onclick="if(event.target===this)closeBooking()">
+  <div class="modal">
+    <button class="close" onclick="closeBooking()">×</button>
+    <h3>Reserve your spot</h3>
+    <p class="msub">No payment yet — pricing is being finalized. We'll email you the details before anything is due.</p>
+
+    <div class="field">
+      <label>Your name</label>
+      <input type="text" id="bk-name" placeholder="First and last name" />
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="bk-email" placeholder="you@example.com" />
+    </div>
+    <div class="field">
+      <label>Which session?</label>
+      <select id="bk-session">
+        <option>Session One — Aug 18–22</option>
+        <option>Session Two — Aug 26–29</option>
+        <option>1-on-1 Mentorship — interest</option>
+        <option>Not sure yet — just keep me posted</option>
+      </select>
+    </div>
+
+    <button class="btn btn-primary" onclick="submitBooking()">Send reservation <span class="arr">→</span></button>
+    <p class="fineprint">This opens your email app with the details pre-filled, sent to enginquire7@gmail.com. Once pricing is live, this button will take you straight to secure payment.</p>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// TAB NAVIGATION — switches visible .page, updates active tab
+// ============================================================
+function go(page){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(page).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.page === page);
+  });
+  document.querySelector('.tabs').classList.remove('open'); // close mobile menu
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+// ============================================================
+// BOOKING MODAL
+// ============================================================
+function openBooking(presetSession){
+  const modal = document.getElementById('bookingModal');
+  if(presetSession){
+    const sel = document.getElementById('bk-session');
+    for(const opt of sel.options){ if(opt.value === presetSession){ opt.selected = true; break; } }
+  }
+  modal.classList.add('open');
+}
+function closeBooking(){ document.getElementById('bookingModal').classList.remove('open'); }
+
+// ------------------------------------------------------------
+// HOW TO TURN THIS INTO A REAL PAYMENT / SIGNUP SYSTEM
+// ------------------------------------------------------------
+// Right now submitBooking() opens the user's email app (mailto)
+// with their details pre-filled. That's the zero-setup option —
+// works today, no account needed. When you're ready to go live
+// with real payments, pick ONE of these and follow the note:
+//
+//  OPTION A — STRIPE PAYMENT LINK (recommended once price is set)
+//    1. Make a free Stripe account -> Payment Links -> create a
+//       link for each session at your chosen price.
+//    2. Replace the body of submitBooking() with:
+//         window.location.href = "https://buy.stripe.com/YOUR_LINK";
+//       (or map each session to its own link via a small if/else.)
+//    Stripe handles checkout, receipts, and payouts to your bank.
+//
+//  OPTION B — GOOGLE FORM (free, no payments, collect signups)
+//    1. Build a Google Form with name/email/session fields.
+//    2. Replace submitBooking() body with:
+//         window.open("https://forms.gle/YOUR_FORM", "_blank");
+//    Responses land in a Google Sheet you both can see.
+//
+//  OPTION C — E-TRANSFER (simplest for money)
+//    Keep the mailto below; in your reply email, send Interac
+//    e-transfer instructions to enginquire7@gmail.com.
+//
+//  When you add a backend later (the "app phase"), submitBooking()
+//  becomes a fetch() POST to your own API instead.
+// ------------------------------------------------------------
+function submitBooking(){
+  const name = document.getElementById('bk-name').value.trim();
+  const email = document.getElementById('bk-email').value.trim();
+  const session = document.getElementById('bk-session').value;
+
+  if(!name || !email){
+    alert('Please add your name and email so we can reach you.');
+    return;
+  }
+
+  // --- Current behaviour: open email client pre-filled (mailto) ---
+  const subject = encodeURIComponent('Session reservation — ' + session);
+  const body = encodeURIComponent(
+    'Hi EngInQuire,\n\n' +
+    'I\'d like to reserve a spot.\n\n' +
+    'Name: ' + name + '\n' +
+    'Email: ' + email + '\n' +
+    'Session: ' + session + '\n\n' +
+    'Please send me the price and payment details. Thanks!'
+  );
+  window.location.href = 'mailto:enginquire7@gmail.com?subject=' + subject + '&body=' + body;
+  closeBooking();
+}
+
+// Close modal on Escape
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBooking(); });
+</script>
+</body>
+</html>
