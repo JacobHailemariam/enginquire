@@ -434,6 +434,105 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   .photo{ width:130px; }
 }
 @media (prefers-reduced-motion:reduce){ *{ animation-duration:0.01ms!important; transition-duration:0.01ms!important; } }
+
+/* ===== QUIZ STYLES ===== */
+
+/* ---- Quiz: mode picker ---- */
+.qz-picker{ display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:2.5rem; }
+.qz-mode{
+  background:var(--walnut); border:1px solid rgba(224,169,63,0.16);
+  border-radius:14px; padding:1.9rem; cursor:pointer; position:relative; overflow:hidden;
+  transition:all 0.28s ease;
+}
+.qz-mode::before{ content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--gold); transform:scaleX(0); transform-origin:left; transition:transform 0.3s; }
+.qz-mode:hover::before{ transform:scaleX(1); }
+.qz-mode:hover{ transform:translateY(-5px); border-color:var(--gold); box-shadow:0 16px 40px rgba(0,0,0,0.3); }
+.qz-mode.feat{ background:linear-gradient(165deg,var(--coffee),var(--walnut)); border-color:var(--gold); }
+.qz-mode.feat::before{ transform:scaleX(1); background:var(--terra); }
+.qz-mode-tag{ display:inline-block; font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:1rem; }
+.qz-mode-tag.gold{ color:var(--gold); }
+.qz-mode-tag.terra{ color:var(--terra); }
+.qz-mode h3{ margin-bottom:0.6rem; }
+.qz-mode p{ font-size:0.92rem; color:var(--text-dim); margin-bottom:1.2rem; line-height:1.6; }
+.qz-mode-meta{ font-family:var(--font-mono); font-size:0.74rem; color:var(--text-mute); margin-bottom:1.3rem; }
+.qz-mode-go{ font-family:var(--font-head); font-weight:700; font-size:0.92rem; color:var(--gold); }
+
+/* ---- Quiz: runner ---- */
+.qz-runner{ margin-top:2.5rem; max-width:760px; }
+.qz-bar-row{ display:flex; align-items:center; gap:1rem; margin-bottom:1.2rem; }
+.qz-exit{ background:none; border:none; color:var(--text-dim); font-family:var(--font-head); font-weight:600; font-size:0.9rem; cursor:pointer; padding:0.4rem 0; transition:color 0.2s; white-space:nowrap; }
+.qz-exit:hover{ color:var(--gold); }
+.qz-progress{ flex:1; height:8px; background:var(--walnut); border-radius:99px; overflow:hidden; border:1px solid rgba(224,169,63,0.18); }
+.qz-progress-fill{ height:100%; width:5%; background:linear-gradient(90deg,var(--terra),var(--gold)); border-radius:99px; transition:width 0.4s ease; }
+.qz-count{ font-family:var(--font-mono); font-size:0.85rem; color:var(--text-dim); white-space:nowrap; }
+.qz-count #qz-num{ color:var(--gold); font-weight:500; }
+
+.qz-score-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+.qz-mode-label{ font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-mute); }
+.qz-streak{ font-family:var(--font-mono); font-size:0.8rem; color:var(--gold); }
+
+.qz-card{
+  background:linear-gradient(165deg,var(--walnut),var(--coffee));
+  border:1px solid rgba(224,169,63,0.2); border-radius:16px;
+  padding:2.2rem; box-shadow:0 14px 40px rgba(0,0,0,0.25);
+}
+.qz-q{ font-family:var(--font-head); font-weight:600; font-size:1.45rem; color:var(--cream); line-height:1.4; margin-bottom:1.8rem; }
+.qz-q sub, .qz-q sup{ font-size:0.7em; }
+
+.qz-options{ display:grid; gap:0.8rem; }
+.qz-opt{
+  text-align:left; background:var(--espresso); border:1.5px solid rgba(224,169,63,0.22);
+  color:var(--cream); font-family:var(--font-body); font-size:1.05rem;
+  padding:1rem 1.2rem; border-radius:10px; cursor:pointer; transition:all 0.18s ease;
+  display:flex; align-items:center; gap:0.9rem; position:relative;
+}
+.qz-opt:hover:not(.locked){ border-color:var(--gold); transform:translateX(3px); }
+.qz-opt .qz-letter{
+  width:28px; height:28px; flex-shrink:0; border-radius:7px;
+  background:rgba(224,169,63,0.14); color:var(--gold);
+  font-family:var(--font-mono); font-size:0.85rem; font-weight:500;
+  display:flex; align-items:center; justify-content:center;
+}
+.qz-opt sub, .qz-opt sup{ font-size:0.7em; }
+
+/* correct / wrong states */
+.qz-opt.correct{ border-color:#5fae6e; background:rgba(95,174,110,0.16); animation:qzPopGreen 0.4s ease; }
+.qz-opt.correct .qz-letter{ background:#5fae6e; color:var(--espresso); }
+.qz-opt.wrong{ border-color:#cf4d3c; background:rgba(207,77,60,0.16); animation:qzShake 0.4s ease; }
+.qz-opt.wrong .qz-letter{ background:#cf4d3c; color:var(--cream); }
+.qz-opt.locked{ cursor:default; opacity:0.55; }
+.qz-opt.locked.correct, .qz-opt.locked.wrong{ opacity:1; }
+
+@keyframes qzPopGreen{ 0%{ transform:scale(1);} 40%{ transform:scale(1.03);} 100%{ transform:scale(1);} }
+@keyframes qzShake{ 0%,100%{ transform:translateX(0);} 25%{ transform:translateX(-6px);} 75%{ transform:translateX(6px);} }
+
+.qz-feedback{ margin-top:1.4rem; font-size:0.95rem; line-height:1.6; min-height:1.2rem; }
+.qz-feedback.show-wrong{ color:#e8917f; }
+.qz-feedback.show-right{ color:#8fce9b; }
+.qz-feedback .qz-fb-label{ font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.08em; text-transform:uppercase; display:block; margin-bottom:0.3rem; opacity:0.9; }
+
+/* ---- Quiz: results ---- */
+.qz-results{ margin-top:2.5rem; max-width:620px; }
+.qz-results-card{
+  background:linear-gradient(165deg,var(--coffee),var(--walnut));
+  border:1px solid rgba(224,169,63,0.25); border-radius:16px; padding:2.6rem;
+  text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.3);
+}
+.qz-results-tag{ font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:0.8rem; }
+.qz-results-card h2{ font-size:3rem; margin-bottom:0.6rem; }
+.qz-results-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin:2rem 0; }
+.qz-stat{ background:var(--espresso); border:1px solid rgba(224,169,63,0.16); border-radius:10px; padding:1.2rem 0.8rem; }
+.qz-stat-num{ font-family:var(--font-head); font-weight:800; font-size:1.8rem; color:var(--gold); line-height:1; margin-bottom:0.4rem; }
+.qz-stat-lbl{ font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-mute); }
+.qz-results-btns{ display:flex; gap:0.9rem; justify-content:center; flex-wrap:wrap; }
+
+@media (max-width:880px){
+  .qz-picker{ grid-template-columns:1fr; }
+  .qz-q{ font-size:1.25rem; }
+  .qz-card{ padding:1.6rem; }
+  .qz-results-card{ padding:1.8rem; }
+}
+
 </style>
 </head>
 <body>
@@ -452,6 +551,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       <button class="tab"        data-page="about"     onclick="go('about')">About</button>
       <button class="tab"        data-page="sessions"  onclick="go('sessions')">Sessions</button>
       <button class="tab"        data-page="resources" onclick="go('resources')">Resources</button>
+      <button class="tab"        data-page="review"    onclick="go('review')">Review Quiz</button>
       <button class="tab"        data-page="team"      onclick="go('team')">The Team</button>
       <button class="tab"        data-page="contact"   onclick="go('contact')">Contact</button>
       <button class="nav-cta" onclick="openBooking('')">Book a Session</button>
@@ -704,11 +804,11 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
           <p class="bio">A machine-learning researcher heading into the tech field. Jacob is an NSERC-funded undergraduate researcher building deep-learning models for LiDAR–hyperspectral sensor fusion, with a first-author paper in the works. Outside research he designs PCBs and writes embedded firmware on an electric-motorsport team. He's aiming squarely at the ML and tech industry — and finished first year at 3.97 while building things he actually cared about, proof that depth and grades aren't a trade-off.</p>
           <div class="creds">
             <span class="cred g">GPA 3.97</span>
-            <span class="cred">Schulich Dean's Scholar</span>   
             <span class="cred">NSERC Researcher</span>
             <span class="cred">Machine Learning</span>
             <span class="cred">PyTorch</span>
             <span class="cred">PCB / Altium</span>
+            <span class="cred">Schulich Dean's Scholar</span>
           </div>
         </div>
       </div>
@@ -718,13 +818,80 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
         <div>
           <h3>Tom Kurian</h3>
           <div class="role teal">Co-Founder · Mechanical Eng. + Energy &amp; Environment Minor</div>
-          <p class="bio">High-school valedictorian with a 99% IB average in his STEM classes, now in Mechanical Engineering with an Energy & Environment minor. Tom is a research and laboratory assistant in UCalgary's Faculty of Engineering, where he runs asphalt-materials testing, collects and analyzes experimental data alongside graduate researchers, and is authoring a formal machine procedure document that demonstrates strong written communication and the ability to translate technical knowledge clearly. He led his ENGG 200 team as project manager and CAD designer and tutored math, chemistry, and physics through high school, so breaking hard concepts down for someone who's just starting out is second nature.</p>
+          <p class="bio">High-school valedictorian with a 99% IB average in math, physics, and chemistry. Tom is an asphalt-materials lab technician at the University of Calgary, running sample prep, controlled testing, and data collection alongside graduate researchers and faculty. He also coaches kids' sports through Sportball and tutored math, chemistry, and physics through high school — so explaining hard things simply is second nature.</p>
           <div class="creds">
             <span class="cred g">GPA 3.94</span>
             <span class="cred">Asphalt Lab Technician</span>
+            <span class="cred">Schulich Dean's Scholar</span>
             <span class="cred">Valedictorian</span>
             <span class="cred">IB 99%</span>
+            <span class="cred">Sports Coach</span>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="review">
+  <div class="wrap section-pad">
+    <span class="eyebrow">Free review quiz</span>
+    <h2 style="margin:0.8rem 0 0.6rem;">Test yourself before day one.</h2>
+    <p class="lead" style="max-width:680px;">Two quick 20-question reviews of the math that first-semester engineering assumes you already own. Get one wrong and it reshuffles with new numbers so you actually learn it, not just memorize the letter.</p>
+
+    <!-- ===== MODE PICKER ===== -->
+    <div id="qz-picker" class="qz-picker">
+      <div class="qz-mode" onclick="QZ.start('precalc')">
+        <div class="qz-mode-tag gold">// Math 30-1</div>
+        <h3>Pre-Calculus Review</h3>
+        <p>Factoring, functions &amp; transformations, trig values, logs, domains. The algebra you'll lean on constantly.</p>
+        <div class="qz-mode-meta">20 questions · retry until right</div>
+        <span class="qz-mode-go">Start review →</span>
+      </div>
+
+      <div class="qz-mode feat" onclick="QZ.start('mixed')">
+        <div class="qz-mode-tag terra">// Mainly Calculus</div>
+        <h3>Mixed Review <span style="font-weight:400;font-size:0.8em;opacity:0.8;">(mostly calculus)</span></h3>
+        <p>Limits, the power rule, tangent slopes, derivatives, basic integrals — with a few precalc warm-ups mixed in.</p>
+        <div class="qz-mode-meta">20 questions · retry until right</div>
+        <span class="qz-mode-go">Start review →</span>
+      </div>
+    </div>
+
+    <!-- ===== QUIZ RUNNER (hidden until a mode is picked) ===== -->
+    <div id="qz-runner" class="qz-runner" style="display:none;">
+      <div class="qz-bar-row">
+        <button class="qz-exit" onclick="QZ.exit()">← Back</button>
+        <div class="qz-progress"><div class="qz-progress-fill" id="qz-fill"></div></div>
+        <div class="qz-count"><span id="qz-num">1</span> / 20</div>
+      </div>
+
+      <div class="qz-score-row">
+        <span class="qz-mode-label" id="qz-mode-label">Pre-Calculus Review</span>
+        <span class="qz-streak" id="qz-streak"></span>
+      </div>
+
+      <div class="qz-card">
+        <div class="qz-q" id="qz-question">Question text</div>
+        <div class="qz-options" id="qz-options"></div>
+        <div class="qz-feedback" id="qz-feedback"></div>
+      </div>
+    </div>
+
+    <!-- ===== RESULTS (hidden until finished) ===== -->
+    <div id="qz-results" class="qz-results" style="display:none;">
+      <div class="qz-results-card">
+        <div class="qz-results-tag">// review complete</div>
+        <h2 id="qz-results-score">20 / 20</h2>
+        <p id="qz-results-msg" class="lead" style="margin-bottom:1.6rem;">Nice work.</p>
+        <div class="qz-results-stats">
+          <div class="qz-stat"><div class="qz-stat-num" id="qz-stat-first">0</div><div class="qz-stat-lbl">First try</div></div>
+          <div class="qz-stat"><div class="qz-stat-num" id="qz-stat-retry">0</div><div class="qz-stat-lbl">Needed retries</div></div>
+          <div class="qz-stat"><div class="qz-stat-num" id="qz-stat-acc">100%</div><div class="qz-stat-lbl">First-try rate</div></div>
+        </div>
+        <div class="qz-results-btns">
+          <button class="btn btn-primary" id="qz-again" onclick="QZ.again()">Try again <span class="arr">→</span></button>
+          <button class="btn btn-ghost" onclick="QZ.exit()">Pick another quiz</button>
         </div>
       </div>
     </div>
@@ -886,6 +1053,211 @@ function submitBooking(){
 
 // Close modal on Escape
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBooking(); });
+
+
+const QZ = (function(){
+  // ---------- helpers ----------
+  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+  function sup(n){ return '<sup>'+n+'</sup>'; }
+
+  // Build a 4-option MC question from a correct string + array of distractor strings
+  function mc(question, correctStr, distractorStrs, explanation){
+    const set=new Set([correctStr]); const opts=[correctStr];
+    for(const d of distractorStrs){ if(!set.has(d)){ set.add(d); opts.push(d);} if(opts.length>=4) break; }
+    let guard=0;
+    while(opts.length<4 && guard<60){ const c=correctStr+'\u200b'.repeat(opts.length); if(!set.has(c)){set.add(c);opts.push(c);} guard++; }
+    const order=shuffle(opts);
+    return { question, options:order, correctIndex:order.indexOf(correctStr), explanation };
+  }
+
+  // ---------- PRECALC generators ----------
+  function gFactor(){
+    const p=randInt(1,6), q=randInt(1,6); const b=p+q, c=p*q;
+    const correct='(x + '+p+')(x + '+q+')';
+    const dis=['(x + '+(p+1)+')(x + '+q+')','(x + '+p+')(x + '+(q+1)+')','(x \u2212 '+p+')(x \u2212 '+q+')','(x + '+(p+q)+')(x + 1)'];
+    return mc('Factor:  x'+sup(2)+' + '+b+'x + '+c, correct, dis, 'x'+sup(2)+' + '+b+'x + '+c+' = (x + '+p+')(x + '+q+'), since '+p+'+'+q+' = '+b+' and '+p+'\u00d7'+q+' = '+c+'.');
+  }
+  function gLog(){
+    const b=pick([2,3,5,10]); const k=randInt(2,4); const val=Math.pow(b,k);
+    return mc('Evaluate:  log<sub>'+b+'</sub>('+val+')', String(k), [String(k+1),String(k-1),String(b),String(val)], 'log<sub>'+b+'</sub>('+val+') = '+k+' because '+b+sup(k)+' = '+val+'.');
+  }
+  function gTransform(){
+    const h=randInt(1,5), k=randInt(1,5);
+    const correct='Right '+h+', up '+k;
+    const dis=['Left '+h+', up '+k,'Right '+h+', down '+k,'Left '+h+', down '+k,'Up '+h+', right '+k];
+    return mc('Describe the transformation of  y = (x \u2212 '+h+')'+sup(2)+' + '+k+'  from  y = x'+sup(2)+'.', correct, dis, '(x \u2212 '+h+') shifts the graph right '+h+'; the + '+k+' shifts it up '+k+'.');
+  }
+  function gLinear(){
+    const a=randInt(2,6), x=randInt(1,8), bb=randInt(1,10); const c=a*x+bb;
+    return mc('Solve for x:  '+a+'x + '+bb+' = '+c, String(x), [String(x+1),String(x-1),String(c-bb),String(a)], a+'x = '+c+' \u2212 '+bb+' = '+(c-bb)+', so x = '+(c-bb)+' / '+a+' = '+x+'.');
+  }
+  function gTrig(){
+    const items=[['sin','30\u00b0','1/2'],['cos','60\u00b0','1/2'],['sin','90\u00b0','1'],['cos','0\u00b0','1'],['sin','0\u00b0','0'],['cos','90\u00b0','0'],['sin','60\u00b0','\u221a3/2'],['cos','30\u00b0','\u221a3/2'],['tan','45\u00b0','1']];
+    const it=pick(items); const correct=it[2];
+    const pool=['0','1','1/2','\u221a3/2','\u221a2/2','\u22121'].filter(v=>v!==correct);
+    return mc('Evaluate:  '+it[0]+'('+it[1]+')', correct, shuffle(pool), it[0]+'('+it[1]+') = '+correct+', a standard unit-circle value.');
+  }
+  function gDomain(){
+    const a=randInt(1,9);
+    return mc('What is the domain of  f(x) = \u221a(x \u2212 '+a+') ?', 'x \u2265 '+a, ['x \u2264 '+a,'x > '+a,'x \u2265 \u2212'+a,'x \u2265 '+(a+1)], 'The value under the root must be \u2265 0:  x \u2212 '+a+' \u2265 0, so x \u2265 '+a+'.');
+  }
+
+  // ---------- CALCULUS generators ----------
+  function gPower(){
+    const n=randInt(2,6), coef=randInt(2,5); const c2=coef*n, e2=n-1;
+    const correct = e2===1 ? c2+'x' : c2+'x'+sup(e2);
+    const dis=[coef*n+'x'+sup(n), coef+'x'+sup(e2), c2+'x'+sup(e2+1), coef*(n-1)+'x'+sup(e2)];
+    return mc('Differentiate:  f(x) = '+coef+'x'+sup(n), correct, dis, 'Power rule: multiply by the exponent and subtract 1 from it \u2192 '+coef+'\u00b7'+n+'x'+sup(n+'\u22121')+' = '+correct+'.');
+  }
+  function gLimit(){
+    const a=randInt(1,4), b=randInt(1,5), c=randInt(1,6); const val=b*a*a+c;
+    return mc('Evaluate:  lim<sub>x\u2192'+a+'</sub> ('+b+'x'+sup(2)+' + '+c+')', String(val), [String(b*a+c),String(b*a*a-c),String(b*a*a*a+c),String(val+a)], 'The function is continuous, so substitute x = '+a+':  '+b+'('+a+')'+sup(2)+' + '+c+' = '+b+'\u00b7'+(a*a)+' + '+c+' = '+val+'.');
+  }
+  function gTangentSlope(){
+    const a=randInt(1,6), k=randInt(1,3); const slope=2*k*a;
+    return mc('Find the slope of the tangent to  f(x) = '+k+'x'+sup(2)+'  at  x = '+a+'.', String(slope), [String(k*a*a),String(2*k*a*a),String(k*2),String(slope+k)], "f\u2032(x) = "+(2*k)+'x; at x = '+a+':  '+(2*k)+'\u00b7'+a+' = '+slope+'.');
+  }
+  function gSumDeriv(){
+    const n=randInt(2,4), c=randInt(2,6); const e=n-1;
+    const lead = e===1 ? n+'x' : n+'x'+sup(e);
+    const correct=lead+' + '+c;
+    const dis=[n+'x'+sup(e)+' + '+c+'x', n+'x'+sup(n)+' + '+c, lead+' + '+c+'x', lead];
+    return mc('Differentiate:  f(x) = x'+sup(n)+' + '+c+'x', correct, dis, 'd/dx[x'+sup(n)+'] = '+n+'x'+sup(e)+';  d/dx['+c+'x] = '+c+'.  Sum: '+correct+'.');
+  }
+  function gIntegral(){
+    const n=randInt(2,5); const e=n+1;
+    const correct='x'+sup(e)+'/'+e+' + C';
+    const dis=['x'+sup(n)+'/'+n+' + C', n+'x'+sup(n-1)+' + C', 'x'+sup(e)+'/'+n+' + C', e+'x'+sup(e)+' + C'];
+    return mc('Evaluate:  \u222b x'+sup(n)+' dx', correct, dis, 'Reverse power rule: add 1 to the exponent and divide by the new exponent \u2192 x'+sup(e)+'/'+e+' + C.');
+  }
+  function gConst(){
+    const c=randInt(2,9);
+    if(Math.random()<0.5){ return mc('Differentiate:  f(x) = '+c, '0', [String(c),String(c-1),'1'], 'The derivative of any constant is 0.'); }
+    return mc('Differentiate:  f(x) = '+c+'x', String(c), ['0',String(c-1),String(c+1)], 'd/dx['+c+'x] = '+c+' (the coefficient).');
+  }
+
+  const PRECALC=[gFactor,gLog,gTransform,gLinear,gTrig,gDomain];
+  const CALC=[gPower,gLimit,gTangentSlope,gSumDeriv,gIntegral,gConst];
+
+  // ---------- build a 20-question plan (which generator each slot uses) ----------
+  function buildPlan(mode){
+    const plan=[]; const N=20;
+    if(mode==='precalc'){
+      // even spread of the 6 precalc generators across 20 slots
+      for(let i=0;i<N;i++) plan.push(PRECALC[i%PRECALC.length]);
+    } else {
+      // mixed, mostly calculus: ~70% calc, 30% precalc
+      for(let i=0;i<N;i++){ plan.push(Math.random()<0.7 ? pick(CALC) : pick(PRECALC)); }
+    }
+    return shuffle(plan);
+  }
+
+  // ---------- state ----------
+  let state=null;
+
+  function start(mode){
+    state={ mode, plan:buildPlan(mode), idx:0, firstTry:0, retried:false, neededRetry:0, current:null };
+    document.getElementById('qz-picker').style.display='none';
+    document.getElementById('qz-results').style.display='none';
+    document.getElementById('qz-runner').style.display='block';
+    document.getElementById('qz-mode-label').textContent = mode==='precalc' ? 'Pre-Calculus Review' : 'Mixed Review (mostly calculus)';
+    render();
+  }
+
+  function render(){
+    state.retried=false;
+    state.current = state.plan[state.idx]();
+    const q=state.current;
+    document.getElementById('qz-num').textContent = state.idx+1;
+    document.getElementById('qz-fill').style.width = ((state.idx)/20*100+5)+'%';
+    document.getElementById('qz-streak').textContent = state.firstTry>0 ? ('\u2713 '+state.firstTry+' clean') : '';
+    document.getElementById('qz-question').innerHTML = q.question;
+    const fb=document.getElementById('qz-feedback'); fb.className='qz-feedback'; fb.innerHTML='';
+    const box=document.getElementById('qz-options'); box.innerHTML='';
+    const letters=['A','B','C','D'];
+    q.options.forEach((opt,i)=>{
+      const b=document.createElement('button');
+      b.className='qz-opt';
+      b.innerHTML='<span class="qz-letter">'+letters[i]+'</span><span>'+opt+'</span>';
+      b.onclick=()=>choose(i,b);
+      box.appendChild(b);
+    });
+  }
+
+  function choose(i,btn){
+    const q=state.current;
+    const all=document.querySelectorAll('#qz-options .qz-opt');
+    if(i===q.correctIndex){
+      btn.classList.add('correct');
+      all.forEach(b=>b.classList.add('locked'));
+      const fb=document.getElementById('qz-feedback');
+      fb.className='qz-feedback show-right';
+      fb.innerHTML='<span class="qz-fb-label">Correct</span>'+q.explanation;
+      if(!state.retried) state.firstTry++;
+      else state.neededRetry++;
+      // advance after a short beat
+      setTimeout(next, 950);
+    } else {
+      // wrong: glow red, then reshuffle SAME concept with new numbers
+      btn.classList.add('wrong','locked');
+      state.retried=true;
+      const fb=document.getElementById('qz-feedback');
+      fb.className='qz-feedback show-wrong';
+      fb.innerHTML='<span class="qz-fb-label">Not quite \u2014 new version loading</span>Same idea, different numbers. Give it another go.';
+      // regenerate the same generator (new params) after a beat
+      setTimeout(()=>{
+        state.current = state.plan[state.idx](); // same generator function, fresh randomization
+        const box=document.getElementById('qz-options'); box.innerHTML='';
+        const q2=state.current; const letters=['A','B','C','D'];
+        document.getElementById('qz-question').innerHTML = q2.question;
+        q2.options.forEach((opt,k)=>{
+          const b=document.createElement('button');
+          b.className='qz-opt';
+          b.innerHTML='<span class="qz-letter">'+letters[k]+'</span><span>'+opt+'</span>';
+          b.onclick=()=>choose(k,b);
+          box.appendChild(b);
+        });
+        const fb2=document.getElementById('qz-feedback'); fb2.className='qz-feedback'; fb2.innerHTML='';
+      }, 1100);
+    }
+  }
+
+  function next(){
+    state.idx++;
+    if(state.idx>=20){ finish(); return; }
+    render();
+  }
+
+  function finish(){
+    document.getElementById('qz-runner').style.display='none';
+    const r=document.getElementById('qz-results'); r.style.display='block';
+    const first=state.firstTry, retry=state.neededRetry;
+    document.getElementById('qz-results-score').textContent = first+' / 20';
+    document.getElementById('qz-stat-first').textContent = first;
+    document.getElementById('qz-stat-retry').textContent = retry;
+    document.getElementById('qz-stat-acc').textContent = Math.round(first/20*100)+'%';
+    const msg=document.getElementById('qz-results-msg');
+    const pct=first/20;
+    if(pct===1) msg.textContent='Perfect run. You\u2019re ready for first semester.';
+    else if(pct>=0.8) msg.textContent='Strong. A couple of concepts to brush up and you\u2019re set.';
+    else if(pct>=0.5) msg.textContent='Good base. Worth reviewing the ones that needed retries.';
+    else msg.textContent='Great that you\u2019re practicing now \u2014 this is exactly what the sessions cover.';
+    document.getElementById('qz-fill').style.width='100%';
+  }
+
+  function again(){ start(state.mode); }
+  function exit(){
+    state=null;
+    document.getElementById('qz-runner').style.display='none';
+    document.getElementById('qz-results').style.display='none';
+    document.getElementById('qz-picker').style.display='grid';
+  }
+
+  return { start, exit, again };
+})();
+
 </script>
 </body>
 </html>
