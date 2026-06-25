@@ -443,6 +443,17 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 
 /* ===================== PRACTICE TEST (diploma quiz) ===================== */
 .toolbar{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:2rem;}
+/* ----- two-card test picker ----- */
+.picker{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-bottom:2rem;}
+.pcard{display:flex;flex-direction:column;background:linear-gradient(165deg,var(--walnut),var(--coffee));border:1px solid rgba(224,169,63,0.2);border-radius:16px;padding:1.8rem;box-shadow:0 14px 40px rgba(0,0,0,0.25);transition:border-color 0.2s,transform 0.2s;}
+.pcard:hover{border-color:rgba(224,169,63,0.45);transform:translateY(-3px);}
+.pcard-tag{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.7rem;}
+.pcard h3{font-family:var(--font-head);font-weight:700;font-size:1.35rem;color:var(--cream);margin-bottom:0.6rem;}
+.pcard p{color:var(--text-dim);font-size:0.95rem;line-height:1.55;margin-bottom:1.4rem;flex:1;}
+.pcard-row{display:flex;gap:0.7rem;flex-wrap:wrap;}
+.again-btn.ghost2{background:transparent;color:var(--cream);border:1.5px solid rgba(243,231,208,0.35);}
+.again-btn.ghost2:hover{background:transparent;border-color:var(--gold);color:var(--gold);}
+@media (max-width:880px){.picker{grid-template-columns:1fr;}}
 .tool-btn{font-family:var(--font-head);font-weight:700;font-size:0.88rem;border:none;cursor:pointer;padding:0.7rem 1.3rem;border-radius:8px;transition:all 0.2s;}
 .tool-btn.primary{background:var(--gold);color:var(--espresso);}
 .tool-btn.primary:hover{background:var(--gold-soft);transform:translateY(-2px);}
@@ -524,7 +535,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       <button class="tab"        data-page="resources" onclick="go('resources')">Resources</button>
       <button class="tab"        data-page="team"      onclick="go('team')">The Team</button>
       <button class="tab"        data-page="contact"   onclick="go('contact')">Contact</button>
-      <button class="tab"        data-page="review"    onclick="go('review')">Practice Test</button>
+      <button class="tab"        data-page="review"    onclick="go('review')">Practice Tests</button>
       <button class="nav-cta" onclick="openBooking('')">Book a Session</button>
     </nav>
   </div>
@@ -806,16 +817,33 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 
 
 <!-- ===================== PRACTICE TEST ===================== -->
-<!-- EDIT:REVIEW — diploma-style Math 30-1 practice test. Questions/solutions live in the QZ script near the bottom of the file. -->
+<!-- EDIT:REVIEW — two diploma-style review tests (Pre-Calc + Calculus). Question banks (BANKS.precalc / BANKS.calc) live in the QZ script near the bottom of the file. -->
 <section class="page" id="review">
   <div class="wrap section-pad">
-    <span class="eyebrow">Free practice test</span>
-    <h2 style="margin:0.8rem 0 0.6rem;">Math 30-1 diploma-style practice.</h2>
-    <p class="lead" style="max-width:680px;">20 exam-level questions adapted from the Alberta Mathematics 30-1 diploma practice test, with full worked solutions. Miss one and the solution is shown, then you move on.</p>
-    <div class="toolbar" id="toolbar">
-    <button class="tool-btn primary" onclick="QZ.start()">Start the test →</button>
-    <button class="tool-btn ghost" onclick="openSheet()">📄 Formula sheet</button>
-  </div>
+    <span class="eyebrow">Free practice tests</span>
+    <h2 style="margin:0.8rem 0 0.6rem;">Review tests — get exam-ready for first-year engineering.</h2>
+    <p class="lead" style="max-width:680px;">Two diploma-style review tests to sharpen the math first year leans on hardest. Pick one, answer 20 questions one at a time, and get a full worked solution after each — right answers turn green, misses turn red and reveal the correct choice.</p>
+
+    <div class="picker" id="picker">
+      <div class="pcard">
+        <div class="pcard-tag">Pre-Calculus · Math 30-1 level</div>
+        <h3>Pre-Calc Review Test</h3>
+        <p>20 exam-level questions adapted from the Alberta Mathematics 30-1 diploma practice test — transformations, logarithms, polynomials, trigonometry, and the binomial theorem.</p>
+        <div class="pcard-row">
+          <button class="tool-btn primary" onclick="QZ.start('precalc')">Start test →</button>
+          <button class="tool-btn ghost" onclick="openSheet('precalc')">📄 Formula sheet</button>
+        </div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-tag">Calculus · Math 31 level</div>
+        <h3>Calculus High School Review</h3>
+        <p>20 questions across limits, the differentiation rules, implicit and related rates, optimization, curve analysis, and area between curves — the calculus you use most in first year.</p>
+        <div class="pcard-row">
+          <button class="tool-btn primary" onclick="QZ.start('calc')">Start test →</button>
+          <button class="tool-btn ghost" onclick="openSheet('calc')">📄 Formula sheet</button>
+        </div>
+      </div>
+    </div>
 
   <div id="runner" style="display:none;">
     <div class="bar-row">
@@ -837,7 +865,10 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       <div class="results-tag">// test complete</div>
       <h2 id="score">0 / 20</h2>
       <p class="results-msg" id="msg"></p>
-      <button class="again-btn" onclick="QZ.start()">Retake the test →</button>
+      <div class="pcard-row" style="justify-content:center;">
+        <button class="again-btn" onclick="QZ.again()">Retake this test →</button>
+        <button class="again-btn ghost2" onclick="QZ.back()">Choose another test</button>
+      </div>
     </div>
   </div>
 </div>
@@ -888,8 +919,9 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 <div class="fsheet-overlay" id="sheetModal" onclick="if(event.target===this)closeSheet()">
   <div class="fsheet">
     <button class="close" onclick="closeSheet()">×</button>
-    <h3>Math 30-1 Formula Sheet</h3>
-    <p class="fsub">The formulas allowed on the diploma exam (permutations &amp; combinations excluded).</p>
+    <div id="sheet-precalc">
+    <h3>Pre-Calc Review — Formula Sheet</h3>
+    <p class="fsub">The formulas allowed on the Math 30-1 diploma exam (permutations &amp; combinations excluded).</p>
 
     <h4>Laws of Logarithms</h4>
     <div class="frow">$\log_b(MN) = \log_b M + \log_b N$</div>
@@ -915,6 +947,32 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 
     <h4>Binomial Theorem</h4>
     <div class="frow">General term: $\;t_{k+1} = \dbinom{n}{k}\,x^{\,n-k}\,y^{\,k}$</div>
+    </div><!-- /sheet-precalc -->
+
+    <div id="sheet-calc" style="display:none;">
+    <h3>Calculus Review — Formula Sheet</h3>
+    <p class="fsub">Trimmed to exactly what the calculus review test needs.</p>
+
+    <h4>Differentiation</h4>
+    <div class="frow">First principles: $\;f'(x)=\displaystyle\lim_{h\to 0}\dfrac{f(x+h)-f(x)}{h}$</div>
+    <div class="frow">Power rule: $\;\dfrac{d}{dx}x^{n}=n\,x^{\,n-1}$</div>
+    <div class="frow">Product rule: $\;\dfrac{d}{dx}\big[f\,g\big]=f'g+g'f$</div>
+    <div class="frow">Quotient rule: $\;\dfrac{d}{dx}\!\left[\dfrac{f}{g}\right]=\dfrac{f'g-g'f}{g^{2}}$</div>
+    <div class="frow">Chain rule: $\;\dfrac{d}{dx}f\big(g(x)\big)=f'\big(g(x)\big)\,g'(x)$</div>
+    <div class="frow">Chain (power): $\;\dfrac{d}{dx}\big[g(x)\big]^{n}=n\big[g(x)\big]^{n-1}g'(x)$</div>
+
+    <h4>Integration</h4>
+    <div class="frow">$\displaystyle\int a\,x^{n}\,dx=\dfrac{a\,x^{\,n+1}}{n+1}+C,\quad n\neq -1$</div>
+
+    <h4>Geometry — for related rates</h4>
+    <div class="frow">Sphere: $\;V=\dfrac{4}{3}\pi r^{3}, \quad SA=4\pi r^{2}$</div>
+    <div class="frow">Cube: $\;V=s^{3} \qquad$ Cylinder: $\;V=\pi r^{2}h$</div>
+    <div class="frow">Triangle: $\;A=\dfrac{1}{2}\,b\,h$</div>
+
+    <h4>Algebra</h4>
+    <div class="frow">Line: $\;m(x-x_{1})=y-y_{1}$</div>
+    <div class="frow">Quadratic: $\;x=\dfrac{-b\pm\sqrt{b^{2}-4ac}}{2a}$</div>
+    </div><!-- /sheet-calc -->
   </div>
 </div>
 
@@ -1036,7 +1094,15 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBooking(
 
 /* ===================== PRACTICE TEST LOGIC ===================== */
 
-function openSheet(){ document.getElementById('sheetModal').classList.add('open'); renderMath(document.getElementById('sheetModal')); }
+let PT_TEST='precalc';
+function openSheet(which){
+  if(which){ PT_TEST = which; }
+  const isCalc = (PT_TEST==='calc');
+  document.getElementById('sheet-precalc').style.display = isCalc ? 'none' : 'block';
+  document.getElementById('sheet-calc').style.display = isCalc ? 'block' : 'none';
+  document.getElementById('sheetModal').classList.add('open');
+  renderMath(document.getElementById('sheetModal'));
+}
 function closeSheet(){ document.getElementById('sheetModal').classList.remove('open'); }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet();});
 
@@ -1050,7 +1116,8 @@ function renderMath(el){
 }
 
 const QZ=(function(){
-  const BANK=[
+  const BANKS={};
+  BANKS.precalc=[
     {
       topic:"Transformations · Domain",
       q:"The graph of $y=f(x)$ has domain $\\{x \\mid x \\ge -4,\\ x\\in\\mathbb{R}\\}$. What is the domain of $y=f(-x+4)$?",
@@ -1096,9 +1163,9 @@ const QZ=(function(){
     {
       topic:"Logarithmic Functions",
       q:"For $f(x)=\\log_a x$ and $g(x)=\\log_b x$: $f$ increases to the right while $g$ decreases. Which statement is true?",
-      options:["$a<b$","$b>1$","$a>b$","$a<1$"],
+      options:["$a\\lt b$","$b\\gt 1$","$a\\gt b$","$a\\lt 1$"],
       correct:2,
-      sol:"An increasing logarithm has base $a>1$; a decreasing logarithm has base $0<b<1$. Therefore $a>b$."
+      sol:"An increasing logarithm has base $a\\gt 1$; a decreasing logarithm has base $0\\lt b\\lt 1$. Therefore $a\\gt b$."
     },
     {
       topic:"Logarithmic Equations",
@@ -1123,7 +1190,7 @@ const QZ=(function(){
     },
     {
       topic:"Polynomials · Graphs",
-      q:"Michael graphs $y=a(x-b)^2(x+c)$ with $a,b,c>0$. If he changes only $a$ to be $a<0$, what changes?",
+      q:"Michael graphs $y=a(x-b)^2(x+c)$ with $a,b,c\\gt 0$. If he changes only $a$ to be $a\\lt 0$, what changes?",
       options:["domain","range","$x$-intercepts","$y$-intercept"],
       correct:3,
       sol:"The $x$-intercepts come from the zeros (unchanged), and the domain and range of a cubic are all real numbers either way. Flipping the sign of $a$ reflects the graph vertically, which changes the sign of the $y$-intercept."
@@ -1191,22 +1258,166 @@ const QZ=(function(){
       correct:0,
       sol:"The middle term of $(x-2y)^8$ is the 5th term: $t_5=\\dbinom{8}{4}x^4(-2y)^4=70\\cdot 16\\,x^4y^4=1120\\,x^4y^4$. The $(-2)^4$ is positive, so the coefficient is $+1120$."
     }
-  ];
+  ]; /* end precalc bank */
+
+  BANKS.calc=[
+    {
+      topic:"Limits · At Infinity",
+      q:"Evaluate $\\displaystyle\\lim_{t\\to\\infty}\\dfrac{2t^{2}-2t+3}{2t^{2}+5t-3}$.",
+      options:["$0$","$-1$","$1$","$\\tfrac{1}{2}$"],
+      correct:2,
+      sol:"For a rational function as $t\\to\\infty$, the leading terms dominate. Divide top and bottom by $t^{2}$: every $\\tfrac{1}{t}$ term goes to $0$, leaving $\\dfrac{2}{2}=1$ — the ratio of leading coefficients."
+    },
+    {
+      topic:"Limits · Factoring",
+      q:"Evaluate $\\displaystyle\\lim_{h\\to 1}\\dfrac{h^{2}+3h-4}{h-1}$.",
+      options:["$0$","$-3$","$5$","undefined"],
+      correct:2,
+      sol:"Direct substitution gives $\\tfrac{0}{0}$, so factor: $h^{2}+3h-4=(h+4)(h-1)$. Cancel $(h-1)$ to get $\\displaystyle\\lim_{h\\to 1}(h+4)=5$."
+    },
+    {
+      topic:"Derivatives · Quotient Rule",
+      q:"Differentiate $y=\\dfrac{x-1}{x(x+1)}$.",
+      options:["$\\dfrac{-x^{2}-1}{(x^{2}+x)^{2}}$","$\\dfrac{x^{2}-1}{(x^{2}+x)^{2}}$","$\\dfrac{-x^{2}+2x+1}{(x^{2}+x)^{2}}$","$\\dfrac{-x^{2}-2x+1}{(x^{2}+x)^{2}}$"],
+      correct:2,
+      sol:"Denominator $=x^{2}+x$. With $u=x-1,\\ v=x^{2}+x$: $y'=\\dfrac{u'v-v'u}{v^{2}}=\\dfrac{(x^{2}+x)-(2x+1)(x-1)}{(x^{2}+x)^{2}}$. Since $(2x+1)(x-1)=2x^{2}-x-1$, the numerator is $-x^{2}+2x+1$."
+    },
+    {
+      topic:"Derivatives · Quotient Rule",
+      q:"Differentiate $\\dfrac{x^{3}-7}{x^{2}+4}$.",
+      options:["$\\dfrac{5x^{4}+12x^{2}-14x}{(x^{2}+4)^{2}}$","$\\dfrac{x^{4}+12x^{2}+14x}{(x^{2}+4)^{2}}$","$\\dfrac{-x^{4}+12x^{2}-14x}{(x^{2}+4)^{2}}$","none of these"],
+      correct:1,
+      sol:"$\\dfrac{3x^{2}(x^{2}+4)-2x(x^{3}-7)}{(x^{2}+4)^{2}}=\\dfrac{3x^{4}+12x^{2}-2x^{4}+14x}{(x^{2}+4)^{2}}=\\dfrac{x^{4}+12x^{2}+14x}{(x^{2}+4)^{2}}$."
+    },
+    {
+      topic:"Derivatives · Product + Chain",
+      q:"Differentiate $y=x\\sqrt{1-x^{2}}$.",
+      options:["$\\tfrac{1}{2}x(1-x^{2})^{-1/2}+(1-x^{2})^{1/2}$","$-x^{2}(1-x^{2})^{-1/2}+(1-x^{2})^{1/2}$","$-x(1-x^{2})^{-1/2}$","$x-x(1-x^{2})^{3/2}$"],
+      correct:1,
+      sol:"Product rule with $f=x,\\ g=(1-x^{2})^{1/2}$. By the chain rule $g'=-x(1-x^{2})^{-1/2}$. So $y'=(1-x^{2})^{1/2}-x^{2}(1-x^{2})^{-1/2}$."
+    },
+    {
+      topic:"Derivatives · Second Derivative",
+      q:"If $y=\\dfrac{1}{\\sqrt{1+x}}$, find $\\dfrac{d^{2}y}{dx^{2}}$.",
+      options:["$\\dfrac{-1}{4\\sqrt{(1+x)^{3}}}$","$\\dfrac{3}{4\\sqrt{(1+x)^{5}}}$","$\\dfrac{-1}{2\\sqrt{(1+x)^{3}}}$","$\\dfrac{1}{4\\sqrt{(1+x)^{3}}}$"],
+      correct:1,
+      sol:"$y=(1+x)^{-1/2}\\Rightarrow y'=-\\tfrac{1}{2}(1+x)^{-3/2}\\Rightarrow y''=\\tfrac{3}{4}(1+x)^{-5/2}=\\dfrac{3}{4\\sqrt{(1+x)^{5}}}$."
+    },
+    {
+      topic:"Implicit Differentiation",
+      q:"For $2x^{2}+3xy-y^{2}=20$, find $\\dfrac{dy}{dx}$.",
+      options:["$\\dfrac{-(4x+3y)}{3x-2y}$","$\\dfrac{4x+3y}{3x-2y}$","$4x+3-2y$","$-7x-y$"],
+      correct:0,
+      sol:"Differentiate implicitly (product rule on $3xy$): $4x+3y+3x\\,y'-2y\\,y'=0$. Group: $y'(3x-2y)=-(4x+3y)$."
+    },
+    {
+      topic:"Implicit Differentiation",
+      q:"If $y^{3}-a^{2}(x-y)=0$ ($a$ constant), find $\\dfrac{dy}{dx}$.",
+      options:["$\\dfrac{a^{2}}{3y^{2}-a^{2}}$","$\\dfrac{a^{2}}{3y^{2}+a^{2}}$","$\\dfrac{a^{2}}{3y^{2}+ya^{2}}$","$\\dfrac{a^{2}}{3y^{2}-ya^{2}}$"],
+      correct:1,
+      sol:"Expand to $y^{3}-a^{2}x+a^{2}y=0$. Then $3y^{2}y'-a^{2}+a^{2}y'=0$, so $y'(3y^{2}+a^{2})=a^{2}$."
+    },
+    {
+      topic:"Tangent Lines",
+      q:"The tangent to the circle $x^{2}+y^{2}=25$ at $(3,4)$ is:",
+      options:["$3x-4y-25=0$","$3x+4y-25=0$","$3x+4y+25=0$","$3x-4y+25=0$"],
+      correct:1,
+      sol:"Implicitly $2x+2y\\,y'=0\\Rightarrow y'=-\\tfrac{x}{y}=-\\tfrac{3}{4}$. Then $y-4=-\\tfrac{3}{4}(x-3)\\Rightarrow 3x+4y-25=0$."
+    },
+    {
+      topic:"Tangent Lines",
+      q:"A tangent to $y=3x+\\dfrac{1}{x}$ that is parallel to $y=-x+6$ is:",
+      options:["$y=3-\\dfrac{1}{x^{2}}$","$y=-x+7\\sqrt{\\tfrac{1}{3}}$","$y=-x+4$","$y=x+4$"],
+      correct:2,
+      sol:"Parallel means slope $-1$: $y'=3-\\dfrac{1}{x^{2}}=-1\\Rightarrow x=\\pm\\tfrac{1}{2}$. At $x=\\tfrac{1}{2}$, $y=\\tfrac{7}{2}$, giving $y=-x+4$."
+    },
+    {
+      topic:"Related Rates · Sphere",
+      q:"A spherical balloon is inflated at $100\\ \\text{dm}^{3}/\\text{min}$. When the radius is $3\\ \\text{dm}$, the radius is increasing at:",
+      options:["$\\dfrac{25}{9\\pi}$","$\\dfrac{9\\pi}{25}$","$25\\pi$","$9\\pi$"],
+      correct:0,
+      sol:"$V=\\tfrac{4}{3}\\pi r^{3}\\Rightarrow \\dfrac{dV}{dt}=4\\pi r^{2}\\dfrac{dr}{dt}$. So $100=36\\pi\\dfrac{dr}{dt}\\Rightarrow \\dfrac{dr}{dt}=\\dfrac{25}{9\\pi}$ dm/min."
+    },
+    {
+      topic:"Related Rates · Cube",
+      q:"A cube's edge grows at $5\\ \\text{cm/s}$. When the edge is $4\\ \\text{cm}$, the volume changes at:",
+      options:["$192$","$48$","$375$","$240$"],
+      correct:3,
+      sol:"$V=s^{3}\\Rightarrow \\dfrac{dV}{dt}=3s^{2}\\dfrac{ds}{dt}=3(16)(5)=240\\ \\text{cm}^{3}/\\text{s}$."
+    },
+    {
+      topic:"Related Rates · Triangle",
+      q:"The hypotenuse of a right isosceles triangle grows at $2\\ \\text{cm/min}$. When it is $8\\ \\text{cm}$, the area changes at ($\\text{cm}^{2}/\\text{min}$):",
+      options:["$8$","$10$","$12$","$14$"],
+      correct:0,
+      sol:"Each leg is $\\tfrac{h}{\\sqrt2}$, so $A=\\tfrac{1}{2}\\left(\\tfrac{h}{\\sqrt2}\\right)^{2}=\\tfrac{h^{2}}{4}$. Then $\\dfrac{dA}{dt}=\\tfrac{h}{2}\\dfrac{dh}{dt}=\\tfrac{8}{2}(2)=8$."
+    },
+    {
+      topic:"Optimization",
+      q:"Two natural numbers sum to $48$. The square of one times the other is greatest when the numbers are:",
+      options:["$24$ and $24$","$8$ and $40$","$28$ and $20$","$32$ and $16$"],
+      correct:3,
+      sol:"Maximize $P=x^{2}(48-x)=48x^{2}-x^{3}$. Then $P'=96x-3x^{2}=3x(32-x)=0\\Rightarrow x=32$, so the other is $16$. ($P''=96-6x\\lt 0$ at $x=32$ confirms a maximum.)"
+    },
+    {
+      topic:"Optimization",
+      q:"A rectangular field is fenced and split into two plots by a fence parallel to one side. With $1200\\ \\text{ft}$ of fence, the largest field has dimensions:",
+      options:["$150\\times 350$","$200\\times 600$","$300\\times 300$","$200\\times 300$"],
+      correct:3,
+      sol:"The divider runs parallel to the side of length $x$, so $3x+2y=1200$. Maximize $A=xy=x\\cdot\\dfrac{1200-3x}{2}$. Then $A'=\\dfrac{1200-6x}{2}=0\\Rightarrow x=200,\\ y=300$."
+    },
+    {
+      topic:"Curve Analysis · Intervals",
+      q:"The function $y=x^{2}-\\dfrac{1}{2}x^{4}$ is decreasing on:",
+      options:["$0\\lt x\\lt 1$ or $x\\lt -1$","$x\\lt 0$ or $x\\gt 1$","$x\\gt 0$ or $x\\lt -1$","$-1\\lt x\\lt 0$ or $x\\gt 1$"],
+      correct:3,
+      sol:"$y'=2x-2x^{3}=2x(1-x)(1+x)$. It is negative (decreasing) where the sign test gives $-$: on $-1\\lt x\\lt 0$ and on $x\\gt 1$."
+    },
+    {
+      topic:"Curve Analysis · Extrema",
+      q:"A local maximum value of $y=x^{3}+3+\\dfrac{3}{x}$ is:",
+      options:["$7$","$3$","$-1$","$1$"],
+      correct:2,
+      sol:"$y'=3x^{2}-\\dfrac{3}{x^{2}}=0\\Rightarrow x^{4}=1\\Rightarrow x=\\pm 1$. With $y''=6x+\\dfrac{6}{x^{3}}$, at $x=-1$ we get $y''=-12\\lt 0$ (a maximum), and $y(-1)=-1+3-3=-1$."
+    },
+    {
+      topic:"Curve Analysis · Inflection",
+      q:"A point of inflection on $y=2x^{1/3}+x^{4/3}$ is:",
+      options:["$(0,0)$","$(8,20)$","$(1,3)$","there is no point of inflection"],
+      correct:2,
+      sol:"$y''=-\\tfrac{4}{9}x^{-5/3}+\\tfrac{4}{9}x^{-2/3}=\\tfrac{4}{9}x^{-5/3}(x-1)$, which changes sign at $x=1$. Since $y(1)=2+1=3$, the inflection point is $(1,3)$."
+    },
+    {
+      topic:"Antiderivatives",
+      q:"The antiderivative of $f(x)=(2x^{2}-1)^{2}\\,x$ is:",
+      options:["$(2x^{2}-1)^{3}+c$","$\\dfrac{(2x^{2}-1)^{3}}{6}$","$(2x^{2}-1)^{3}$","$\\dfrac{(2x^{2}-1)^{3}}{12}+c$"],
+      correct:3,
+      sol:"Let $u=2x^{2}-1$, so $du=4x\\,dx$ and $x\\,dx=\\tfrac{1}{4}du$. Then $\\displaystyle\\int(2x^{2}-1)^{2}x\\,dx=\\tfrac{1}{4}\\cdot\\dfrac{u^{3}}{3}=\\dfrac{(2x^{2}-1)^{3}}{12}+c$."
+    },
+    {
+      topic:"Area Between Curves",
+      q:"The area bounded by $y=2x+4$ and $y=x^{2}+2x$ is:",
+      options:["$\\dfrac{20}{3}$","$\\dfrac{28}{3}$","$\\dfrac{4}{3}$","$\\dfrac{32}{3}$"],
+      correct:3,
+      sol:"They meet where $x^{2}=4$, i.e. $x=\\pm 2$, with the line on top. $\\displaystyle\\int_{-2}^{2}(4-x^{2})\\,dx=\\left[4x-\\tfrac{x^{3}}{3}\\right]_{-2}^{2}=16-\\tfrac{16}{3}=\\dfrac{32}{3}$."
+    }
+  ]; /* end calc bank */
 
   let state=null;
 
-  function start(){
-    state={idx:0,correct:0};
-    document.getElementById('toolbar').style.display='none';
+  function start(test){
+    PT_TEST = (test==='calc') ? 'calc' : 'precalc';
+    state={test:PT_TEST, bank:BANKS[PT_TEST], idx:0, correct:0};
+    document.getElementById('picker').style.display='none';
     document.getElementById('results').style.display='none';
     document.getElementById('runner').style.display='block';
     render();
   }
 
   function render(){
-    const q=BANK[state.idx];
+    const q=state.bank[state.idx];
     document.getElementById('num').textContent=state.idx+1;
-    document.getElementById('fill').style.width=(state.idx/20*100+5)+'%';
+    document.getElementById('fill').style.width=(state.idx/state.bank.length*100+5)+'%';
     document.getElementById('topic').textContent=q.topic;
     document.getElementById('question').innerHTML=q.q;
     const sol=document.getElementById('solution');sol.className='solution';sol.innerHTML='';
@@ -1224,7 +1435,7 @@ const QZ=(function(){
   }
 
   function choose(i,btn){
-    const q=BANK[state.idx];
+    const q=state.bank[state.idx];
     const all=document.querySelectorAll('#options .opt');
     all.forEach(b=>{b.classList.add('locked');b.onclick=null;});
     if(i===q.correct){ btn.classList.add('correct'); state.correct++; }
@@ -1238,7 +1449,7 @@ const QZ=(function(){
 
   function next(){
     state.idx++;
-    if(state.idx>=20){ finish(); return; }
+    if(state.idx>=state.bank.length){ finish(); return; }
     render();
   }
 
@@ -1246,12 +1457,22 @@ const QZ=(function(){
     document.getElementById('runner').style.display='none';
     document.getElementById('results').style.display='block';
     document.getElementById('fill').style.width='100%';
-    document.getElementById('score').textContent=state.correct+' / 20';
-    const m=document.getElementById('msg');const p=state.correct/20;
-    m.textContent = p===1?'Perfect — that\u2019s diploma-ready work.':p>=0.8?'Excellent. You\u2019re in strong shape for first-year math.':p>=0.6?'Solid. Review the ones you missed and you\u2019re set.':p>=0.4?'Good practice \u2014 the worked solutions are where the learning is.':'This is exactly the kind of prep our sessions cover. Keep at it.';
+    const total=state.bank.length;
+    document.getElementById('score').textContent=state.correct+' / '+total;
+    const m=document.getElementById('msg');const p=state.correct/total;
+    m.textContent = p===1?'Perfect \u2014 outstanding work.':p>=0.8?'Excellent. You\u2019re in strong shape for first-year math.':p>=0.6?'Solid. Review the ones you missed and you\u2019re set.':p>=0.4?'Good practice \u2014 the worked solutions are where the learning is.':'This is exactly the kind of prep our sessions cover. Keep at it.';
   }
 
-  return {start,next};
+  function again(){ start(state.test); }
+
+  function back(){
+    document.getElementById('runner').style.display='none';
+    document.getElementById('results').style.display='none';
+    document.getElementById('picker').style.display='grid';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  return {start,next,again,back};
 })();
 
 </script>
