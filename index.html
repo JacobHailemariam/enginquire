@@ -1115,6 +1115,14 @@ async function submitBooking(){
     return;
   }
 
+  // --- guard: catch the un-pasted access key before we even try to send ---
+  if(!WEB3FORMS_KEY || WEB3FORMS_KEY === 'YOUR_WEB3FORMS_ACCESS_KEY'){
+    status.className = 'bk-status err';
+    status.textContent = 'Setup: the Web3Forms access key hasn\u2019t been added yet (WEB3FORMS_KEY in index.html).';
+    console.error('[EngInQuire] WEB3FORMS_KEY is still the placeholder \u2014 paste your real key and re-deploy.');
+    return;
+  }
+
   // --- show a sending state so the button can't be double-clicked ---
   btn.disabled = true;
   btn.innerHTML = 'Sending\u2026';
@@ -1138,6 +1146,7 @@ async function submitBooking(){
       })
     });
     const data = await res.json();
+    console.log('[EngInQuire] Web3Forms response:', data);   // open DevTools console to see this
 
     if(data.success){
       // swap the form for the success panel
@@ -1147,11 +1156,12 @@ async function submitBooking(){
       throw new Error(data.message || 'Submission failed');
     }
   } catch(err){
-    // re-enable and tell them how to reach you the manual way
+    // re-enable and show the ACTUAL reason (e.g. "Invalid Access Key")
     btn.disabled = false;
     btn.innerHTML = 'Send reservation <span class="arr">&rarr;</span>';
     status.className = 'bk-status err';
-    status.textContent = 'Couldn\u2019t send that just now \u2014 please email enginquire7@gmail.com directly, or try again.';
+    status.textContent = 'Couldn\u2019t send (' + (err.message || 'network error') + '). Email enginquire7@gmail.com directly, or try again.';
+    console.error('[EngInQuire] reservation send failed:', err);
   }
 }
 
