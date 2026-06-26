@@ -413,6 +413,17 @@ h4{ font-size:1.05rem; }
 .field input:focus, .field select:focus{ outline:none; border-color:var(--gold); }
 .modal .btn{ width:100%; justify-content:center; margin-top:0.5rem; }
 .modal .fineprint{ font-size:0.78rem; color:var(--text-mute); margin-top:1rem; text-align:center; line-height:1.5; }
+/* two-column name row inside the reservation modal */
+.field-row{ display:flex; gap:0.7rem; }
+.field-row .field{ flex:1; }
+/* inline status message under the send button (errors / sending) */
+.bk-status{ font-size:0.85rem; margin-top:0.8rem; text-align:center; min-height:1.1rem; color:var(--teal-soft); }
+.bk-status.err{ color:var(--terra); }
+/* success panel shown after a reservation sends */
+.bk-done{ display:none; text-align:center; padding:0.4rem 0 0.2rem; }
+.bk-done .check{ width:54px; height:54px; border-radius:50%; background:rgba(77,139,127,0.18); border:1px solid var(--teal); color:var(--teal-soft); display:flex; align-items:center; justify-content:center; font-size:1.7rem; margin:0 auto 1.1rem; }
+.bk-done h4{ margin-bottom:0.5rem; }
+.bk-done p{ font-size:0.9rem; color:var(--text-dim); line-height:1.5; }
 
 /* ============================================================
    FOOTER
@@ -536,7 +547,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       <button class="tab"        data-page="team"      onclick="go('team')">The Team</button>
       <button class="tab"        data-page="contact"   onclick="go('contact')">Contact</button>
       <button class="tab"        data-page="review"    onclick="go('review')">Practice Tests</button>
-      <button class="nav-cta" onclick="openBooking('')">Book a Session</button>
+      <button class="nav-cta" onclick="openBooking('')">Reserve your spot</button>
     </nav>
   </div>
 </header>
@@ -978,29 +989,52 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 <div class="modal-overlay" id="bookingModal" onclick="if(event.target===this)closeBooking()">
   <div class="modal">
     <button class="close" onclick="closeBooking()">×</button>
-    <h3>Reserve your spot</h3>
-    <p class="msub">No payment yet — pricing is being finalized. We'll email you the details before anything is due.</p>
 
-    <div class="field">
-      <label>Your name</label>
-      <input type="text" id="bk-name" placeholder="First and last name" />
-    </div>
-    <div class="field">
-      <label>Email</label>
-      <input type="email" id="bk-email" placeholder="you@example.com" />
-    </div>
-    <div class="field">
-      <label>Which session?</label>
-      <select id="bk-session">
-        <option>Session One — Aug 18–22</option>
-        <option>Session Two — Aug 26–29</option>
-        <option>1-on-1 Mentorship — interest</option>
-        <option>Not sure yet — just keep me posted</option>
-      </select>
+    <!-- FORM VIEW -->
+    <div id="bk-form">
+      <h3>Reserve your spot</h3>
+      <p class="msub">No payment yet — pricing is being finalized. We'll text and email you the details before anything is due.</p>
+
+      <div class="field-row">
+        <div class="field">
+          <label>First name</label>
+          <input type="text" id="bk-first" placeholder="First" />
+        </div>
+        <div class="field">
+          <label>Last name</label>
+          <input type="text" id="bk-last" placeholder="Last" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="bk-email" placeholder="you@example.com" />
+      </div>
+      <div class="field">
+        <label>Phone — so we can text your confirmation</label>
+        <input type="tel" id="bk-phone" placeholder="(403) 555-0123" />
+      </div>
+      <div class="field">
+        <label>Which session?</label>
+        <select id="bk-session">
+          <option>Session One — Aug 18–22</option>
+          <option>Session Two — Aug 26–29</option>
+          <option>1-on-1 Mentorship — interest</option>
+          <option>Not sure yet — just keep me posted</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary" id="bk-submit" onclick="submitBooking()">Send reservation <span class="arr">→</span></button>
+      <div id="bk-status" class="bk-status"></div>
+      <p class="fineprint">Your name, email, phone, and chosen session go straight to enginquire7@gmail.com. We'll personally text you to confirm. Pricing &amp; payment come later — nothing is due now.</p>
     </div>
 
-    <button class="btn btn-primary" onclick="submitBooking()">Send reservation <span class="arr">→</span></button>
-    <p class="fineprint">This opens your email app with the details pre-filled, sent to enginquire7@gmail.com. Once pricing is live, this button will take you straight to secure payment.</p>
+    <!-- SUCCESS VIEW (shown after a reservation sends) -->
+    <div id="bk-done" class="bk-done">
+      <div class="check">✓</div>
+      <h4>You're on the list.</h4>
+      <p>Thanks — your reservation is in. We'll text and email you shortly to confirm your spot and send pricing once it's set.</p>
+      <button class="btn btn-ghost" onclick="closeBooking()" style="margin-top:1.2rem;">Done</button>
+    </div>
   </div>
 </div>
 
@@ -1024,6 +1058,13 @@ function go(page){
 // ============================================================
 function openBooking(presetSession){
   const modal = document.getElementById('bookingModal');
+  // reset to the form view (in case it was left on the success screen)
+  document.getElementById('bk-form').style.display = 'block';
+  document.getElementById('bk-done').style.display = 'none';
+  const status = document.getElementById('bk-status');
+  status.textContent = ''; status.className = 'bk-status';
+  const btn = document.getElementById('bk-submit');
+  btn.disabled = false; btn.innerHTML = 'Send reservation <span class="arr">&rarr;</span>';
   if(presetSession){
     const sel = document.getElementById('bk-session');
     for(const opt of sel.options){ if(opt.value === presetSession){ opt.selected = true; break; } }
@@ -1032,57 +1073,86 @@ function openBooking(presetSession){
 }
 function closeBooking(){ document.getElementById('bookingModal').classList.remove('open'); }
 
+// ============================================================
+// EDIT:BOOKING — RESERVATION EMAIL (Web3Forms)
 // ------------------------------------------------------------
-// HOW TO TURN THIS INTO A REAL PAYMENT / SIGNUP SYSTEM
-// ------------------------------------------------------------
-// Right now submitBooking() opens the user's email app (mailto)
-// with their details pre-filled. That's the zero-setup option —
-// works today, no account needed. When you're ready to go live
-// with real payments, pick ONE of these and follow the note:
+// HOW IT WORKS: when someone hits "Send reservation", the browser
+// POSTs their details to Web3Forms, which emails the whole thing
+// to enginquire7@gmail.com. No backend, no secret server needed —
+// the access key below is SAFE to be public because it can only
+// ever deliver to the one email address you verified.
 //
-//  OPTION A — STRIPE PAYMENT LINK (recommended once price is set)
-//    1. Make a free Stripe account -> Payment Links -> create a
-//       link for each session at your chosen price.
-//    2. Replace the body of submitBooking() with:
-//         window.location.href = "https://buy.stripe.com/YOUR_LINK";
-//       (or map each session to its own link via a small if/else.)
-//    Stripe handles checkout, receipts, and payouts to your bank.
+// >>> ONE STEP TO GO LIVE <<<
+//   1. Go to https://web3forms.com  →  enter enginquire7@gmail.com
+//   2. They email that inbox an Access Key (looks like a UUID).
+//   3. Paste it between the quotes below, replacing the placeholder.
+// Until you do, submissions will fail with a friendly error and a
+// prompt to email you directly — so the site never looks broken.
 //
-//  OPTION B — GOOGLE FORM (free, no payments, collect signups)
-//    1. Build a Google Form with name/email/session fields.
-//    2. Replace submitBooking() body with:
-//         window.open("https://forms.gle/YOUR_FORM", "_blank");
-//    Responses land in a Google Sheet you both can see.
-//
-//  OPTION C — E-TRANSFER (simplest for money)
-//    Keep the mailto below; in your reply email, send Interac
-//    e-transfer instructions to enginquire7@gmail.com.
-//
-//  When you add a backend later (the "app phase"), submitBooking()
-//  becomes a fetch() POST to your own API instead.
-// ------------------------------------------------------------
-function submitBooking(){
-  const name = document.getElementById('bk-name').value.trim();
-  const email = document.getElementById('bk-email').value.trim();
-  const session = document.getElementById('bk-session').value;
+// LATER — ADDING PAYMENT (when pricing is set):
+//   Easiest path is a Stripe Payment Link (one URL per session you
+//   generate in the Stripe dashboard, no code). After a successful
+//   send below, redirect to it, e.g.:
+//       window.location.href = STRIPE_LINKS[session];
+//   For true automation (mark-as-paid, receipts), a Stripe webhook
+//   hitting a small serverless function is the next step up.
+// ============================================================
+const WEB3FORMS_KEY = "c9b19a26-f90e-494e-b2c3-4f3fb681acb0";  // <-- paste your key here
 
-  if(!name || !email){
-    alert('Please add your name and email so we can reach you.');
+async function submitBooking(){
+  const first   = document.getElementById('bk-first').value.trim();
+  const last    = document.getElementById('bk-last').value.trim();
+  const email   = document.getElementById('bk-email').value.trim();
+  const phone   = document.getElementById('bk-phone').value.trim();
+  const session = document.getElementById('bk-session').value;
+  const status  = document.getElementById('bk-status');
+  const btn     = document.getElementById('bk-submit');
+
+  // --- validate: all four contact fields are required ---
+  if(!first || !last || !email || !phone){
+    status.className = 'bk-status err';
+    status.textContent = 'Please add your name, email, and phone so we can confirm your spot.';
     return;
   }
 
-  // --- Current behaviour: open email client pre-filled (mailto) ---
-  const subject = encodeURIComponent('Session reservation — ' + session);
-  const body = encodeURIComponent(
-    'Hi EngInQuire,\n\n' +
-    'I\'d like to reserve a spot.\n\n' +
-    'Name: ' + name + '\n' +
-    'Email: ' + email + '\n' +
-    'Session: ' + session + '\n\n' +
-    'Please send me the price and payment details. Thanks!'
-  );
-  window.location.href = 'mailto:enginquire7@gmail.com?subject=' + subject + '&body=' + body;
-  closeBooking();
+  // --- show a sending state so the button can't be double-clicked ---
+  btn.disabled = true;
+  btn.innerHTML = 'Sending\u2026';
+  status.className = 'bk-status';
+  status.textContent = '';
+
+  try{
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: 'New reservation \u2014 ' + session,   // shows the session right in the email subject
+        from_name: 'EngInQuire website',
+        replyto: email,                                 // hitting "reply" in Gmail goes to the student
+        'First name': first,
+        'Last name': last,
+        'Email': email,
+        'Phone': phone,
+        'Session requested': session
+      })
+    });
+    const data = await res.json();
+
+    if(data.success){
+      // swap the form for the success panel
+      document.getElementById('bk-form').style.display = 'none';
+      document.getElementById('bk-done').style.display = 'block';
+    } else {
+      throw new Error(data.message || 'Submission failed');
+    }
+  } catch(err){
+    // re-enable and tell them how to reach you the manual way
+    btn.disabled = false;
+    btn.innerHTML = 'Send reservation <span class="arr">&rarr;</span>';
+    status.className = 'bk-status err';
+    status.textContent = 'Couldn\u2019t send that just now \u2014 please email enginquire7@gmail.com directly, or try again.';
+  }
 }
 
 // Close modal on Escape
