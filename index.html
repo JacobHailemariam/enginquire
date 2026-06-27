@@ -35,6 +35,9 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
+<!-- EmailJS — sends the styled confirmation email to the student who reserves -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <style>
 /* ============================================================
    THEME — edit these variables to re-skin the entire site
@@ -383,6 +386,14 @@ h4{ font-size:1.05rem; }
 .cmethod .ci.terra{ background:rgba(207,106,60,0.2); color:var(--terra); }
 .cmethod .cl{ font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-mute); }
 .cmethod .cv{ font-size:0.98rem; color:var(--cream); font-weight:500; }
+/* direct-to-founder block under the main contact grid */
+.team-direct{ margin-top:3rem; padding-top:2.3rem; border-top:1px solid rgba(224,169,63,0.15); }
+.team-direct h3{ margin-bottom:0.35rem; }
+.team-direct .sub{ color:var(--text-dim); font-size:0.92rem; margin-bottom:1.6rem; max-width:560px; }
+.team-direct-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1.6rem 2rem; }
+.tperson{ display:flex; flex-direction:column; gap:0.75rem; }
+.tname{ font-family:var(--font-head); font-weight:700; color:var(--cream); font-size:1.05rem; letter-spacing:-0.01em; }
+@media(max-width:640px){ .team-direct-grid{ grid-template-columns:1fr; } }
 
 /* ============================================================
    BOOKING MODAL
@@ -910,9 +921,38 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
         </a>
       </div>
     </div>
+
+    <!-- EDIT:CONTACT — direct lines to Jacob & Tom (tel: lets mobile tap to call/text) -->
+    <div class="team-direct">
+      <h3>Prefer to reach us directly?</h3>
+      <p class="sub">Call or text either of us, or email our UCalgary inboxes — for any inquiry, big or small, don't hesitate to reach out.</p>
+      <div class="team-direct-grid">
+        <div class="tperson">
+          <span class="tname">Jacob Hailemariam</span>
+          <a href="tel:+15875001728" class="cmethod">
+            <span class="ci teal">☏</span>
+            <span><span class="cl">Call / Text</span><br><span class="cv">587-500-1728</span></span>
+          </a>
+          <a href="mailto:jacob.hailemariam@ucalgary.ca" class="cmethod">
+            <span class="ci gold">@</span>
+            <span><span class="cl">Outlook</span><br><span class="cv">jacob.hailemariam@ucalgary.ca</span></span>
+          </a>
+        </div>
+        <div class="tperson">
+          <span class="tname">Tom Kurian</span>
+          <a href="tel:+18255581415" class="cmethod">
+            <span class="ci teal">☏</span>
+            <span><span class="cl">Call / Text</span><br><span class="cv">825-558-1415</span></span>
+          </a>
+          <a href="mailto:tom.kurian@ucalgary.ca" class="cmethod">
+            <span class="ci gold">@</span>
+            <span><span class="cl">Outlook</span><br><span class="cv">tom.kurian@ucalgary.ca</span></span>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
-
 <!-- ===================== FOOTER ===================== -->
 <footer>
   <div class="foot-brand">Eng<span class="in">In</span>Quire</div>
@@ -1099,6 +1139,42 @@ function closeBooking(){ document.getElementById('bookingModal').classList.remov
 // ============================================================
 const WEB3FORMS_KEY = "c9b19a26-f90e-494e-b2c3-4f3fb681acb0";  // <-- paste your key here
 
+// ============================================================
+// EDIT:BOOKING — STUDENT CONFIRMATION EMAIL (EmailJS)
+// ------------------------------------------------------------
+// This sends the nice branded "You're in!" email to whoever
+// reserved. The email's LOOK lives in your EmailJS dashboard
+// template (see the separate confirmation-email.html I gave you);
+// this code just fires it with their name + session filled in.
+//
+// >>> THREE IDs TO PASTE (all from your EmailJS dashboard) <<<
+//   PUBLIC KEY : Account → General → Public Key
+//   SERVICE ID : Email Services → (your Gmail service)
+//   TEMPLATE ID: Email Templates → (the template you create)
+// The public key is safe to expose (lock it to your domain in
+// EmailJS → Account → Security). Until all three are set, the
+// site still works — it just skips the confirmation step.
+// ============================================================
+const EMAILJS_PUBLIC_KEY  = "NCO_4z8QKWneBPWVl";
+const EMAILJS_SERVICE_ID  = "service_2axu63s";
+const EMAILJS_TEMPLATE_ID = "template_0x9uwfp";
+const EMAILJS_READY = EMAILJS_PUBLIC_KEY !== "YOUR_EMAILJS_PUBLIC_KEY"
+                   && EMAILJS_SERVICE_ID !== "YOUR_EMAILJS_SERVICE_ID"
+                   && EMAILJS_TEMPLATE_ID !== "YOUR_EMAILJS_TEMPLATE_ID";
+
+if(EMAILJS_READY && window.emailjs){ emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); }
+
+// best-effort: never blocks the reservation if it fails
+function sendUserConfirmation(params){
+  if(!EMAILJS_READY || !window.emailjs){
+    console.warn('[EngInQuire] EmailJS not configured yet — confirmation email skipped.');
+    return;
+  }
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+    .then(()  => console.log('[EngInQuire] confirmation email sent to', params.user_email))
+    .catch(e => console.error('[EngInQuire] confirmation email failed:', e));
+}
+
 async function submitBooking(){
   const first   = document.getElementById('bk-first').value.trim();
   const last    = document.getElementById('bk-last').value.trim();
@@ -1152,6 +1228,8 @@ async function submitBooking(){
       // swap the form for the success panel
       document.getElementById('bk-form').style.display = 'none';
       document.getElementById('bk-done').style.display = 'block';
+      // and send the student their branded confirmation (best-effort)
+      sendUserConfirmation({ first_name: first, last_name: last, user_email: email, session: session });
     } else {
       throw new Error(data.message || 'Submission failed');
     }
