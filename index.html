@@ -274,7 +274,12 @@ h4{ font-size:1.05rem; }
 .tilt:hover .glare{ opacity:1; }
 
 /* Drifting ambient gradient layer for the hero */
-.hero{ position:relative; }
+.hero-wrap{ position:relative; overflow:hidden; }
+.math-field{
+  position:absolute; inset:0; width:100%; height:100%;
+  z-index:0; pointer-events:none; display:block;
+  opacity:1;
+}
 .hero-aura{
   position:absolute; inset:-20% -10% -20% -10%; z-index:0; pointer-events:none;
   background:
@@ -283,7 +288,7 @@ h4{ font-size:1.05rem; }
     radial-gradient(560px 480px at 60% 90%, rgba(207,106,60,0.12), transparent 60%);
   filter:blur(8px); animation:auraDrift 18s ease-in-out infinite alternate;
 }
-.hero > *{ position:relative; z-index:1; }
+.hero{ position:relative; z-index:1; }
 @keyframes auraDrift{
   0%   { transform:translate3d(0,0,0) scale(1); }
   50%  { transform:translate3d(2%,-2%,0) scale(1.06); }
@@ -292,6 +297,12 @@ h4{ font-size:1.05rem; }
 
 /* Count-up numbers sit in mono until they finish for a "loading" feel */
 .countup{ font-variant-numeric:tabular-nums; }
+
+/* Gentle float on the hero panel for living depth */
+@keyframes floatY{ 0%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } 100%{ transform:translateY(0); } }
+.floaty{ animation:floatY 6s ease-in-out infinite; }
+/* parallax layers shift via JS-set CSS vars */
+.plx{ transition:transform 0.25s cubic-bezier(.2,.7,.2,1); will-change:transform; }
 
 /* generic two-tone band */
 .band{ background:var(--walnut); border-top:1px solid rgba(224,169,63,0.14); border-bottom:1px solid rgba(224,169,63,0.14); }
@@ -604,10 +615,12 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 
 <!-- ===================== HOME ===================== -->
 <section class="page active" id="home">
+  <div class="hero-wrap">
+  <canvas class="math-field" id="mathField" aria-hidden="true"></canvas>
+  <div class="hero-aura"></div>
   <div class="wrap hero">
-    <div class="hero-aura"></div>
     <!-- EDIT:HOME -->
-    <div>
+    <div class="plx" data-plx="0.018">
       <span class="eyebrow">Schulich · UCalgary · Class of 2030</span>
       <h1>First-year engineering, <span class="gold">decoded</span> by people who <span class="em">just did it</span>.</h1>
       <p class="lead">EngInQuire runs pre-semester review sessions and free study resources for incoming Schulich engineering students — built by two upper-years who finished first year with 3.9+ GPAs and remember exactly what tripped people up.</p>
@@ -616,7 +629,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
         <button class="btn btn-ghost" onclick="go('resources')">Free resources</button>
       </div>
     </div>
-    <div class="hero-panel tilt" data-tilt>
+    <div class="hero-panel tilt floaty plx" data-tilt data-plx="0.04">
       <div class="glare"></div>
       <div class="tilt-inner">
       <div class="panel-label">// the people teaching you</div>
@@ -634,6 +647,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       </div>
       </div>
     </div>
+  </div>
   </div>
 
   <div class="band section-pad">
@@ -1746,6 +1760,215 @@ const QZ=(function(){
     nums.forEach(function(el){ io2.observe(el); });
   } else {
     nums.forEach(runCount);
+  }
+
+  /* ---- Mouse parallax on hero layers ---- */
+  if(!reduce){
+    var hero = document.querySelector('.hero');
+    var layers = document.querySelectorAll('.plx');
+    if(hero && layers.length){
+      var raf = null, tx = 0, ty = 0;
+      hero.addEventListener('mousemove', function(e){
+        var r = hero.getBoundingClientRect();
+        tx = ((e.clientX - r.left)/r.width - 0.5);
+        ty = ((e.clientY - r.top)/r.height - 0.5);
+        if(!raf) raf = requestAnimationFrame(apply);
+      });
+      hero.addEventListener('mouseleave', function(){ tx=0; ty=0; if(!raf) raf=requestAnimationFrame(apply); });
+      function apply(){
+        raf = null;
+        layers.forEach(function(l){
+          var depth = parseFloat(l.getAttribute('data-plx')) || 0.02;
+          var mx = -tx * depth * 100;
+          var my = -ty * depth * 100;
+          if(l.classList.contains('floaty')){
+            l.style.marginLeft = mx.toFixed(1)+'px';
+            l.style.marginTop  = my.toFixed(1)+'px';
+          } else {
+            l.style.transform = 'translate('+mx.toFixed(1)+'px,'+my.toFixed(1)+'px)';
+          }
+        });
+      }
+    }
+  }
+})();
+
+/* ============================================================
+   EDIT:MATHFIELD — animated warping grid + floating equations
+   Canvas behind the hero. Reacts to the cursor like a gravity
+   well bending a coordinate mesh. Brand-colored. Auto-pauses
+   off-screen and disables under reduced-motion.
+============================================================ */
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var canvas = document.getElementById('mathField');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var W=0, H=0, cols=0, rows=0, SP=46; // grid spacing in px
+  var pts = [];           // grid points
+  var mouse = {x:-9999, y:-9999, active:false};
+  var t = 0, running = true, rafId = null;
+
+  // brand palette
+  var GOLD='224,169,63', TERRA='207,106,60', TEAL='77,139,127';
+
+  // floating equations that drift through the field
+  var EQS = ['∫ f(x)dx','∇·F','dy/dx','eⁱᵖ+1=0','Σ aₙ','√(b²-4ac)','λ = h/p','F = ma','∂u/∂t','lim x→0','A·xⁿ','θ = ωt',
+    '∮ E·dl','∬ ρ dA','d²y/dx²','∏ xᵢ','sin²θ+cos²θ','V = IR','E = mc²','∫₀^∞','f\'(x)','Δx·Δp ≥ ℏ/2','PV = nRT','τ = r×F',
+    'log(xy)','∂²f/∂x²','i² = -1','Σ Fₓ = 0','ω = 2πf','a² + b² = c²','∇²φ = 0','dv/dt','½mv²','q = mcΔT','tan(θ)','∫∫∫ dV'];
+  var floaters = [];
+
+  function build(){
+    var wrap = canvas.parentElement;
+    var rect = wrap.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    cols = Math.ceil(W/SP)+2; rows = Math.ceil(H/SP)+2;
+    pts = [];
+    for(var r=0;r<rows;r++){
+      for(var c=0;c<cols;c++){
+        pts.push({ ox:c*SP-SP, oy:r*SP-SP, x:c*SP-SP, y:r*SP-SP, c:c, r:r });
+      }
+    }
+    // (re)seed floaters spread across the field
+    if(floaters.length===0){
+      for(var i=0;i<EQS.length;i++){
+        floaters.push({
+          txt:EQS[i],
+          x:Math.random()*W, y:Math.random()*H,
+          vx:(Math.random()-0.5)*0.25, vy:(Math.random()-0.5)*0.25,
+          sz:13+Math.random()*10, base:0.13+Math.random()*0.12
+        });
+      }
+    }
+  }
+
+  function idx(c,r){ return r*cols+c; }
+
+  function frame(){
+    if(!running){ rafId=null; return; }
+    t += 0.012;
+    ctx.clearRect(0,0,W,H);
+
+    // --- update grid points: wave + cursor gravity well ---
+    for(var i=0;i<pts.length;i++){
+      var p = pts[i];
+      // ambient wave
+      var wave = Math.sin((p.ox*0.018)+(t)) * 11 + Math.cos((p.oy*0.02)-(t*0.8)) * 11;
+      var tx = p.ox + Math.sin((p.oy*0.016)+(t*0.7))*6, ty = p.oy + wave;
+      // cursor gravity well
+      if(mouse.active){
+        var dx = p.ox - mouse.x, dy = p.oy - mouse.y;
+        var dist = Math.sqrt(dx*dx+dy*dy);
+        var R = 300;
+        if(dist < R){
+          var force = (1 - dist/R);
+          var pull = force*force*120;
+          var ang = Math.atan2(dy,dx);
+          tx += Math.cos(ang)*pull;     // push outward = warp
+          ty += Math.sin(ang)*pull;
+        }
+      }
+      // ease toward target for smoothness
+      p.x += (tx - p.x)*0.12;
+      p.y += (ty - p.y)*0.12;
+    }
+
+    // --- draw connecting lines (the mesh) ---
+    ctx.lineWidth = 1;
+    for(var r=0;r<rows;r++){
+      for(var c=0;c<cols;c++){
+        var p = pts[idx(c,r)];
+        // distance to mouse drives brightness
+        var glow = 0.05;
+        if(mouse.active){
+          var mdx=p.x-mouse.x, mdy=p.y-mouse.y;
+          var md=Math.sqrt(mdx*mdx+mdy*mdy);
+          glow = Math.max(0.06, 0.75*(1 - Math.min(md/320,1)));
+        }
+        // horizontal neighbor
+        if(c<cols-1){
+          var q=pts[idx(c+1,r)];
+          ctx.strokeStyle='rgba('+GOLD+','+(glow*0.75).toFixed(3)+')';
+          ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke();
+        }
+        // vertical neighbor
+        if(r<rows-1){
+          var s=pts[idx(c,r+1)];
+          ctx.strokeStyle='rgba('+TEAL+','+(glow*0.68).toFixed(3)+')';
+          ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(s.x,s.y); ctx.stroke();
+        }
+        // node dot
+        ctx.fillStyle='rgba('+GOLD+','+(glow*1.1).toFixed(3)+')';
+        ctx.beginPath(); ctx.arc(p.x,p.y, glow>0.2?2.8:1.3, 0, 6.283); ctx.fill();
+      }
+    }
+
+    // --- floating equations ---
+    for(var f=0;f<floaters.length;f++){
+      var fl=floaters[f];
+      fl.x += fl.vx; fl.y += fl.vy;
+      if(fl.x<-60) fl.x=W+40; if(fl.x>W+60) fl.x=-40;
+      if(fl.y<-30) fl.y=H+30; if(fl.y>H+30) fl.y=-30;
+      var op = fl.base;
+      if(mouse.active){
+        var ddx=fl.x-mouse.x, ddy=fl.y-mouse.y;
+        var dd=Math.sqrt(ddx*ddx+ddy*ddy);
+        if(dd<260) op = fl.base + (1-dd/260)*0.85;
+      }
+      ctx.save();
+      ctx.font='600 '+fl.sz.toFixed(0)+'px "JetBrains Mono", monospace';
+      ctx.fillStyle='rgba('+TERRA+','+op.toFixed(3)+')';
+      ctx.fillText(fl.txt, fl.x, fl.y);
+      ctx.restore();
+    }
+
+    rafId = requestAnimationFrame(frame);
+  }
+
+  // pointer tracking relative to the canvas/hero-wrap
+  var wrap = canvas.parentElement;
+  function onMove(e){
+    var rect = wrap.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+    mouse.active = true;
+  }
+  function onLeave(){ mouse.active=false; mouse.x=-9999; mouse.y=-9999; }
+
+  if(!reduce){
+    wrap.addEventListener('mousemove', onMove);
+    wrap.addEventListener('mouseleave', onLeave);
+    // touch: let finger warp it too
+    wrap.addEventListener('touchmove', function(e){
+      if(e.touches[0]){ var rect=wrap.getBoundingClientRect(); mouse.x=e.touches[0].clientX-rect.left; mouse.y=e.touches[0].clientY-rect.top; mouse.active=true; }
+    }, {passive:true});
+    wrap.addEventListener('touchend', onLeave);
+  }
+
+  // pause when hero scrolled out of view (perf)
+  if('IntersectionObserver' in window){
+    var vio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        running = en.isIntersecting;
+        if(running && !rafId){ rafId=requestAnimationFrame(frame); }
+      });
+    }, {threshold:0.01});
+    vio.observe(wrap);
+  }
+
+  var rt;
+  window.addEventListener('resize', function(){ clearTimeout(rt); rt=setTimeout(build, 150); });
+
+  build();
+  if(reduce){
+    // static single frame: draw the mesh once, no animation
+    running=false; t=0; frame();
+  } else {
+    rafId = requestAnimationFrame(frame);
   }
 })();
 
