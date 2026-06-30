@@ -153,11 +153,18 @@ header.nav{
 .nav-cta{
   font-family:var(--font-head); font-weight:700; font-size:0.88rem;
   background:var(--terra); color:var(--cream);
-  border:none; cursor:pointer;
+  border:none; cursor:pointer; position:relative; overflow:hidden;
   padding:0.6rem 1.15rem; border-radius:7px; margin-left:0.5rem;
-  transition:all 0.18s;
+  transition:transform 0.28s cubic-bezier(.2,1.3,.3,1), box-shadow 0.28s, background 0.18s, color 0.18s;
 }
-.nav-cta:hover{ background:var(--gold); color:var(--espresso); transform:translateY(-1px); }
+.nav-cta::before{
+  content:""; position:absolute; top:0; left:-80%; width:55%; height:100%;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform:skewX(-18deg); pointer-events:none;
+}
+.nav-cta:hover::before{ left:130%; transition:left 0.7s cubic-bezier(.2,.7,.2,1); }
+.nav-cta:hover{ background:var(--gold); color:var(--espresso); transform:translateY(-3px) scale(1.05); box-shadow:0 12px 30px -8px rgba(224,169,63,0.55); }
+.nav-cta:active{ transform:scale(0.93); transition:transform 0.08s; }
 
 .menu-btn{ display:none; background:none; border:none; color:var(--cream); font-size:1.5rem; cursor:pointer; }
 
@@ -203,16 +210,35 @@ h4{ font-size:1.05rem; }
   font-family:var(--font-head); font-weight:700; font-size:0.92rem;
   padding:0.85rem 1.5rem; border-radius:8px; border:none; cursor:pointer;
   text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem;
-  transition:all 0.2s;
+  position:relative; overflow:hidden;
+  transition:transform 0.28s cubic-bezier(.2,1.3,.3,1), box-shadow 0.28s, background 0.2s, color 0.2s, border-color 0.2s;
 }
+/* shine sweep that crosses the button on hover */
+.btn::before{
+  content:""; position:absolute; top:0; left:-80%; width:60%; height:100%;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform:skewX(-18deg); transition:left 0s; pointer-events:none;
+}
+.btn:hover::before{ left:130%; transition:left 0.7s cubic-bezier(.2,.7,.2,1); }
+.btn:active{ transform:scale(0.94) translateY(1px); transition:transform 0.08s; }
+
 .btn-primary{ background:var(--gold); color:var(--espresso); }
-.btn-primary:hover{ background:var(--gold-soft); transform:translateY(-2px); box-shadow:0 8px 24px rgba(224,169,63,0.25); }
+.btn-primary:hover{ background:var(--gold-soft); transform:translateY(-4px) scale(1.04); box-shadow:0 16px 40px -8px rgba(224,169,63,0.55); }
 .btn-ghost{ background:transparent; color:var(--cream); border:1.5px solid rgba(243,231,208,0.35); }
-.btn-ghost:hover{ border-color:var(--gold); color:var(--gold); }
+.btn-ghost:hover{ border-color:var(--gold); color:var(--gold); transform:translateY(-4px) scale(1.04); box-shadow:0 16px 40px -10px rgba(224,169,63,0.4); }
 .btn-terra{ background:var(--terra); color:var(--cream); }
-.btn-terra:hover{ background:var(--gold); color:var(--espresso); transform:translateY(-2px); }
-.btn .arr{ transition:transform 0.2s; }
-.btn:hover .arr{ transform:translateX(4px); }
+.btn-terra:hover{ background:var(--gold); color:var(--espresso); transform:translateY(-4px) scale(1.04); box-shadow:0 16px 40px -8px rgba(207,106,60,0.55); }
+.btn .arr{ transition:transform 0.28s cubic-bezier(.2,1.4,.3,1); }
+.btn:hover .arr{ transform:translateX(6px); }
+
+/* idle bob — the "bumping up and down" on key CTAs */
+@keyframes ctaBob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); } }
+.cta-bob{ animation:ctaBob 2.4s ease-in-out infinite; }
+.cta-bob:hover{ animation-play-state:paused; }
+/* a soft pulsing ring of attention on the most important CTA */
+@keyframes ctaPulse{ 0%{ box-shadow:0 0 0 0 rgba(224,169,63,0.45); } 70%{ box-shadow:0 0 0 14px rgba(224,169,63,0); } 100%{ box-shadow:0 0 0 0 rgba(224,169,63,0); } }
+.cta-pulse{ animation:ctaBob 2.4s ease-in-out infinite, ctaPulse 2.4s ease-out infinite; }
+.cta-pulse:hover{ animation-play-state:paused; }
 
 /* Hero stat panel */
 .hero-panel{
@@ -511,7 +537,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   .member{ grid-template-columns:1fr; }
   .photo{ width:130px; }
 }
-@media (prefers-reduced-motion:reduce){ *{ animation-duration:0.01ms!important; transition-duration:0.01ms!important; } .reveal{ opacity:1!important; transform:none!important; } .tilt{ transform:none!important; } .hero-aura{ animation:none!important; } }
+@media (prefers-reduced-motion:reduce){ *{ animation-duration:0.01ms!important; transition-duration:0.01ms!important; } .reveal{ opacity:1!important; transform:none!important; } .tilt{ transform:none!important; } .hero-aura{ animation:none!important; } .cta-bob, .cta-pulse{ animation:none!important; } }
 
 /* ===================== PRACTICE TEST (diploma quiz) ===================== */
 .toolbar{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:2rem;}
@@ -625,7 +651,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       <h1>First-year engineering, <span class="gold">decoded</span> by people who <span class="em">just did it</span>.</h1>
       <p class="lead">EngInQuire runs pre-semester review sessions and free study resources for incoming Schulich engineering students — built by two upper-years who finished first year with 3.9+ GPAs and remember exactly what tripped people up.</p>
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="openBooking('')">Book a session <span class="arr">→</span></button>
+        <button class="btn btn-primary cta-pulse" onclick="openBooking('')">Book a session <span class="arr">→</span></button>
         <button class="btn btn-ghost" onclick="go('resources')">Free resources</button>
       </div>
     </div>
@@ -765,7 +791,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
           <li>Printed cheat-sheet handout</li>
           <li>Q&amp;A with two 3.9+ students</li>
         </ul>
-        <button class="btn btn-ghost" onclick="openBooking('Session One — Aug 18–22')">Reserve spot <span class="arr">→</span></button>
+        <button class="btn btn-ghost cta-bob" onclick="openBooking('Session One — Aug 18–22')">Reserve spot <span class="arr">→</span></button>
       </div>
 
       <div class="sess feat reveal d1">
@@ -779,7 +805,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
           <li>Printed cheat-sheet handout</li>
           <li>Refined from Session 1 feedback</li>
         </ul>
-        <button class="btn btn-terra" onclick="openBooking('Session Two — Aug 26–29')">Reserve spot <span class="arr">→</span></button>
+        <button class="btn btn-terra cta-bob" onclick="openBooking('Session Two — Aug 26–29')">Reserve spot <span class="arr">→</span></button>
       </div>
 
       <div class="sess reveal d2">
@@ -968,7 +994,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
     <div class="contact-grid">
       <div>
         <p class="lead" style="margin-bottom:1.6rem;">We're two students, not a company — replies come from real people, usually within a day. Reach out about sessions, free resources, or anything about engineering at Schulich.</p>
-        <button class="btn btn-primary" onclick="openBooking('')">Book a session <span class="arr">→</span></button>
+        <button class="btn btn-primary cta-pulse" onclick="openBooking('')">Book a session <span class="arr">→</span></button>
       </div>
       <div class="contact-methods">
         <a href="mailto:enginquire7@gmail.com" class="cmethod">
@@ -1794,7 +1820,7 @@ const QZ=(function(){
 })();
 
 /* ============================================================
-   EDIT:MATHFIELD — animated warping grid + floating equations
+   EDIT:MATHFIELD — animated warping grid with cursor shockwaves
    Canvas behind the hero. Reacts to the cursor like a gravity
    well bending a coordinate mesh. Brand-colored. Auto-pauses
    off-screen and disables under reduced-motion.
@@ -1811,13 +1837,13 @@ const QZ=(function(){
   var t = 0, running = true, rafId = null;
 
   // brand palette
-  var GOLD='224,169,63', TERRA='207,106,60', TEAL='77,139,127';
+  var GOLD='224,169,63', TERRA='207,106,60', TEAL='77,139,127', GOLDSOFT='240,201,118';
 
-  // floating equations that drift through the field
-  var EQS = ['∫ f(x)dx','∇·F','dy/dx','eⁱᵖ+1=0','Σ aₙ','√(b²-4ac)','λ = h/p','F = ma','∂u/∂t','lim x→0','A·xⁿ','θ = ωt',
-    '∮ E·dl','∬ ρ dA','d²y/dx²','∏ xᵢ','sin²θ+cos²θ','V = IR','E = mc²','∫₀^∞','f\'(x)','Δx·Δp ≥ ℏ/2','PV = nRT','τ = r×F',
-    'log(xy)','∂²f/∂x²','i² = -1','Σ Fₓ = 0','ω = 2πf','a² + b² = c²','∇²φ = 0','dv/dt','½mv²','q = mcΔT','tan(θ)','∫∫∫ dV'];
-  var floaters = [];
+  // cursor trail history for the glowing comet sweep
+  var trail = [];
+  // expanding ripple rings spawned as the cursor moves fast
+  var ripples = [];
+  var lastMx=null, lastMy=null;
 
   function build(){
     var wrap = canvas.parentElement;
@@ -1833,17 +1859,6 @@ const QZ=(function(){
         pts.push({ ox:c*SP-SP, oy:r*SP-SP, x:c*SP-SP, y:r*SP-SP, c:c, r:r });
       }
     }
-    // (re)seed floaters spread across the field
-    if(floaters.length===0){
-      for(var i=0;i<EQS.length;i++){
-        floaters.push({
-          txt:EQS[i],
-          x:Math.random()*W, y:Math.random()*H,
-          vx:(Math.random()-0.5)*0.25, vy:(Math.random()-0.5)*0.25,
-          sz:13+Math.random()*10, base:0.13+Math.random()*0.12
-        });
-      }
-    }
   }
 
   function idx(c,r){ return r*cols+c; }
@@ -1853,79 +1868,130 @@ const QZ=(function(){
     t += 0.012;
     ctx.clearRect(0,0,W,H);
 
-    // --- update grid points: wave + cursor gravity well ---
+    // spawn ripples based on cursor speed
+    if(mouse.active){
+      if(lastMx!==null){
+        var sp = Math.hypot(mouse.x-lastMx, mouse.y-lastMy);
+        if(sp > 6){
+          ripples.push({ x:mouse.x, y:mouse.y, rad:0, life:1, max:340+sp*4 });
+          if(ripples.length>14) ripples.shift();
+        }
+      }
+      lastMx=mouse.x; lastMy=mouse.y;
+      // feed the comet trail
+      trail.push({x:mouse.x, y:mouse.y, life:1});
+      if(trail.length>22) trail.shift();
+    }
+    // age trail + ripples
+    for(var ti=trail.length-1; ti>=0; ti--){ trail[ti].life -= 0.05; if(trail[ti].life<=0) trail.splice(ti,1); }
+    for(var ri=ripples.length-1; ri>=0; ri--){ var rp=ripples[ri]; rp.rad += 7; rp.life -= 0.014; if(rp.life<=0||rp.rad>rp.max) ripples.splice(ri,1); }
+
+    // --- update grid points: ambient wave + cursor well + ripple shockwaves ---
     for(var i=0;i<pts.length;i++){
       var p = pts[i];
-      // ambient wave
-      var wave = Math.sin((p.ox*0.018)+(t)) * 11 + Math.cos((p.oy*0.02)-(t*0.8)) * 11;
-      var tx = p.ox + Math.sin((p.oy*0.016)+(t*0.7))*6, ty = p.oy + wave;
-      // cursor gravity well
+      var wave = Math.sin((p.ox*0.018)+(t)) * 12 + Math.cos((p.oy*0.02)-(t*0.8)) * 12;
+      var tx = p.ox + Math.sin((p.oy*0.016)+(t*0.7))*7, ty = p.oy + wave;
+
       if(mouse.active){
         var dx = p.ox - mouse.x, dy = p.oy - mouse.y;
         var dist = Math.sqrt(dx*dx+dy*dy);
-        var R = 300;
+        var R = 320;
         if(dist < R){
           var force = (1 - dist/R);
-          var pull = force*force*120;
+          var pull = force*force*150;
           var ang = Math.atan2(dy,dx);
-          tx += Math.cos(ang)*pull;     // push outward = warp
+          tx += Math.cos(ang)*pull;
           ty += Math.sin(ang)*pull;
         }
       }
-      // ease toward target for smoothness
-      p.x += (tx - p.x)*0.12;
-      p.y += (ty - p.y)*0.12;
+      // ripple shockwaves push points radially as the ring passes through them
+      for(var k=0;k<ripples.length;k++){
+        var rp=ripples[k];
+        var rdx=p.ox-rp.x, rdy=p.oy-rp.y;
+        var rd=Math.sqrt(rdx*rdx+rdy*rdy);
+        var band = Math.abs(rd - rp.rad);
+        if(band < 46){
+          var infl = (1 - band/46) * rp.life * 34;
+          var ra = Math.atan2(rdy,rdx);
+          tx += Math.cos(ra)*infl;
+          ty += Math.sin(ra)*infl;
+        }
+      }
+
+      p.x += (tx - p.x)*0.14;
+      p.y += (ty - p.y)*0.14;
     }
 
-    // --- draw connecting lines (the mesh) ---
     ctx.lineWidth = 1;
+    ctx.lineCap='round';
+    // additive blending makes overlapping glows blaze — the WOW core
+    ctx.globalCompositeOperation = 'lighter';
+
     for(var r=0;r<rows;r++){
       for(var c=0;c<cols;c++){
         var p = pts[idx(c,r)];
-        // distance to mouse drives brightness
-        var glow = 0.05;
+        var glow = 0.04;
         if(mouse.active){
           var mdx=p.x-mouse.x, mdy=p.y-mouse.y;
           var md=Math.sqrt(mdx*mdx+mdy*mdy);
-          glow = Math.max(0.06, 0.75*(1 - Math.min(md/320,1)));
+          glow = Math.max(0.04, 0.9*(1 - Math.min(md/340,1)));
         }
-        // horizontal neighbor
+        // ripple rings also light up the mesh they pass through
+        for(var k2=0;k2<ripples.length;k2++){
+          var rp2=ripples[k2];
+          var rd2=Math.hypot(p.x-rp2.x, p.y-rp2.y);
+          if(Math.abs(rd2-rp2.rad) < 40){ glow += (1-Math.abs(rd2-rp2.rad)/40)*rp2.life*0.7; }
+        }
+        if(glow>1) glow=1;
+        var lw = 0.6 + glow*1.8; ctx.lineWidth = lw;
         if(c<cols-1){
           var q=pts[idx(c+1,r)];
-          ctx.strokeStyle='rgba('+GOLD+','+(glow*0.75).toFixed(3)+')';
+          ctx.strokeStyle='rgba('+GOLD+','+(glow*0.85).toFixed(3)+')';
           ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke();
         }
-        // vertical neighbor
         if(r<rows-1){
           var s=pts[idx(c,r+1)];
-          ctx.strokeStyle='rgba('+TEAL+','+(glow*0.68).toFixed(3)+')';
+          ctx.strokeStyle='rgba('+TEAL+','+(glow*0.7).toFixed(3)+')';
           ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(s.x,s.y); ctx.stroke();
         }
-        // node dot
-        ctx.fillStyle='rgba('+GOLD+','+(glow*1.1).toFixed(3)+')';
-        ctx.beginPath(); ctx.arc(p.x,p.y, glow>0.2?2.8:1.3, 0, 6.283); ctx.fill();
+        if(glow>0.12){
+          ctx.fillStyle='rgba('+GOLDSOFT+','+(glow*1.2).toFixed(3)+')';
+          ctx.beginPath(); ctx.arc(p.x,p.y, 1.2+glow*3.4, 0, 6.283); ctx.fill();
+        }
       }
     }
 
-    // --- floating equations ---
-    for(var f=0;f<floaters.length;f++){
-      var fl=floaters[f];
-      fl.x += fl.vx; fl.y += fl.vy;
-      if(fl.x<-60) fl.x=W+40; if(fl.x>W+60) fl.x=-40;
-      if(fl.y<-30) fl.y=H+30; if(fl.y>H+30) fl.y=-30;
-      var op = fl.base;
-      if(mouse.active){
-        var ddx=fl.x-mouse.x, ddy=fl.y-mouse.y;
-        var dd=Math.sqrt(ddx*ddx+ddy*ddy);
-        if(dd<260) op = fl.base + (1-dd/260)*0.85;
-      }
-      ctx.save();
-      ctx.font='600 '+fl.sz.toFixed(0)+'px "JetBrains Mono", monospace';
-      ctx.fillStyle='rgba('+TERRA+','+op.toFixed(3)+')';
-      ctx.fillText(fl.txt, fl.x, fl.y);
-      ctx.restore();
+    // --- glowing comet trail following the cursor ---
+    for(var tr=0; tr<trail.length; tr++){
+      var pt=trail[tr];
+      var a = pt.life * (tr/trail.length);
+      var rad = 2 + (tr/trail.length)*16;
+      var g = ctx.createRadialGradient(pt.x,pt.y,0, pt.x,pt.y,rad*2.4);
+      g.addColorStop(0,'rgba('+GOLDSOFT+','+(a*0.5).toFixed(3)+')');
+      g.addColorStop(0.4,'rgba('+TERRA+','+(a*0.28).toFixed(3)+')');
+      g.addColorStop(1,'rgba('+TERRA+',0)');
+      ctx.fillStyle=g;
+      ctx.beginPath(); ctx.arc(pt.x,pt.y, rad*2.4, 0, 6.283); ctx.fill();
+    }
+    // bright core at the cursor
+    if(mouse.active){
+      var cg = ctx.createRadialGradient(mouse.x,mouse.y,0, mouse.x,mouse.y,60);
+      cg.addColorStop(0,'rgba('+GOLDSOFT+',0.55)');
+      cg.addColorStop(0.5,'rgba('+GOLD+',0.18)');
+      cg.addColorStop(1,'rgba('+GOLD+',0)');
+      ctx.fillStyle=cg;
+      ctx.beginPath(); ctx.arc(mouse.x,mouse.y,60,0,6.283); ctx.fill();
     }
 
+    // --- draw expanding ripple rings ---
+    for(var k3=0;k3<ripples.length;k3++){
+      var rp3=ripples[k3];
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle='rgba('+GOLDSOFT+','+(rp3.life*0.35).toFixed(3)+')';
+      ctx.beginPath(); ctx.arc(rp3.x,rp3.y, rp3.rad, 0, 6.283); ctx.stroke();
+    }
+
+    ctx.globalCompositeOperation = 'source-over';
     rafId = requestAnimationFrame(frame);
   }
 
@@ -1970,6 +2036,53 @@ const QZ=(function(){
   } else {
     rafId = requestAnimationFrame(frame);
   }
+})();
+
+/* ============================================================
+   EDIT:CTAFX — sparkle burst + soft click on key buttons
+============================================================ */
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var COLORS = ['#e0a93f','#f0c976','#cf6a3c','#4d8b7f'];
+
+  // tiny WebAudio click — no files needed; only after a user gesture
+  var AC=null;
+  function blip(){
+    try{
+      if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)();
+      var o=AC.createOscillator(), g=AC.createGain();
+      o.type='triangle'; o.frequency.value=660;
+      o.connect(g); g.connect(AC.destination);
+      g.gain.setValueAtTime(0, AC.currentTime);
+      g.gain.linearRampToValueAtTime(0.12, AC.currentTime+0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, AC.currentTime+0.12);
+      o.start(); o.stop(AC.currentTime+0.14);
+    }catch(e){}
+  }
+
+  function burst(x, y){
+    if(reduce) return;
+    for(var i=0;i<16;i++){
+      var s=document.createElement('div');
+      s.style.cssText='position:fixed;left:'+x+'px;top:'+y+'px;width:8px;height:8px;border-radius:50%;pointer-events:none;z-index:9999;';
+      s.style.background=COLORS[i%COLORS.length];
+      document.body.appendChild(s);
+      var ang=(Math.PI*2*i/16)+(Math.random()-0.5), dist=40+Math.random()*70;
+      var dx=Math.cos(ang)*dist, dy=Math.sin(ang)*dist - 20;
+      s.animate([
+        {transform:'translate(-50%,-50%) scale(1)', opacity:1},
+        {transform:'translate(calc(-50% + '+dx+'px),calc(-50% + '+dy+'px)) scale(0)', opacity:0}
+      ], {duration:600+Math.random()*300, easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=function(){ this.effect.target.remove(); };
+    }
+  }
+
+  // wire to every primary/terra CTA and the nav CTA
+  document.querySelectorAll('.btn-primary, .btn-terra, .nav-cta').forEach(function(b){
+    b.addEventListener('click', function(e){
+      burst(e.clientX, e.clientY);
+      blip();
+    });
+  });
 })();
 
 </script>
