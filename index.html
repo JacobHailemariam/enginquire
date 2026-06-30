@@ -256,6 +256,43 @@ h4{ font-size:1.05rem; }
 .hl-card h4{ margin-bottom:0.45rem; }
 .hl-card p{ font-size:0.9rem; color:var(--text-dim); }
 
+/* ============================================================
+   EDIT:ANIMATIONS — 3D tilt, scroll reveal, drifting bg
+============================================================ */
+/* Scroll-reveal: elements start hidden + shifted, then settle */
+.reveal{ opacity:0; transform:translateY(28px); transition:opacity 0.7s cubic-bezier(.2,.7,.2,1), transform 0.7s cubic-bezier(.2,.7,.2,1); will-change:opacity,transform; }
+.reveal.in{ opacity:1; transform:translateY(0); }
+.reveal.d1{ transition-delay:0.08s; }
+.reveal.d2{ transition-delay:0.16s; }
+.reveal.d3{ transition-delay:0.24s; }
+
+/* 3D tilt: perspective wrapper applied via JS to cards */
+.tilt{ transform-style:preserve-3d; transition:transform 0.18s ease, box-shadow 0.25s ease; will-change:transform; }
+.tilt .tilt-inner{ transform:translateZ(40px); transform-style:preserve-3d; }
+/* gold glare that follows the cursor on tilted cards */
+.tilt .glare{ position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0; transition:opacity 0.25s; background:radial-gradient(circle at var(--gx,50%) var(--gy,50%), rgba(243,231,208,0.18), transparent 45%); }
+.tilt:hover .glare{ opacity:1; }
+
+/* Drifting ambient gradient layer for the hero */
+.hero{ position:relative; }
+.hero-aura{
+  position:absolute; inset:-20% -10% -20% -10%; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(600px 420px at 20% 30%, rgba(224,169,63,0.14), transparent 60%),
+    radial-gradient(520px 380px at 80% 20%, rgba(77,139,127,0.12), transparent 60%),
+    radial-gradient(560px 480px at 60% 90%, rgba(207,106,60,0.12), transparent 60%);
+  filter:blur(8px); animation:auraDrift 18s ease-in-out infinite alternate;
+}
+.hero > *{ position:relative; z-index:1; }
+@keyframes auraDrift{
+  0%   { transform:translate3d(0,0,0) scale(1); }
+  50%  { transform:translate3d(2%,-2%,0) scale(1.06); }
+  100% { transform:translate3d(-2%,1%,0) scale(1.02); }
+}
+
+/* Count-up numbers sit in mono until they finish for a "loading" feel */
+.countup{ font-variant-numeric:tabular-nums; }
+
 /* generic two-tone band */
 .band{ background:var(--walnut); border-top:1px solid rgba(224,169,63,0.14); border-bottom:1px solid rgba(224,169,63,0.14); }
 
@@ -463,7 +500,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   .member{ grid-template-columns:1fr; }
   .photo{ width:130px; }
 }
-@media (prefers-reduced-motion:reduce){ *{ animation-duration:0.01ms!important; transition-duration:0.01ms!important; } }
+@media (prefers-reduced-motion:reduce){ *{ animation-duration:0.01ms!important; transition-duration:0.01ms!important; } .reveal{ opacity:1!important; transform:none!important; } .tilt{ transform:none!important; } .hero-aura{ animation:none!important; } }
 
 /* ===================== PRACTICE TEST (diploma quiz) ===================== */
 .toolbar{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:2rem;}
@@ -568,6 +605,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 <!-- ===================== HOME ===================== -->
 <section class="page active" id="home">
   <div class="wrap hero">
+    <div class="hero-aura"></div>
     <!-- EDIT:HOME -->
     <div>
       <span class="eyebrow">Schulich · UCalgary · Class of 2030</span>
@@ -578,19 +616,22 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
         <button class="btn btn-ghost" onclick="go('resources')">Free resources</button>
       </div>
     </div>
-    <div class="hero-panel">
+    <div class="hero-panel tilt" data-tilt>
+      <div class="glare"></div>
+      <div class="tilt-inner">
       <div class="panel-label">// the people teaching you</div>
       <div class="stat-row">
         <span class="stat-name">Jacob<b>Electrical + Computer Eng.</b></span>
-        <span class="stat-val g">3.97</span>
+        <span class="stat-val g countup" data-target="3.97" data-dec="2">3.97</span>
       </div>
       <div class="stat-row">
         <span class="stat-name">Tom<b>Mechanical Eng. + Energy &amp; Env.</b></span>
-        <span class="stat-val t">3.94</span>
+        <span class="stat-val t countup" data-target="3.94" data-dec="2">3.94</span>
       </div>
       <div class="stat-row">
         <span class="stat-name">Fresh experience<b>Not faded memories</b></span>
         <span class="stat-val r">1 yr</span>
+      </div>
       </div>
     </div>
   </div>
@@ -599,20 +640,29 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
     <div class="wrap">
       <span class="eyebrow">What we do</span>
       <div class="highlights" style="margin-top:1.5rem;">
-        <div class="hl-card">
+        <div class="hl-card tilt reveal" data-tilt>
+          <div class="glare"></div>
+          <div class="tilt-inner">
           <div class="hl-ic gold">◎</div>
           <h4>Pre-semester sessions</h4>
           <p>Focused in-person reviews that compress the first six weeks of confusion into one afternoon — before classes even start.</p>
+          </div>
         </div>
-        <div class="hl-card">
+        <div class="hl-card tilt reveal d1" data-tilt>
+          <div class="glare"></div>
+          <div class="tilt-inner">
           <div class="hl-ic teal">❋</div>
           <h4>Free resources</h4>
           <p>Guides, schedules, and weekly tips published all summer — most of what helped us wasn't behind a paywall.</p>
+          </div>
         </div>
-        <div class="hl-card">
+        <div class="hl-card tilt reveal d2" data-tilt>
+          <div class="glare"></div>
+          <div class="tilt-inner">
           <div class="hl-ic terra">↗</div>
           <h4>Real mentorship</h4>
           <p>Honest advice from students one year ahead, not a faceless service. Replies come from actual people.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -690,7 +740,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 
     <!-- EDIT:SESSIONS — update dates, prices, features. Copy a .sess block to add another. -->
     <div class="sess-grid">
-      <div class="sess">
+      <div class="sess reveal">
         <span class="sess-tag gold">Aug 18 – 22</span>
         <h3>Session One</h3>
         <p class="desc">For local and early-arrival students. Smaller cohort, more one-on-one time.</p>
@@ -704,7 +754,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
         <button class="btn btn-ghost" onclick="openBooking('Session One — Aug 18–22')">Reserve spot <span class="arr">→</span></button>
       </div>
 
-      <div class="sess feat">
+      <div class="sess feat reveal d1">
         <span class="sess-tag terra">Aug 26 – 29</span>
         <h3>Session Two</h3>
         <p class="desc">For international students and anyone who missed Session 1. Same content, refined.</p>
@@ -718,7 +768,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
         <button class="btn btn-terra" onclick="openBooking('Session Two — Aug 26–29')">Reserve spot <span class="arr">→</span></button>
       </div>
 
-      <div class="sess">
+      <div class="sess reveal d2">
         <span class="sess-tag teal">Coming soon</span>
         <h3>1-on-1 Mentorship</h3>
         <p class="desc">Monthly check-ins through first semester. Limited spots, opens after the group sessions.</p>
@@ -1627,6 +1677,76 @@ const QZ=(function(){
   }
 
   return {start,next,again,back};
+})();
+
+/* ============================================================
+   EDIT:ANIMATIONS — interaction engine
+   3D tilt · scroll reveal · count-up. Respects reduced-motion.
+============================================================ */
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* ---- 3D tilt on [data-tilt] cards ---- */
+  if(!reduce){
+    var MAX = 9; // max tilt degrees — kept subtle on purpose
+    document.querySelectorAll('[data-tilt]').forEach(function(card){
+      card.style.perspective = '900px';
+      function move(e){
+        var r = card.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width;   // 0..1
+        var py = (e.clientY - r.top) / r.height;   // 0..1
+        var rx = (0.5 - py) * MAX * 2;
+        var ry = (px - 0.5) * MAX * 2;
+        card.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateZ(0)';
+        card.style.boxShadow = '0 24px 60px rgba(0,0,0,0.4)';
+        var glare = card.querySelector('.glare');
+        if(glare){ glare.style.setProperty('--gx', (px*100).toFixed(1)+'%'); glare.style.setProperty('--gy', (py*100).toFixed(1)+'%'); }
+      }
+      function leave(){
+        card.style.transform = 'rotateX(0) rotateY(0)';
+        card.style.boxShadow = '';
+      }
+      card.addEventListener('mousemove', move);
+      card.addEventListener('mouseleave', leave);
+    });
+  }
+
+  /* ---- Scroll reveal via IntersectionObserver ---- */
+  var reveals = document.querySelectorAll('.reveal');
+  if(reduce || !('IntersectionObserver' in window)){
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { threshold:0.15, rootMargin:'0px 0px -8% 0px' });
+    reveals.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---- Count-up numbers when they scroll into view ---- */
+  var nums = document.querySelectorAll('.countup');
+  function runCount(el){
+    var target = parseFloat(el.getAttribute('data-target'));
+    var dec = parseInt(el.getAttribute('data-dec')||'0', 10);
+    if(reduce){ el.textContent = target.toFixed(dec); return; }
+    var start = performance.now(), dur = 1100;
+    function tick(now){
+      var t = Math.min((now-start)/dur, 1);
+      var eased = 1 - Math.pow(1-t, 3); // ease-out cubic
+      el.textContent = (target*eased).toFixed(dec);
+      if(t<1) requestAnimationFrame(tick); else el.textContent = target.toFixed(dec);
+    }
+    requestAnimationFrame(tick);
+  }
+  if('IntersectionObserver' in window){
+    var io2 = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ runCount(en.target); io2.unobserve(en.target); } });
+    }, { threshold:0.6 });
+    nums.forEach(function(el){ io2.observe(el); });
+  } else {
+    nums.forEach(runCount);
+  }
 })();
 
 </script>
