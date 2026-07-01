@@ -231,6 +231,9 @@ h4{ font-size:1.05rem; }
 .btn .arr{ transition:transform 0.28s cubic-bezier(.2,1.4,.3,1); }
 .btn:hover .arr{ transform:translateX(6px); }
 
+/* falling confetti — celebratory, cabin-trip style */
+.confetti{ position:fixed; z-index:9999; pointer-events:none; top:-24px; border-radius:2px; }
+
 /* idle bob — the "bumping up and down" on key CTAs */
 @keyframes ctaBob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); } }
 .cta-bob{ animation:ctaBob 2.4s ease-in-out infinite; }
@@ -301,10 +304,10 @@ h4{ font-size:1.05rem; }
 
 /* Drifting ambient gradient layer for the hero */
 .hero-wrap{ position:relative; overflow:hidden; }
-.math-field{
-  position:absolute; inset:0; width:100%; height:100%;
+.math-field-global{
+  position:fixed; inset:0; width:100vw; height:100vh;
   z-index:0; pointer-events:none; display:block;
-  opacity:1;
+  opacity:0.85;
 }
 .hero-aura{
   position:absolute; inset:-20% -10% -20% -10%; z-index:0; pointer-events:none;
@@ -552,11 +555,12 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 .again-btn.ghost2{background:transparent;color:var(--cream);border:1.5px solid rgba(243,231,208,0.35);}
 .again-btn.ghost2:hover{background:transparent;border-color:var(--gold);color:var(--gold);}
 @media (max-width:880px){.picker{grid-template-columns:1fr;}}
-.tool-btn{font-family:var(--font-head);font-weight:700;font-size:0.88rem;border:none;cursor:pointer;padding:0.7rem 1.3rem;border-radius:8px;transition:all 0.2s;}
+.tool-btn{font-family:var(--font-head);font-weight:700;font-size:0.88rem;border:none;cursor:pointer;padding:0.7rem 1.3rem;border-radius:8px;transition:transform 0.28s cubic-bezier(.2,1.3,.3,1),box-shadow 0.28s,background 0.2s,color 0.2s,border-color 0.2s;}
 .tool-btn.primary{background:var(--gold);color:var(--espresso);}
-.tool-btn.primary:hover{background:var(--gold-soft);transform:translateY(-2px);}
+.tool-btn.primary:hover{background:var(--gold-soft);transform:translateY(-4px) scale(1.04);box-shadow:0 14px 34px -8px rgba(224,169,63,0.5);}
 .tool-btn.ghost{background:transparent;color:var(--cream);border:1.5px solid rgba(243,231,208,0.35);}
-.tool-btn.ghost:hover{border-color:var(--gold);color:var(--gold);}
+.tool-btn.ghost:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-4px) scale(1.04);}
+.tool-btn:active{transform:scale(0.94);transition:transform 0.08s;}
 
 .bar-row{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;}
 .fbtn{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--gold);background:rgba(224,169,63,0.12);border:1px solid rgba(224,169,63,0.3);border-radius:6px;padding:0.4rem 0.7rem;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
@@ -616,6 +620,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 </style>
 </head>
 <body>
+<canvas class="math-field-global" id="mathFieldGlobal" aria-hidden="true"></canvas>
 <div class="app">
 
 <!-- ===================== NAV ===================== -->
@@ -642,7 +647,6 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 <!-- ===================== HOME ===================== -->
 <section class="page active" id="home">
   <div class="hero-wrap">
-  <canvas class="math-field" id="mathField" aria-hidden="true"></canvas>
   <div class="hero-aura"></div>
   <div class="wrap hero">
     <!-- EDIT:HOME -->
@@ -921,6 +925,9 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
           </div>
         </div>
       </div>
+    </div>
+    <div style="text-align:center; margin-top:2.6rem;">
+      <button class="btn btn-primary cta-pulse" onclick="openBooking('')">Learn from them — book a session <span class="arr">→</span></button>
     </div>
   </div>
 </section>
@@ -1318,6 +1325,8 @@ async function submitBooking(){
       // swap the form for the success panel
       document.getElementById('bk-form').style.display = 'none';
       document.getElementById('bk-done').style.display = 'block';
+      // 🎉 celebratory confetti rain
+      if(window.EngFX && window.EngFX.confettiFall) window.EngFX.confettiFall();
       // and send the student their branded confirmation (best-effort)
       sendUserConfirmation({ first_name: first, last_name: last, user_email: email, session: session });
     } else {
@@ -1705,6 +1714,8 @@ const QZ=(function(){
     document.getElementById('score').textContent=state.correct+' / '+total;
     const m=document.getElementById('msg');const p=state.correct/total;
     m.textContent = p===1?'Perfect \u2014 outstanding work.':p>=0.8?'Excellent. You\u2019re in strong shape for first-year math.':p>=0.6?'Solid. Review the ones you missed and you\u2019re set.':p>=0.4?'Good practice \u2014 the worked solutions are where the learning is.':'This is exactly the kind of prep our sessions cover. Keep at it.';
+    // celebratory confetti rain for a passing score (above 50%)
+    if(p > 0.5 && window.EngFX){ setTimeout(function(){ window.EngFX.confettiFall(); }, 350); }
   }
 
   function again(){ start(state.test); }
@@ -1770,10 +1781,10 @@ const QZ=(function(){
     var target = parseFloat(el.getAttribute('data-target'));
     var dec = parseInt(el.getAttribute('data-dec')||'0', 10);
     if(reduce){ el.textContent = target.toFixed(dec); return; }
-    var start = performance.now(), dur = 1100;
+    var start = performance.now(), dur = 2200; // slower so the climb is clearly visible
     function tick(now){
       var t = Math.min((now-start)/dur, 1);
-      var eased = 1 - Math.pow(1-t, 3); // ease-out cubic
+      var eased = 1 - Math.pow(1-t, 2); // gentler ease-out (quad) — climbs more evenly
       el.textContent = (target*eased).toFixed(dec);
       if(t<1) requestAnimationFrame(tick); else el.textContent = target.toFixed(dec);
     }
@@ -1827,7 +1838,7 @@ const QZ=(function(){
 ============================================================ */
 (function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var canvas = document.getElementById('mathField');
+  var canvas = document.getElementById('mathFieldGlobal');
   if(!canvas) return;
   var ctx = canvas.getContext('2d');
   var DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -1846,9 +1857,7 @@ const QZ=(function(){
   var lastMx=null, lastMy=null;
 
   function build(){
-    var wrap = canvas.parentElement;
-    var rect = wrap.getBoundingClientRect();
-    W = rect.width; H = rect.height;
+    W = window.innerWidth; H = window.innerHeight;
     canvas.width = W*DPR; canvas.height = H*DPR;
     canvas.style.width=W+'px'; canvas.style.height=H+'px';
     ctx.setTransform(DPR,0,0,DPR,0,0);
@@ -1995,36 +2004,29 @@ const QZ=(function(){
     rafId = requestAnimationFrame(frame);
   }
 
-  // pointer tracking relative to the canvas/hero-wrap
-  var wrap = canvas.parentElement;
+  // pointer tracking — canvas is fixed to the viewport, so use clientX/Y directly
   function onMove(e){
-    var rect = wrap.getBoundingClientRect();
-    mouse.x = e.clientX - rect.left;
-    mouse.y = e.clientY - rect.top;
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
     mouse.active = true;
   }
   function onLeave(){ mouse.active=false; mouse.x=-9999; mouse.y=-9999; }
 
   if(!reduce){
-    wrap.addEventListener('mousemove', onMove);
-    wrap.addEventListener('mouseleave', onLeave);
+    window.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseleave', onLeave);
     // touch: let finger warp it too
-    wrap.addEventListener('touchmove', function(e){
-      if(e.touches[0]){ var rect=wrap.getBoundingClientRect(); mouse.x=e.touches[0].clientX-rect.left; mouse.y=e.touches[0].clientY-rect.top; mouse.active=true; }
+    window.addEventListener('touchmove', function(e){
+      if(e.touches[0]){ mouse.x=e.touches[0].clientX; mouse.y=e.touches[0].clientY; mouse.active=true; }
     }, {passive:true});
-    wrap.addEventListener('touchend', onLeave);
+    window.addEventListener('touchend', onLeave);
   }
 
-  // pause when hero scrolled out of view (perf)
-  if('IntersectionObserver' in window){
-    var vio = new IntersectionObserver(function(entries){
-      entries.forEach(function(en){
-        running = en.isIntersecting;
-        if(running && !rafId){ rafId=requestAnimationFrame(frame); }
-      });
-    }, {threshold:0.01});
-    vio.observe(wrap);
-  }
+  // pause the animation when the browser tab isn't visible (perf/battery)
+  document.addEventListener('visibilitychange', function(){
+    running = !document.hidden;
+    if(running && !rafId && !reduce){ rafId=requestAnimationFrame(frame); }
+  });
 
   var rt;
   window.addEventListener('resize', function(){ clearTimeout(rt); rt=setTimeout(build, 150); });
@@ -2039,19 +2041,18 @@ const QZ=(function(){
 })();
 
 /* ============================================================
-   EDIT:CTAFX — sparkle burst + soft click on key buttons
+   EDIT:CTAFX — sparkle burst, falling confetti, soft click
 ============================================================ */
 (function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var COLORS = ['#e0a93f','#f0c976','#cf6a3c','#4d8b7f'];
+  var COLORS = ['#e0a93f','#f0c976','#cf6a3c','#4d8b7f','#f3e7d0'];
 
-  // tiny WebAudio click — no files needed; only after a user gesture
   var AC=null;
-  function blip(){
+  function blip(freq){
     try{
       if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)();
       var o=AC.createOscillator(), g=AC.createGain();
-      o.type='triangle'; o.frequency.value=660;
+      o.type='triangle'; o.frequency.value=freq||660;
       o.connect(g); g.connect(AC.destination);
       g.gain.setValueAtTime(0, AC.currentTime);
       g.gain.linearRampToValueAtTime(0.12, AC.currentTime+0.008);
@@ -2059,8 +2060,10 @@ const QZ=(function(){
       o.start(); o.stop(AC.currentTime+0.14);
     }catch(e){}
   }
+  // little ascending chime for celebrations
+  function chime(){ blip(523); setTimeout(function(){blip(659);},90); setTimeout(function(){blip(784);},180); }
 
-  function burst(x, y){
+  function sparkle(x, y){
     if(reduce) return;
     for(var i=0;i<16;i++){
       var s=document.createElement('div');
@@ -2076,10 +2079,34 @@ const QZ=(function(){
     }
   }
 
-  // wire to every primary/terra CTA and the nav CTA
-  document.querySelectorAll('.btn-primary, .btn-terra, .nav-cta').forEach(function(b){
+  // FALLING confetti — celebratory rain, like the cabin presentation
+  function confettiFall(){
+    if(reduce) return;
+    chime();
+    for(var i=0;i<130;i++){
+      var c=document.createElement('div');
+      var sz=6+Math.random()*9;
+      c.style.cssText='position:fixed;top:-20px;z-index:9999;pointer-events:none;border-radius:2px;';
+      c.style.width=sz+'px'; c.style.height=(sz*1.5)+'px';
+      c.style.left=Math.random()*100+'vw';
+      c.style.background=COLORS[i%COLORS.length];
+      c.style.opacity='0.92';
+      document.body.appendChild(c);
+      var dx=(Math.random()-0.5)*440, dur=1600+Math.random()*1700, spin=720+Math.random()*900;
+      c.animate([
+        {transform:'translate(0,0) rotate(0deg)', opacity:1},
+        {transform:'translate('+dx+'px,108vh) rotate('+spin+'deg)', opacity:0.85}
+      ], {duration:dur, easing:'cubic-bezier(.25,.6,.4,1)'}).onfinish=function(){ this.effect.target.remove(); };
+    }
+  }
+
+  // expose globally so quiz + booking can trigger it
+  window.EngFX = { sparkle:sparkle, confettiFall:confettiFall, blip:blip, chime:chime };
+
+  // wire sparkle+click to CTAs across ALL tabs, including quiz/tool buttons
+  document.querySelectorAll('.btn-primary, .btn-terra, .btn-ghost, .nav-cta, .tool-btn, .again-btn, .next-btn').forEach(function(b){
     b.addEventListener('click', function(e){
-      burst(e.clientX, e.clientY);
+      sparkle(e.clientX, e.clientY);
       blip();
     });
   });
