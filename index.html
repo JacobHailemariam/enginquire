@@ -243,43 +243,51 @@ h4{ font-size:1.05rem; }
 .cta-pulse{ animation:ctaBob 2.4s ease-in-out infinite, ctaPulse 2.4s ease-out infinite; }
 .cta-pulse:hover{ animation-play-state:paused; }
 
-/* Hero stat panel — now a full photo with a floating stat tag */
+/* Hero stat panel — a full photo with a floating stat tag.
+   The photo is an in-flow block (NOT absolute) so it renders reliably
+   even inside the .tilt-inner transform wrapper. The overlay uses
+   .photo-frame as its positioning context. */
 .hero-panel{
   position:relative;
   border:1px solid rgba(224,169,63,0.22);
   border-radius:16px;
   box-shadow:0 20px 50px rgba(0,0,0,0.35);
   overflow:hidden;
-  aspect-ratio:3/4;
+}
+.photo-frame{
+  position:relative;
+  width:100%;
+  line-height:0; /* kill inline-image gap */
 }
 .panel-photo{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  object-fit:cover; object-position:center 30%;
   display:block;
+  width:100%;
+  height:auto;             /* let the image set its own height — no cropping */
 }
 /* dark gradient at the bottom so the tag stays legible over the photo */
-.hero-panel::after{
+.photo-frame::after{
   content:''; position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(to top, rgba(20,10,4,0.85) 0%, rgba(20,10,4,0.35) 26%, transparent 48%);
+  background:linear-gradient(to top, rgba(20,10,4,0.9) 0%, rgba(20,10,4,0.4) 24%, transparent 46%);
 }
 .hero-panel .panel-label{
-  position:absolute; top:1rem; left:1.1rem; z-index:3;
+  position:absolute; top:0.9rem; left:0.9rem; z-index:3;
   font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.15em;
+  line-height:1.2;
   text-transform:uppercase; color:var(--gold);
-  background:rgba(20,10,4,0.55); backdrop-filter:blur(6px);
+  background:rgba(20,10,4,0.6); backdrop-filter:blur(6px);
   padding:0.35rem 0.7rem; border-radius:6px;
   border:1px solid rgba(224,169,63,0.22);
 }
-/* the tag sticking out of the bottom-left */
+/* the tag overlapping the bottom of the photo */
 .stat-tag{
   position:absolute; z-index:3;
-  left:1rem; bottom:1rem; right:1rem;
-  background:rgba(36,20,9,0.78);
+  left:0.9rem; right:0.9rem; bottom:0.9rem;
+  background:rgba(36,20,9,0.82);
   backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
   border:1px solid rgba(224,169,63,0.28);
   border-radius:12px;
-  padding:0.5rem 1rem;
+  padding:0.4rem 1rem;
+  line-height:1.5;
   box-shadow:0 12px 30px rgba(0,0,0,0.45);
 }
 .stat-row{ display:flex; align-items:center; justify-content:space-between; padding:0.6rem 0; border-bottom:1px solid rgba(224,169,63,0.14); }
@@ -326,6 +334,9 @@ h4{ font-size:1.05rem; }
 /* 3D tilt: perspective wrapper applied via JS to cards */
 .tilt{ transform-style:preserve-3d; transition:transform 0.18s ease, box-shadow 0.25s ease; will-change:transform; }
 .tilt .tilt-inner{ transform:translateZ(40px); transform-style:preserve-3d; }
+/* the hero photo panel shouldn't push its inner content on the Z-axis —
+   keeps the photo + stat tag from being clipped/hidden in some browsers */
+.hero-panel .tilt-inner{ transform:none; }
 /* gold glare that follows the cursor on tilted cards */
 .tilt .glare{ position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0; transition:opacity 0.25s; background:radial-gradient(circle at var(--gx,50%) var(--gy,50%), rgba(243,231,208,0.18), transparent 45%); }
 .tilt:hover .glare{ opacity:1; }
@@ -690,6 +701,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
     <div class="hero-panel tilt floaty plx" data-tilt data-plx="0.04">
       <div class="glare"></div>
       <div class="tilt-inner">
+      <div class="photo-frame">
       <img class="panel-photo" src="team-photo.jpg" alt="Jacob and Tom, the founders of EngInQuire" />
       <div class="panel-label">// the people teaching you</div>
       <div class="stat-tag">
@@ -704,6 +716,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       <div class="stat-row">
         <span class="stat-name">Fresh experience<b>Not faded memories</b></span>
         <span class="stat-val r">1 yr</span>
+      </div>
       </div>
       </div>
       </div>
