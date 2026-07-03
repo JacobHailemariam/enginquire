@@ -243,28 +243,50 @@ h4{ font-size:1.05rem; }
 .cta-pulse{ animation:ctaBob 2.4s ease-in-out infinite, ctaPulse 2.4s ease-out infinite; }
 .cta-pulse:hover{ animation-play-state:paused; }
 
-/* Hero stat panel */
+/* Hero stat panel — now a full photo with a floating stat tag */
 .hero-panel{
-  background:linear-gradient(160deg, var(--walnut), var(--coffee));
+  position:relative;
   border:1px solid rgba(224,169,63,0.22);
-  border-radius:16px; padding:1.8rem;
+  border-radius:16px;
   box-shadow:0 20px 50px rgba(0,0,0,0.35);
-}
-.hero-panel .panel-label{
-  font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.15em;
-  text-transform:uppercase; color:var(--gold); margin-bottom:1.2rem;
+  overflow:hidden;
+  aspect-ratio:3/4;
 }
 .panel-photo{
-  width:100%; height:190px; object-fit:cover; object-position:center 20%;
-  border-radius:10px; margin-bottom:1.3rem;
-  border:1px solid rgba(224,169,63,0.28);
-  box-shadow:0 12px 28px rgba(0,0,0,0.35);
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover; object-position:center 30%;
+  display:block;
 }
-.stat-row{ display:flex; align-items:center; justify-content:space-between; padding:0.85rem 0; border-bottom:1px solid rgba(224,169,63,0.14); }
+/* dark gradient at the bottom so the tag stays legible over the photo */
+.hero-panel::after{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to top, rgba(20,10,4,0.85) 0%, rgba(20,10,4,0.35) 26%, transparent 48%);
+}
+.hero-panel .panel-label{
+  position:absolute; top:1rem; left:1.1rem; z-index:3;
+  font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.15em;
+  text-transform:uppercase; color:var(--gold);
+  background:rgba(20,10,4,0.55); backdrop-filter:blur(6px);
+  padding:0.35rem 0.7rem; border-radius:6px;
+  border:1px solid rgba(224,169,63,0.22);
+}
+/* the tag sticking out of the bottom-left */
+.stat-tag{
+  position:absolute; z-index:3;
+  left:1rem; bottom:1rem; right:1rem;
+  background:rgba(36,20,9,0.78);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(224,169,63,0.28);
+  border-radius:12px;
+  padding:0.5rem 1rem;
+  box-shadow:0 12px 30px rgba(0,0,0,0.45);
+}
+.stat-row{ display:flex; align-items:center; justify-content:space-between; padding:0.6rem 0; border-bottom:1px solid rgba(224,169,63,0.14); }
 .stat-row:last-child{ border-bottom:none; }
-.stat-name{ font-size:0.92rem; color:var(--text-dim); }
-.stat-name b{ color:var(--cream); font-weight:600; display:block; font-family:var(--font-head); }
-.stat-val{ font-family:var(--font-head); font-weight:800; font-size:1.9rem; }
+.stat-name{ font-size:0.86rem; color:var(--text-dim); }
+.stat-name b{ color:var(--cream); font-weight:600; display:block; font-family:var(--font-head); font-size:0.95rem; }
+.stat-val{ font-family:var(--font-head); font-weight:800; font-size:1.65rem; }
 .stat-val.g{ color:var(--gold); }
 .stat-val.t{ color:var(--teal-soft); }
 .stat-val.r{ color:var(--terra); }
@@ -668,8 +690,9 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
     <div class="hero-panel tilt floaty plx" data-tilt data-plx="0.04">
       <div class="glare"></div>
       <div class="tilt-inner">
-      <div class="panel-label">// the people teaching you</div>
       <img class="panel-photo" src="team-photo.jpg" alt="Jacob and Tom, the founders of EngInQuire" />
+      <div class="panel-label">// the people teaching you</div>
+      <div class="stat-tag">
       <div class="stat-row">
         <span class="stat-name">Jacob<b>Electrical + Computer Eng.</b></span>
         <span class="stat-val g countup" data-target="3.97" data-dec="2">3.97</span>
@@ -681,6 +704,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       <div class="stat-row">
         <span class="stat-name">Fresh experience<b>Not faded memories</b></span>
         <span class="stat-val r">1 yr</span>
+      </div>
       </div>
       </div>
     </div>
