@@ -459,7 +459,26 @@ h4{ font-size:1.05rem; }
   border-radius:10px; text-decoration:none; color:var(--text-light); transition:all 0.2s;
 }
 .cmethod:hover{ border-color:var(--gold); transform:translateX(4px); }
+
+/* email row: card wrapper holds a link + a real sibling button (valid HTML, no nested interactive elements) */
+.cmethod-split{ padding-right:0.9rem; }
+.cmethod-split:hover{ transform:none; }
+.cmethod-main{ display:flex; align-items:center; gap:1rem; text-decoration:none; color:var(--text-light); flex:1; min-width:0; }
+.cmethod-main:hover{ opacity:0.85; }
 .cmethod .ci{ width:40px; height:40px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-weight:600; flex-shrink:0; }
+
+.copy-btn{
+  margin-left:auto; flex-shrink:0; display:flex; align-items:center; gap:0.4rem;
+  background:rgba(224,169,63,0.12); color:var(--gold);
+  border:1px solid rgba(224,169,63,0.3); border-radius:7px;
+  padding:0.45rem 0.7rem; font-family:var(--font-head); font-weight:700; font-size:0.78rem;
+  cursor:pointer; transition:background 0.2s, border-color 0.2s, transform 0.2s;
+  position:relative; z-index:1;
+}
+.copy-btn:hover{ background:rgba(224,169,63,0.22); border-color:var(--gold); transform:scale(1.05); }
+.copy-btn:active{ transform:scale(0.94); }
+.copy-btn.copied{ background:rgba(77,139,127,0.22); border-color:var(--teal-soft); color:var(--teal-soft); }
+.copy-btn .copy-label{ white-space:nowrap; }
 .cmethod .ci.gold{ background:rgba(224,169,63,0.18); color:var(--gold); }
 .cmethod .ci.teal{ background:rgba(77,139,127,0.2); color:var(--teal-soft); }
 .cmethod .ci.terra{ background:rgba(207,106,60,0.2); color:var(--terra); }
@@ -1004,12 +1023,19 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
         <button class="btn btn-primary cta-pulse" onclick="openBooking('')">Book a session <span class="arr">→</span></button>
       </div>
       <div class="contact-methods">
-        <a href="mailto:enginquire7@gmail.com" class="cmethod">
-          <span class="ci gold">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.3"/><path d="M3 6.5l9 6.2 9-6.2"/></svg>
-          </span>
-          <span><span class="cl">Email</span><br><span class="cv">enginquire7@gmail.com</span></span>
-        </a>
+        <div class="cmethod cmethod-split" id="emailMethod">
+          <a href="mailto:enginquire7@gmail.com" class="cmethod-main">
+            <span class="ci gold">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.3"/><path d="M3 6.5l9 6.2 9-6.2"/></svg>
+            </span>
+            <span><span class="cl">Email</span><br><span class="cv">enginquire7@gmail.com</span></span>
+          </a>
+          <button type="button" class="copy-btn" id="copyEmailBtn" title="Copy email address" aria-label="Copy email address">
+            <svg class="ic-copy" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2.2"/><path d="M15.5 8.5V5.8A2.3 2.3 0 0 0 13.2 3.5H5.8A2.3 2.3 0 0 0 3.5 5.8v7.4a2.3 2.3 0 0 0 2.3 2.3h2.7"/></svg>
+            <svg class="ic-check" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M4 12.5l5 5L20 6.5"/></svg>
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
         <a href="https://instagram.com/enginquire_" target="_blank" rel="noopener" class="cmethod">
           <span class="ci terra">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.6"/><circle cx="17.15" cy="6.85" r="1.15" fill="currentColor" stroke="none"/></svg>
@@ -2116,6 +2142,54 @@ const QZ=(function(){
       blip();
     });
   });
+})();
+
+/* ============================================================
+   EDIT:COPYEMAIL — copy address without triggering the mailto link
+============================================================ */
+(function(){
+  var btn = document.getElementById('copyEmailBtn');
+  if(!btn) return;
+  var EMAIL = 'enginquire7@gmail.com';
+  var iconCopy = btn.querySelector('.ic-copy');
+  var iconCheck = btn.querySelector('.ic-check');
+  var label = btn.querySelector('.copy-label');
+  var resetTimer = null;
+
+  btn.addEventListener('click', function(e){
+    e.preventDefault();   // don't let the click bubble into the parent <a href="mailto:...">
+    e.stopPropagation();
+
+    function showCopied(){
+      btn.classList.add('copied');
+      if(iconCopy) iconCopy.style.display='none';
+      if(iconCheck) iconCheck.style.display='';
+      if(label) label.textContent='Copied!';
+      clearTimeout(resetTimer);
+      resetTimer = setTimeout(function(){
+        btn.classList.remove('copied');
+        if(iconCopy) iconCopy.style.display='';
+        if(iconCheck) iconCheck.style.display='none';
+        if(label) label.textContent='Copy';
+      }, 1800);
+    }
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(EMAIL).then(showCopied).catch(function(){
+        fallbackCopy(EMAIL); showCopied();
+      });
+    } else {
+      fallbackCopy(EMAIL); showCopied();
+    }
+  });
+
+  function fallbackCopy(text){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta);
+  }
 })();
 
 </script>
