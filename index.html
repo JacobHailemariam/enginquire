@@ -406,6 +406,21 @@ h4{ font-size:1.05rem; }
 .notice p{ font-size:0.92rem; color:var(--text-dim); }
 .notice b{ color:var(--teal-soft); }
 
+/* Privacy Policy / Terms — comfortable long-form reading */
+.legal-page{ max-width:720px; }
+.legal-page .legal-updated{ color:var(--text-dim); font-size:0.85rem; margin-bottom:1.6rem; }
+.legal-page .lead{ max-width:none; margin-bottom:1.8rem; }
+.legal-page h3{ font-family:var(--font-head); font-size:1.08rem; color:var(--gold); margin:2rem 0 0.6rem; }
+.legal-page p{ color:var(--text-dim); font-size:0.96rem; line-height:1.75; margin-bottom:0.9rem; }
+.legal-page .legal-link{ color:var(--gold); text-decoration:underline; text-underline-offset:2px; }
+.legal-page .legal-link:hover{ color:var(--gold-soft); }
+
+/* small legal links in the footer */
+.foot-legal{ display:flex; gap:1.2rem; justify-content:center; margin-top:0.8rem; flex-wrap:wrap; }
+.foot-legal a{ color:var(--text-dim); font-size:0.82rem; text-decoration:none; background:none; border:none; cursor:pointer; font-family:inherit; }
+.foot-legal a:hover{ color:var(--gold); text-decoration:underline; }
+
+
 /* ============================================================
    RESOURCES
 ============================================================ */
@@ -522,6 +537,14 @@ h4{ font-size:1.05rem; }
 .field input:focus, .field select:focus{ outline:none; border-color:var(--gold); }
 .modal .btn{ width:100%; justify-content:center; margin-top:0.5rem; }
 .modal .fineprint{ font-size:0.78rem; color:var(--text-mute); margin-top:1rem; text-align:center; line-height:1.5; }
+.consent-row{
+  display:flex; align-items:flex-start; gap:0.6rem; margin:1.1rem 0 1.3rem;
+  font-size:0.85rem; color:var(--text-dim); line-height:1.5; cursor:pointer;
+}
+.consent-row input[type="checkbox"]{ margin-top:0.2rem; width:16px; height:16px; accent-color:var(--gold); cursor:pointer; flex-shrink:0; }
+.consent-row .legal-link{ color:var(--gold); text-decoration:underline; text-underline-offset:2px; cursor:pointer; }
+.consent-row .legal-link:hover{ color:var(--gold-soft); }
+#bk-submit:disabled{ opacity:0.45; cursor:not-allowed; transform:none !important; box-shadow:none !important; animation:none !important; }
 /* two-column name row inside the reservation modal */
 .field-row{ display:flex; gap:0.7rem; }
 .field-row .field{ flex:1; }
@@ -1083,11 +1106,100 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   </div>
 </section>
 <!-- ===================== FOOTER ===================== -->
+<!-- ===================== PRIVACY POLICY ===================== -->
+<!-- EDIT:PRIVACY — plain-language policy matched to what this site actually collects (name/email/phone via the booking form, sent through Web3Forms + EmailJS to enginquire7@gmail.com). No cookies, no analytics, no accounts, no stored payments. Update the "Last updated" date whenever this is edited. -->
+<section class="page" id="privacy">
+  <div class="wrap section-pad legal-page">
+    <span class="eyebrow">Legal</span>
+    <h2 style="margin:0.8rem 0 0.4rem;">Privacy Policy</h2>
+    <p class="legal-updated">Last updated: July 10, 2026</p>
+
+    <p class="lead">EngInQuire ("we," "us," "our") is a pre-semester tutoring service run by two students at the University of Calgary. This page explains what personal information we collect through this website, why we collect it, and what your rights are. We wrote it in plain language on purpose — no legalese, no fine print designed to confuse you.</p>
+
+    <h3>What we collect</h3>
+    <p>When you use our booking form, we collect only what you type in: your first and last name, your email address, and — if you choose to provide it — a phone number, along with which session or service you're interested in.</p>
+    <p>We do not use cookies, tracking pixels, or analytics software on this site. We don't build advertising profiles, and there's no account system — nothing is stored beyond the single submission you send us.</p>
+
+    <h3>Why we collect it</h3>
+    <p>Solely to respond to your reservation or inquiry — to confirm your spot, answer your question, or send you details about a session. We don't use your information for anything else, and we never sell, rent, or share it with advertisers or unrelated third parties.</p>
+
+    <h3>Where it goes</h3>
+    <p>Booking form submissions are processed by two third-party services that route the message to us: <b>Web3Forms</b> (delivers your submission to our inbox) and, for the confirmation email you receive, <b>EmailJS</b>. Your message ultimately lands in our email inbox at <b>enginquire7@gmail.com</b>, hosted by Google. Each of these providers has its own privacy practices governing data in transit; we chose them because they don't require us to run a server or store your data ourselves.</p>
+    <p>We do not store your information in any database of our own. Once it's in our inbox, it's kept the same way any personal email is — privately, and accessed only by the two of us.</p>
+
+    <h3>How long we keep it</h3>
+    <p>We keep booking and inquiry emails for as long as reasonably needed to run your session or respond to your question, and afterward for basic record-keeping. You can ask us to delete your information at any time — see below.</p>
+
+    <h3>Your rights</h3>
+    <p>Under Alberta's Personal Information Protection Act (PIPA), you can ask us what personal information we hold about you, request a correction, or request that we delete it. To do any of these, just email us — we're two people, not a call center, and we'll handle it directly and promptly.</p>
+
+    <h3>Children's privacy</h3>
+    <p>Our services are aimed at incoming first-year university students. We don't knowingly collect information from children under 13. If you believe a child has submitted information to us, contact us and we'll remove it.</p>
+
+    <h3>Changes to this policy</h3>
+    <p>If we change how we handle information, we'll update this page and change the "Last updated" date above. We won't make material changes without making them easy to notice.</p>
+
+    <h3>Contact us</h3>
+    <p>Questions about this policy or your data? Email <a href="mailto:enginquire7@gmail.com" class="legal-link">enginquire7@gmail.com</a>.</p>
+
+    <button class="btn btn-ghost" onclick="go('home')" style="margin-top:1.5rem;">← Back to home</button>
+  </div>
+</section>
+
+<!-- ===================== TERMS & CONDITIONS ===================== -->
+<!-- EDIT:TERMS — the cancellation/refund clause below is left deliberately flexible until Jacob & Tom finalize pricing + refund policy. Search "REFUND POLICY — EDIT ME" to find and update that exact line once decided. -->
+<section class="page" id="terms">
+  <div class="wrap section-pad legal-page">
+    <span class="eyebrow">Legal</span>
+    <h2 style="margin:0.8rem 0 0.4rem;">Terms &amp; Conditions</h2>
+    <p class="legal-updated">Last updated: July 10, 2026</p>
+
+    <p class="lead">These terms govern your use of the EngInQuire website and our tutoring services. By reserving a spot, expressing interest in mentorship, or otherwise using this site, you agree to the terms below. We're two students running a small tutoring business, not a law firm — this is written to be genuinely readable.</p>
+
+    <h3>What we offer</h3>
+    <p>EngInQuire provides pre-semester review sessions, free study resources, and optional 1-on-1 mentoring for incoming first-year Schulich engineering students. We are not affiliated with the University of Calgary, the Schulich School of Engineering, or any official university program — we are independent students offering supplementary academic support.</p>
+
+    <h3>No guarantee of results</h3>
+    <p>Our sessions and resources are designed to help you prepare for first-year engineering coursework. They are educational support, not a guarantee of any particular grade, outcome, or academic result. Your results depend on many factors outside our control, including your own effort, attendance, and coursework.</p>
+
+    <h3>Reservations and payment</h3>
+    <p>Reserving a spot through our booking form does not charge you immediately — it holds your interest in a session. Pricing and payment details, once finalized, will be communicated to you directly by email before any payment is due. No payment is collected through this website at this time.</p>
+
+    <h3>Cancellations and refunds</h3>
+    <!-- REFUND POLICY — EDIT ME once Jacob & Tom decide the real policy -->
+    <p>Our cancellation and refund policy will be confirmed at the time payment details are sent to you, and will be clearly stated before you're asked to pay. If your plans change before then, just let us know by email — reserving a spot carries no obligation or penalty.</p>
+
+    <h3>Acceptable use</h3>
+    <p>Please use this site and our booking form honestly — for genuine inquiries about our services. Don't submit false information, attempt to disrupt the site, or use the site for any unlawful purpose.</p>
+
+    <h3>Our content</h3>
+    <p>The practice tests, formula sheets, guides, and other resources on this site are provided free for your personal study use. Please don't redistribute or resell them.</p>
+
+    <h3>Limitation of liability</h3>
+    <p>EngInQuire and its founders are not liable for any indirect, incidental, or consequential damages arising from your use of this website or our services, to the fullest extent permitted by law. Our services are provided "as is," without warranties of any kind beyond what's required by applicable consumer protection law.</p>
+
+    <h3>Changes to these terms</h3>
+    <p>We may update these terms as our services evolve. We'll update the "Last updated" date above whenever we do.</p>
+
+    <h3>Governing law</h3>
+    <p>These terms are governed by the laws of the Province of Alberta and the federal laws of Canada applicable therein.</p>
+
+    <h3>Contact us</h3>
+    <p>Questions about these terms? Email <a href="mailto:enginquire7@gmail.com" class="legal-link">enginquire7@gmail.com</a>.</p>
+
+    <button class="btn btn-ghost" onclick="go('home')" style="margin-top:1.5rem;">← Back to home</button>
+  </div>
+</section>
+
 <footer>
   <div class="foot-brand">Eng<span class="in">In</span>Quire</div>
   <div class="foot-tag">First-year engineering, decoded.</div>
   <div class="foot-div"></div>
   <div class="foot-meta">Calgary, AB · Built by Jacob &amp; Tom · © 2026</div>
+  <div class="foot-legal">
+    <a onclick="go('privacy')">Privacy Policy</a>
+    <a onclick="go('terms')">Terms &amp; Conditions</a>
+  </div>
 </footer>
 
 </div><!-- /.app -->
@@ -1192,7 +1304,12 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
         </select>
       </div>
 
-      <button class="btn btn-primary" id="bk-submit" onclick="submitBooking()">Send reservation <span class="arr">→</span></button>
+      <label class="consent-row">
+        <input type="checkbox" id="bk-consent" onchange="document.getElementById('bk-submit').disabled = !this.checked;" />
+        <span>I agree to the <a onclick="event.preventDefault(); closeBooking(); go('privacy');" class="legal-link">Privacy Policy</a> and <a onclick="event.preventDefault(); closeBooking(); go('terms');" class="legal-link">Terms &amp; Conditions</a>.</span>
+      </label>
+
+      <button class="btn btn-primary" id="bk-submit" onclick="submitBooking()" disabled>Send reservation <span class="arr">→</span></button>
       <div id="bk-status" class="bk-status"></div>
       <p class="fineprint">Your name, email, phone, and chosen session go straight to enginquire7@gmail.com. We'll personally text you to confirm. Pricing &amp; payment come later — nothing is due now.</p>
     </div>
@@ -1232,8 +1349,10 @@ function openBooking(presetSession){
   document.getElementById('bk-done').style.display = 'none';
   const status = document.getElementById('bk-status');
   status.textContent = ''; status.className = 'bk-status';
+  const consent = document.getElementById('bk-consent');
+  if(consent) consent.checked = false;
   const btn = document.getElementById('bk-submit');
-  btn.disabled = false; btn.innerHTML = 'Send reservation <span class="arr">&rarr;</span>';
+  btn.disabled = true; btn.innerHTML = 'Send reservation <span class="arr">&rarr;</span>';
   if(presetSession){
     const sel = document.getElementById('bk-session');
     for(const opt of sel.options){ if(opt.value === presetSession){ opt.selected = true; break; } }
@@ -1317,6 +1436,14 @@ async function submitBooking(){
   if(!first || !last || !email || !phone){
     status.className = 'bk-status err';
     status.textContent = 'Please add your name, email, and phone so we can confirm your spot.';
+    return;
+  }
+
+  // --- guard: consent checkbox must be checked (not just relying on the disabled attribute) ---
+  const consentBox = document.getElementById('bk-consent');
+  if(!consentBox || !consentBox.checked){
+    status.className = 'bk-status err';
+    status.textContent = 'Please confirm you agree to the Privacy Policy and Terms to continue.';
     return;
   }
 
