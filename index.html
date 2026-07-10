@@ -470,9 +470,11 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 .foot-meta{ font-size:0.82rem; color:var(--text-mute); }
 
 /* ============================================================
-   RESPONSIVE — rebuilt/expanded so every newer component
-   (legal pages, consent row, email-copy button, team-direct
-   grid) is properly covered on phones, not just the original set.
+   RESPONSIVE — generous, edge-safe phone margins.
+   Padding is intentionally roomy (1.5rem) + respects the
+   iPhone notch/rounded-corner safe area so nothing hugs edges.
+   Legal pages (Privacy/Terms), consent row, email-copy button,
+   and team-direct grid are all covered.
 ============================================================ */
 @media (max-width:880px){
   .tabs{ position:absolute; top:100%; left:0; right:0; flex-direction:column; align-items:stretch; background:var(--walnut); padding:1rem; gap:0.3rem; display:none; border-bottom:1px solid rgba(224,169,63,0.2); }
@@ -486,10 +488,11 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   .member{ grid-template-columns:1fr; }
   .photo{ width:130px; }
 
-  /* tighter, consistent side padding so nothing crowds the screen edge */
-  .wrap{ padding:0 1.1rem; }
+  /* ROOMY, consistent side padding — the fix for cramped edges.
+     env(safe-area-inset-*) keeps content off the notch/curved corners. */
+  .wrap{ padding-left:calc(1.5rem + env(safe-area-inset-left)); padding-right:calc(1.5rem + env(safe-area-inset-right)); }
+  .nav-inner{ padding:0.9rem calc(1.5rem + env(safe-area-inset-right)) 0.9rem calc(1.5rem + env(safe-area-inset-left)); }
   .section-pad{ padding:3rem 0; }
-  .nav-inner{ padding:0.8rem 1.1rem; }
 
   .hero{ padding:2.8rem 0 2rem; gap:2rem; }
   .btn-row{ flex-direction:column; align-items:stretch; }
@@ -520,7 +523,8 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   .foot-legal{ gap:0.9rem 1rem; }
 }
 @media (max-width:480px){
-  .wrap{ padding:0 0.9rem; }
+  /* keep padding generous even on the smallest phones */
+  .wrap{ padding-left:calc(1.3rem + env(safe-area-inset-left)); padding-right:calc(1.3rem + env(safe-area-inset-right)); }
   h1{ font-size:clamp(1.9rem,8vw,2.6rem); }
   h2{ font-size:clamp(1.5rem,6vw,2rem); }
   .hero-panel{ padding:1.3rem; }
@@ -629,7 +633,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   <div class="hero-aura"></div>
   <div class="wrap hero">
     <div class="plx" data-plx="0.018">
-      <span class="eyebrow">Schulich · UCalgary</span>
+      <span class="eyebrow">Schulich · UCalgary · Class of 2030</span>
       <h1>First-year engineering, <span class="gold">decoded</span> by people who <span class="em">just did it</span>.</h1>
       <p class="lead">EngInQuire runs pre-semester review sessions and free study resources for incoming Schulich engineering students — built by two upper-years who finished first year with 3.9+ GPAs and remember exactly what tripped people up.</p>
       <div class="btn-row">
@@ -723,7 +727,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       </div>
       <div class="about-body">
         <p>The grading curves, the unspoken study habits, the gap between high-school studying and engineering studying, the courses that quietly decide your GPA before midterms even hit — <strong>that's the stuff that catches people off guard.</strong></p>
-        <p>We finished first year at Schulich with 3.97 and 3.94 GPAs while balancing part-time jobs, school, applications, a social life, and staying healthy. We remember exactly what we wish someone had sat us down and explained before first year started.</p>
+        <p>We finished first year at Schulich with 3.97 and 3.94 GPAs while doing engineering research, coaching, and building real projects. We remember exactly what we wish someone had sat us down and explained in August.</p>
         <p><strong>EngInQuire is that conversation, structured</strong> — pre-semester review sessions for students who want to start ahead, plus free resources that make the rest of the year less of a guessing game.</p>
       </div>
     </div>
@@ -884,6 +888,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
             <span class="cred">Asphalt Lab Technician</span>
             <span class="cred">Valedictorian</span>
             <span class="cred">IB 99%</span>
+            <span class="cred">Schulich Dean's Scholar</span>
           </div>
         </div>
       </div>
