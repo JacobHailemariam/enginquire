@@ -4,9 +4,15 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>EngInQuire — First-Year Engineering, Decoded</title>
-<!-- EDIT:FAVICON — glowing terra spark dot, matches the logo -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231a1410'/%3E%3Ccircle cx='16' cy='16' r='10' fill='%23cf6a3c' opacity='0.28'/%3E%3Ccircle cx='16' cy='16' r='5.5' fill='%23cf6a3c'/%3E%3Ccircle cx='14' cy='14' r='1.8' fill='%23f0c976' opacity='0.9'/%3E%3C/svg%3E" />
-<meta name="description" content="Pre-semester engineering review sessions and free study resources by high-GPA upper-years at Schulich, University of Calgary." />
+<!-- EDIT:FAVICON — real files so Google Search shows the logo, not a globe.
+     Upload favicon.ico, favicon-32.png, favicon-48.png, favicon-180.png, favicon-512.png
+     to the SAME folder as this index.html in your repo. -->
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png" />
+<link rel="apple-touch-icon" href="favicon-180.png" />
+<meta name="description" content="Pre-semester engineering review sessions, a free AI schedule-blueprint generator, and study resources for incoming first-year students at the Schulich School of Engineering, University of Calgary." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -357,6 +363,32 @@ h4{ font-size:1.05rem; }
 .res p{ font-size:0.88rem; color:var(--text-dim); margin-bottom:1rem; line-height:1.6; }
 .res .status{ font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.05em; color:var(--gold); }
 
+/* Featured resource — the Blueprint Generator gets a spotlight card that spans the row */
+.res-feature{
+  grid-column:1 / -1;
+  background:linear-gradient(150deg, var(--coffee), var(--walnut) 70%);
+  border:1px solid rgba(224,169,63,0.35);
+  border-radius:16px; padding:2rem 2.1rem;
+  display:grid; grid-template-columns:1fr auto; gap:1.8rem; align-items:center;
+  cursor:default; position:relative; overflow:hidden;
+  box-shadow:0 18px 46px rgba(0,0,0,0.32);
+}
+.res-feature::before{
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg, var(--terra), var(--gold));
+}
+.res-feature:hover{ transform:none; background:linear-gradient(150deg, var(--coffee), var(--walnut) 70%); border-color:rgba(224,169,63,0.5); }
+.res-feature .rf-body{ min-width:0; }
+.res-feature .rn{ display:flex; align-items:center; gap:0.6rem; }
+.res-feature .live-dot{ width:8px; height:8px; border-radius:50%; background:#5fae6e; box-shadow:0 0 8px #5fae6e; display:inline-block; animation:livePulse 2s ease-in-out infinite; }
+@keyframes livePulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.4; } }
+.res-feature h4{ font-size:1.3rem; margin:0.5rem 0 0.6rem; }
+.res-feature p{ font-size:0.95rem; color:var(--text-dim); margin-bottom:0.9rem; max-width:560px; line-height:1.6; }
+.res-feature .rf-how{ font-family:var(--font-mono); font-size:0.78rem; color:var(--text-mute); line-height:1.6; }
+.res-feature .rf-how b{ color:var(--gold-soft); font-weight:500; }
+.res-feature .rf-cta{ display:flex; flex-direction:column; align-items:stretch; gap:0.6rem; flex-shrink:0; }
+@media(max-width:720px){ .res-feature{ grid-template-columns:1fr; gap:1.2rem; } .res-feature .rf-cta .btn{ width:100%; justify-content:center; } }
+
 .team-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:2.5rem; }
 .member{
   background:linear-gradient(165deg,var(--walnut),var(--coffee));
@@ -633,9 +665,9 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   <div class="hero-aura"></div>
   <div class="wrap hero">
     <div class="plx" data-plx="0.018">
-      <span class="eyebrow">Schulich · UCalgary</span>
+      <span class="eyebrow">Schulich School of Engineering · University of Calgary</span>
       <h1>First-year engineering, <span class="gold">decoded</span> by people who <span class="em">just did it</span>.</h1>
-      <p class="lead">EngInQuire runs pre-semester review sessions and free study resources for incoming Schulich engineering students — built by two upper-years who finished first year with 3.9+ GPAs and remember exactly what tripped people up.</p>
+      <p class="lead">EngInQuire runs pre-semester review sessions and free study resources for incoming engineering students at the Schulich School of Engineering, University of Calgary — built by two upper-years who finished first year with 3.9+ GPAs and remember exactly what tripped people up.</p>
       <div class="btn-row">
         <button class="btn btn-primary cta-pulse" onclick="openBooking('')">Book a session <span class="arr">→</span></button>
         <button class="btn btn-ghost" onclick="go('resources')">Free resources</button>
@@ -679,7 +711,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
           <div class="tilt-inner">
           <div class="hl-ic teal">❋</div>
           <h4>Free resources</h4>
-          <p>Guides, schedules, and weekly tips published all summer — most of what helped us wasn't behind a paywall.</p>
+          <p>Including our AI Blueprint Generator that builds a personalized weekly schedule around your block — plus practice tests, tips, and more. Live now.</p>
           </div>
         </div>
         <div class="hl-card tilt reveal d2" data-tilt>
@@ -727,7 +759,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       </div>
       <div class="about-body">
         <p>The grading curves, the unspoken study habits, the gap between high-school studying and engineering studying, the courses that quietly decide your GPA before midterms even hit — <strong>that's the stuff that catches people off guard.</strong></p>
-        <p>We finished first year at Schulich with 3.97 and 3.94 GPAs while balancing part-time jobs, school, applications, a social life, and staying healthy. We remember exactly what we wish someone had sat us down and explained before first year started.</p>
+        <p>We finished first year at Schulich — the University of Calgary's engineering school — with 3.97 and 3.94 GPAs while balancing part-time jobs, school, applications, a social life, and staying healthy. We remember exactly what we wish someone had sat us down and explained before first year started.</p>
         <p><strong>EngInQuire is that conversation, structured</strong> — pre-semester review sessions for students who want to start ahead, plus free resources that make the rest of the year less of a guessing game.</p>
       </div>
     </div>
@@ -816,35 +848,35 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   <div class="wrap section-pad">
     <span class="eyebrow">Free resources</span>
     <h2 style="margin:0.8rem 0 0.6rem;">What you get without paying a cent.</h2>
-    <p class="lead" style="max-width:680px;">Most of what helped us hit 3.9+ GPAs wasn't behind a paywall — it was just hard to find. We're publishing it here, free, throughout the summer.</p>
+    <p class="lead" style="max-width:680px;">Most of what helped us hit 3.9+ GPAs wasn't behind a paywall — it was just hard to find. We're publishing it here, free. Start with our Blueprint Generator below — it's live right now.</p>
 
     <div class="res-grid">
-      <div class="res gold">
-        <div class="rn">01 / Guide</div>
-        <h4>First-Semester Survival PDF</h4>
-        <p>A short guide to the courses, the unwritten rules, and the habits we wish we'd had on day one.</p>
-        <div class="status">→ Coming July 2026</div>
+      <div class="res-feature">
+        <div class="rf-body">
+          <div class="rn gold"><span class="live-dot"></span> 01 / Tool · Live now</div>
+          <h4>First-Year Blueprint Generator</h4>
+          <p>Our flagship free tool. Pick your engineering block, tell it how you like to work — early classes or not, gym time, Friday nights free — and it drafts a personalized weekly schedule built around <em>your</em> real timetable at Schulich. Powered by AI, tailored to you.</p>
+          <div class="rf-how"><b>How to use it:</b> click the button → enter your name, block, and semester → describe your preferences → get your blueprint in seconds. No signup, no cost.</div>
+        </div>
+        <div class="rf-cta">
+          <a href="https://enginquire-schedule-generator.vercel.app/" target="_blank" rel="noopener" class="btn btn-primary">Open the generator <span class="arr">→</span></a>
+          <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-mute); text-align:center;">opens in a new tab</span>
+        </div>
       </div>
       <div class="res teal">
         <div class="rn">02 / Reels</div>
-        <h4>Weekly Tips on Instagram</h4>
+        <h4>Tips on Instagram</h4>
         <p>Short videos covering one specific tactic or course concept, every single week.</p>
-        <div class="status">→ Live @enginquire</div>
-      </div>
-      <div class="res terra">
-        <div class="rn">03 / Schedule</div>
-        <h4>Sample 4.0 Week</h4>
-        <p>How we actually structured our weeks — study, gym, research, sleep. Real, not aspirational.</p>
-        <div class="status">→ Coming August 2026</div>
+        <div class="status">→ Live @enginquire_</div>
       </div>
       <div class="res gold">
-        <div class="rn">04 / FAQ</div>
+        <div class="rn">03 / FAQ</div>
         <h4>Incoming Student FAQ</h4>
-        <p>Straight answers to the questions every first-year asks — laptops, textbooks, course load, and more.</p>
-        <div class="status">→ Coming July 2026</div>
+        <p>Straight answers to the questions every first-year asks — laptops, textbooks, course load, and more. Ask us anytime and we'll walk you through it.</p>
+        <div class="status">→ Available now — just ask</div>
       </div>
       <div class="res teal">
-        <div class="rn">05 / Community</div>
+        <div class="rn">04 / Community</div>
         <h4>Q&amp;A in our DMs</h4>
         <p>Got a question right now? Message us on Instagram — we answer incoming students for free.</p>
         <div class="status">→ Always open</div>
@@ -962,7 +994,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
     <h2 style="margin:0.8rem 0 2.5rem;">Have a question? Want to be first on the list?</h2>
     <div class="contact-grid">
       <div>
-        <p class="lead" style="margin-bottom:1.6rem;">We're two students, not a company — replies come from real people, usually within a day. Reach out about sessions, free resources, or anything about engineering at Schulich.</p>
+        <p class="lead" style="margin-bottom:1.6rem;">We're two students, not a company — replies come from real people, usually within a day. Reach out about sessions, free resources, or anything about engineering at Schulich (University of Calgary).</p>
         <button class="btn btn-primary cta-pulse" onclick="openBooking('')">Book a session <span class="arr">→</span></button>
       </div>
       <div class="contact-methods">
@@ -1035,6 +1067,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 
     <h3>What we collect</h3>
     <p>When you use our booking form, we collect only what you type in: your first and last name, your email address, and — if you choose to provide it — a phone number, along with which session or service you're interested in.</p>
+    <p>Our free First-Year Blueprint Generator (hosted separately at enginquire-schedule-generator.vercel.app) asks for your first name, email, and course block to generate your personalized schedule. Those preferences are processed by Google's Gemini AI to build your schedule, and your name and email may be sent to us so we can follow up with relevant resources. Please don't enter sensitive personal information into the generator.</p>
     <p>We do not use cookies, tracking pixels, or analytics software on this site. We don't build advertising profiles, and there's no account system — nothing is stored beyond the single submission you send us.</p>
 
     <h3>Why we collect it</h3>
@@ -1072,7 +1105,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
     <p class="lead">These terms govern your use of the EngInQuire website and our tutoring services. By reserving a spot, expressing interest in mentorship, or otherwise using this site, you agree to the terms below. We're two students running a small tutoring business, not a law firm — this is written to be genuinely readable.</p>
 
     <h3>What we offer</h3>
-    <p>EngInQuire provides pre-semester review sessions, free study resources, and optional 1-on-1 mentoring for incoming first-year Schulich engineering students. We are not affiliated with the University of Calgary, the Schulich School of Engineering, or any official university program — we are independent students offering supplementary academic support.</p>
+    <p>EngInQuire provides pre-semester review sessions, free study resources (including our online First-Year Blueprint schedule generator and practice tests), and optional 1-on-1 mentoring for incoming first-year students at the Schulich School of Engineering, University of Calgary. We are not affiliated with the University of Calgary, the Schulich School of Engineering, or any official university program — we are independent students offering supplementary academic support.</p>
 
     <h3>No guarantee of results</h3>
     <p>Our sessions and resources are designed to help you prepare for first-year engineering coursework. They are educational support, not a guarantee of any particular grade, outcome, or academic result. Your results depend on many factors outside our control, including your own effort, attendance, and coursework.</p>
