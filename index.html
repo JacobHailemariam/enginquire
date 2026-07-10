@@ -8,80 +8,43 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231a1410'/%3E%3Ccircle cx='16' cy='16' r='10' fill='%23cf6a3c' opacity='0.28'/%3E%3Ccircle cx='16' cy='16' r='5.5' fill='%23cf6a3c'/%3E%3Ccircle cx='14' cy='14' r='1.8' fill='%23f0c976' opacity='0.9'/%3E%3C/svg%3E" />
 <meta name="description" content="Pre-semester engineering review sessions and free study resources by high-GPA upper-years at Schulich, University of Calgary." />
 
-<!-- ============================================================
-     EngInQuire — single-file tabbed website
-     Built by: Jacob Hailemariam & Tom Kurian
-
-     QUICK EDIT MAP — search the file for these labels:
-        EDIT:NAV        nav labels
-        EDIT:HOME       homepage hero + highlights
-        EDIT:ABOUT      about / mission copy
-        EDIT:SESSIONS   session cards + prices
-        EDIT:RESOURCES  free resource cards
-        EDIT:TEAM       bios, credentials, photos
-        EDIT:CONTACT    email / socials / linktree
-        EDIT:BOOKING    booking + payment hookup
-        THEME           the :root block at the top of the style section
-
-     Photos go in the same folder as index.html.
-============================================================ -->
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Plus Jakarta Sans = clean geometric headings; Manrope = body; JetBrains Mono = technical accents -->
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-
-<!-- KaTeX for diploma-style math rendering (loads from CDN; needs internet) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
-<!-- EmailJS — sends the styled confirmation email to the student who reserves -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <style>
-/* ============================================================
-   THEME — edit these variables to re-skin the entire site
-============================================================ */
 :root {
-  /* ---- Deep brown base ---- */
-  --espresso:  #241409;   /* darkest — page base, deep sections */
-  --walnut:    #36210f;   /* dark brown panels */
-  --coffee:    #4a2e16;   /* medium-dark cards */
-  --bark:      #5e3a1d;   /* lighter brown */
-  --cocoa:     #7a4f2c;   /* warm mid brown */
-
-  /* ---- Accent colors ---- */
-  --gold:      #e0a93f;   /* primary accent — warm gold */
-  --gold-soft: #f0c976;   /* light gold */
-  --terra:     #cf6a3c;   /* terracotta — CTAs, energy */
-  --teal:      #4d8b7f;   /* muted teal — secondary accent */
+  --espresso:  #241409;
+  --walnut:    #36210f;
+  --coffee:    #4a2e16;
+  --bark:      #5e3a1d;
+  --cocoa:     #7a4f2c;
+  --gold:      #e0a93f;
+  --gold-soft: #f0c976;
+  --terra:     #cf6a3c;
+  --teal:      #4d8b7f;
   --teal-soft: #6fa89c;
-
-  /* ---- Neutrals / cream ---- */
   --cream:     #f3e7d0;
   --parchment: #e8d7b8;
   --sand:      #d4bd95;
-
-  /* ---- Text ---- */
   --text-light: #f3e7d0;
   --text-dim:   #c9b186;
   --text-mute:  #9a865f;
-
-  /* Fonts */
   --font-head: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-body: 'Manrope', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-
   --max: 1180px;
   --radius: 10px;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
-
 html { scroll-behavior:smooth; }
-
 body {
   font-family:var(--font-body);
   background:var(--espresso);
@@ -90,8 +53,6 @@ body {
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
 }
-
-/* Texture: subtle radial warmth + grain so it's never flat/white */
 body::before{
   content:'';
   position:fixed; inset:0; z-index:0; pointer-events:none;
@@ -105,12 +66,8 @@ body::after{
   opacity:0.35; mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' seed='7'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
 }
-
 .app { position:relative; z-index:2; }
 
-/* ============================================================
-   NAVIGATION (sticky, tab-style)
-============================================================ */
 header.nav{
   position:sticky; top:0; z-index:100;
   background:rgba(36,20,9,0.82);
@@ -137,7 +94,6 @@ header.nav{
   background:var(--terra); margin:0 3px;
   box-shadow:0 0 10px var(--terra);
 }
-
 .tabs{ display:flex; gap:0.3rem; align-items:center; }
 .tab{
   font-family:var(--font-head);
@@ -168,9 +124,6 @@ header.nav{
 
 .menu-btn{ display:none; background:none; border:none; color:var(--cream); font-size:1.5rem; cursor:pointer; }
 
-/* ============================================================
-   PAGES
-============================================================ */
 .page{ display:none; animation:fade 0.45s ease; }
 .page.active{ display:block; }
 @keyframes fade{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
@@ -193,9 +146,6 @@ h4{ font-size:1.05rem; }
 .lead{ font-size:1.12rem; color:var(--text-dim); line-height:1.7; }
 .section-pad{ padding:4.5rem 0; }
 
-/* ============================================================
-   HOME
-============================================================ */
 .hero{
   padding:4.5rem 0 3.5rem;
   display:grid; grid-template-columns:1.45fr 1fr; gap:3rem; align-items:center;
@@ -213,7 +163,6 @@ h4{ font-size:1.05rem; }
   position:relative; overflow:hidden;
   transition:transform 0.28s cubic-bezier(.2,1.3,.3,1), box-shadow 0.28s, background 0.2s, color 0.2s, border-color 0.2s;
 }
-/* shine sweep that crosses the button on hover */
 .btn::before{
   content:""; position:absolute; top:0; left:-80%; width:60%; height:100%;
   background:linear-gradient(100deg, transparent, rgba(255,255,255,0.35), transparent);
@@ -231,19 +180,15 @@ h4{ font-size:1.05rem; }
 .btn .arr{ transition:transform 0.28s cubic-bezier(.2,1.4,.3,1); }
 .btn:hover .arr{ transform:translateX(6px); }
 
-/* falling confetti — celebratory, cabin-trip style */
 .confetti{ position:fixed; z-index:9999; pointer-events:none; top:-24px; border-radius:2px; }
 
-/* idle bob — the "bumping up and down" on key CTAs */
 @keyframes ctaBob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); } }
 .cta-bob{ animation:ctaBob 2.4s ease-in-out infinite; }
 .cta-bob:hover{ animation-play-state:paused; }
-/* a soft pulsing ring of attention on the most important CTA */
 @keyframes ctaPulse{ 0%{ box-shadow:0 0 0 0 rgba(224,169,63,0.45); } 70%{ box-shadow:0 0 0 14px rgba(224,169,63,0); } 100%{ box-shadow:0 0 0 0 rgba(224,169,63,0); } }
 .cta-pulse{ animation:ctaBob 2.4s ease-in-out infinite, ctaPulse 2.4s ease-out infinite; }
 .cta-pulse:hover{ animation-play-state:paused; }
 
-/* Hero stat panel */
 .hero-panel{
   background:linear-gradient(160deg, var(--walnut), var(--coffee));
   border:1px solid rgba(224,169,63,0.22);
@@ -263,7 +208,6 @@ h4{ font-size:1.05rem; }
 .stat-val.t{ color:var(--teal-soft); }
 .stat-val.r{ color:var(--terra); }
 
-/* Highlight strip */
 .highlights{
   display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem;
   margin-top:1rem;
@@ -285,24 +229,17 @@ h4{ font-size:1.05rem; }
 .hl-card h4{ margin-bottom:0.45rem; }
 .hl-card p{ font-size:0.9rem; color:var(--text-dim); }
 
-/* ============================================================
-   EDIT:ANIMATIONS — 3D tilt, scroll reveal, drifting bg
-============================================================ */
-/* Scroll-reveal: elements start hidden + shifted, then settle */
 .reveal{ opacity:0; transform:translateY(28px); transition:opacity 0.7s cubic-bezier(.2,.7,.2,1), transform 0.7s cubic-bezier(.2,.7,.2,1); will-change:opacity,transform; }
 .reveal.in{ opacity:1; transform:translateY(0); }
 .reveal.d1{ transition-delay:0.08s; }
 .reveal.d2{ transition-delay:0.16s; }
 .reveal.d3{ transition-delay:0.24s; }
 
-/* 3D tilt: perspective wrapper applied via JS to cards */
 .tilt{ transform-style:preserve-3d; transition:transform 0.18s ease, box-shadow 0.25s ease; will-change:transform; }
 .tilt .tilt-inner{ transform:translateZ(40px); transform-style:preserve-3d; }
-/* gold glare that follows the cursor on tilted cards */
 .tilt .glare{ position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0; transition:opacity 0.25s; background:radial-gradient(circle at var(--gx,50%) var(--gy,50%), rgba(243,231,208,0.18), transparent 45%); }
 .tilt:hover .glare{ opacity:1; }
 
-/* Drifting ambient gradient layer for the hero */
 .hero-wrap{ position:relative; overflow:hidden; }
 .math-field-global{
   position:fixed; inset:0; width:100vw; height:100vh;
@@ -324,28 +261,20 @@ h4{ font-size:1.05rem; }
   100% { transform:translate3d(-2%,1%,0) scale(1.02); }
 }
 
-/* Count-up numbers sit in mono until they finish for a "loading" feel */
 .countup{ font-variant-numeric:tabular-nums; }
 
-/* Gentle float on the hero panel for living depth */
 @keyframes floatY{ 0%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } 100%{ transform:translateY(0); } }
 .floaty{ animation:floatY 6s ease-in-out infinite; }
-/* parallax layers shift via JS-set CSS vars */
 .plx{ transition:transform 0.25s cubic-bezier(.2,.7,.2,1); will-change:transform; }
 
-/* generic two-tone band */
 .band{ background:var(--walnut); border-top:1px solid rgba(224,169,63,0.14); border-bottom:1px solid rgba(224,169,63,0.14); }
 
-/* Steps (how it works) */
 .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:2.5rem; }
 .step{ position:relative; padding-top:1rem; }
 .step .num{ font-family:var(--font-head); font-weight:800; font-size:2.5rem; color:rgba(224,169,63,0.28); line-height:1; }
 .step h4{ margin:0.4rem 0 0.5rem; }
 .step p{ font-size:0.92rem; color:var(--text-dim); }
 
-/* ============================================================
-   ABOUT
-============================================================ */
 .about-grid{ display:grid; grid-template-columns:1fr 1.25fr; gap:3.5rem; align-items:start; }
 .quote-card{
   background:linear-gradient(160deg,var(--coffee),var(--walnut));
@@ -366,9 +295,6 @@ h4{ font-size:1.05rem; }
 .value h4{ margin-bottom:0.4rem; }
 .value p{ font-size:0.88rem; color:var(--text-dim); }
 
-/* ============================================================
-   SESSIONS
-============================================================ */
 .sess-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:2.5rem; }
 .sess{
   background:var(--walnut); border:1px solid rgba(224,169,63,0.16);
@@ -396,7 +322,6 @@ h4{ font-size:1.05rem; }
 .feats li{ padding:0.38rem 0 0.38rem 1.4rem; position:relative; font-size:0.9rem; color:var(--text-light); }
 .feats li::before{ content:'→'; position:absolute; left:0; color:var(--gold); font-family:var(--font-mono); }
 
-/* pricing-undetermined banner */
 .notice{
   margin-top:2.5rem; background:rgba(77,139,127,0.12);
   border:1px solid rgba(77,139,127,0.3); border-radius:12px;
@@ -406,7 +331,6 @@ h4{ font-size:1.05rem; }
 .notice p{ font-size:0.92rem; color:var(--text-dim); }
 .notice b{ color:var(--teal-soft); }
 
-/* Privacy Policy / Terms — comfortable long-form reading */
 .legal-page{ max-width:720px; }
 .legal-page .legal-updated{ color:var(--text-dim); font-size:0.85rem; margin-bottom:1.6rem; }
 .legal-page .lead{ max-width:none; margin-bottom:1.8rem; }
@@ -415,15 +339,10 @@ h4{ font-size:1.05rem; }
 .legal-page .legal-link{ color:var(--gold); text-decoration:underline; text-underline-offset:2px; }
 .legal-page .legal-link:hover{ color:var(--gold-soft); }
 
-/* small legal links in the footer */
 .foot-legal{ display:flex; gap:1.2rem; justify-content:center; margin-top:0.8rem; flex-wrap:wrap; }
 .foot-legal a{ color:var(--text-dim); font-size:0.82rem; text-decoration:none; background:none; border:none; cursor:pointer; font-family:inherit; }
 .foot-legal a:hover{ color:var(--gold); text-decoration:underline; }
 
-
-/* ============================================================
-   RESOURCES
-============================================================ */
 .res-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; margin-top:2.5rem; }
 .res{
   background:var(--walnut); border:1px solid rgba(224,169,63,0.15);
@@ -438,9 +357,6 @@ h4{ font-size:1.05rem; }
 .res p{ font-size:0.88rem; color:var(--text-dim); margin-bottom:1rem; line-height:1.6; }
 .res .status{ font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.05em; color:var(--gold); }
 
-/* ============================================================
-   TEAM
-============================================================ */
 .team-grid{ display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:2.5rem; }
 .member{
   background:linear-gradient(165deg,var(--walnut),var(--coffee));
@@ -463,9 +379,6 @@ h4{ font-size:1.05rem; }
 .cred{ font-family:var(--font-mono); font-size:0.68rem; background:var(--espresso); border:1px solid rgba(224,169,63,0.22); padding:0.28rem 0.6rem; border-radius:5px; color:var(--text-dim); }
 .cred.g{ border-color:rgba(224,169,63,0.45); color:var(--gold); }
 
-/* ============================================================
-   CONTACT
-============================================================ */
 .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start; }
 .contact-methods{ display:flex; flex-direction:column; gap:1rem; }
 .cmethod{
@@ -475,7 +388,6 @@ h4{ font-size:1.05rem; }
 }
 .cmethod:hover{ border-color:var(--gold); transform:translateX(4px); }
 
-/* email row: card wrapper holds a link + a real sibling button (valid HTML, no nested interactive elements) */
 .cmethod-split{ padding-right:0.9rem; }
 .cmethod-split:hover{ transform:none; }
 .cmethod-main{ display:flex; align-items:center; gap:1rem; text-decoration:none; color:var(--text-light); flex:1; min-width:0; }
@@ -499,7 +411,6 @@ h4{ font-size:1.05rem; }
 .cmethod .ci.terra{ background:rgba(207,106,60,0.2); color:var(--terra); }
 .cmethod .cl{ font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-mute); }
 .cmethod .cv{ font-size:0.98rem; color:var(--cream); font-weight:500; }
-/* direct-to-founder block under the main contact grid */
 .team-direct{ margin-top:3rem; padding-top:2.3rem; border-top:1px solid rgba(224,169,63,0.15); }
 .team-direct h3{ margin-bottom:0.35rem; }
 .team-direct .sub{ color:var(--text-dim); font-size:0.92rem; margin-bottom:1.6rem; max-width:560px; }
@@ -508,9 +419,6 @@ h4{ font-size:1.05rem; }
 .tname{ font-family:var(--font-head); font-weight:700; color:var(--cream); font-size:1.05rem; letter-spacing:-0.01em; }
 @media(max-width:640px){ .team-direct-grid{ grid-template-columns:1fr; } }
 
-/* ============================================================
-   BOOKING MODAL
-============================================================ */
 .modal-overlay{
   position:fixed; inset:0; z-index:1000; display:none;
   background:rgba(20,11,4,0.75); backdrop-filter:blur(6px);
@@ -545,21 +453,15 @@ h4{ font-size:1.05rem; }
 .consent-row .legal-link{ color:var(--gold); text-decoration:underline; text-underline-offset:2px; cursor:pointer; }
 .consent-row .legal-link:hover{ color:var(--gold-soft); }
 #bk-submit:disabled{ opacity:0.45; cursor:not-allowed; transform:none !important; box-shadow:none !important; animation:none !important; }
-/* two-column name row inside the reservation modal */
 .field-row{ display:flex; gap:0.7rem; }
 .field-row .field{ flex:1; }
-/* inline status message under the send button (errors / sending) */
 .bk-status{ font-size:0.85rem; margin-top:0.8rem; text-align:center; min-height:1.1rem; color:var(--teal-soft); }
 .bk-status.err{ color:var(--terra); }
-/* success panel shown after a reservation sends */
 .bk-done{ display:none; text-align:center; padding:0.4rem 0 0.2rem; }
 .bk-done .check{ width:54px; height:54px; border-radius:50%; background:rgba(77,139,127,0.18); border:1px solid var(--teal); color:var(--teal-soft); display:flex; align-items:center; justify-content:center; font-size:1.7rem; margin:0 auto 1.1rem; }
 .bk-done h4{ margin-bottom:0.5rem; }
 .bk-done p{ font-size:0.9rem; color:var(--text-dim); line-height:1.5; }
 
-/* ============================================================
-   FOOTER
-============================================================ */
 footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); padding:2.8rem 1.6rem 2rem; text-align:center; margin-top:3rem; }
 .foot-brand{ font-family:var(--font-head); font-weight:800; font-size:1.3rem; color:var(--cream); margin-bottom:0.4rem; }
 .foot-brand .in{ color:var(--gold); }
@@ -568,7 +470,9 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 .foot-meta{ font-size:0.82rem; color:var(--text-mute); }
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE — rebuilt/expanded so every newer component
+   (legal pages, consent row, email-copy button, team-direct
+   grid) is properly covered on phones, not just the original set.
 ============================================================ */
 @media (max-width:880px){
   .tabs{ position:absolute; top:100%; left:0; right:0; flex-direction:column; align-items:stretch; background:var(--walnut); padding:1rem; gap:0.3rem; display:none; border-bottom:1px solid rgba(224,169,63,0.2); }
@@ -581,12 +485,51 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   .about-grid, .team-grid, .contact-grid{ grid-template-columns:1fr; }
   .member{ grid-template-columns:1fr; }
   .photo{ width:130px; }
+
+  /* tighter, consistent side padding so nothing crowds the screen edge */
+  .wrap{ padding:0 1.1rem; }
+  .section-pad{ padding:3rem 0; }
+  .nav-inner{ padding:0.8rem 1.1rem; }
+
+  .hero{ padding:2.8rem 0 2rem; gap:2rem; }
+  .btn-row{ flex-direction:column; align-items:stretch; }
+  .btn-row .btn{ justify-content:center; }
+
+  /* email row (link + copy button) stacks instead of squeezing */
+  .cmethod-split{ flex-wrap:wrap; row-gap:0.7rem; padding-right:1.3rem; }
+  .cmethod-main{ min-width:0; flex-basis:100%; }
+  .copy-btn{ margin-left:0; }
+  .cmethod .cv{ word-break:break-word; }
+
+  .legal-page{ max-width:100%; }
+  .legal-page h3{ font-size:1rem; margin:1.6rem 0 0.5rem; }
+  .legal-page p{ font-size:0.92rem; }
+
+  .modal-overlay{ padding:1rem; }
+  .modal{ padding:1.6rem; }
+  .field-row{ flex-direction:column; gap:0; }
+  .consent-row{ font-size:0.82rem; gap:0.5rem; }
+
+  .team-direct-grid{ grid-template-columns:1fr; }
+
+  .picker{ grid-template-columns:1fr; }
+  .card{ padding:1.5rem; }
+  .q{ font-size:1.05rem; }
+  .fsheet{ padding:1.5rem; }
+
+  .foot-legal{ gap:0.9rem 1rem; }
+}
+@media (max-width:480px){
+  .wrap{ padding:0 0.9rem; }
+  h1{ font-size:clamp(1.9rem,8vw,2.6rem); }
+  h2{ font-size:clamp(1.5rem,6vw,2rem); }
+  .hero-panel{ padding:1.3rem; }
+  .stat-val{ font-size:1.5rem; }
+  .modal{ padding:1.3rem; }
 }
 @media (prefers-reduced-motion:reduce){ *{ animation-duration:0.01ms!important; transition-duration:0.01ms!important; } .reveal{ opacity:1!important; transform:none!important; } .tilt{ transform:none!important; } .hero-aura{ animation:none!important; } .cta-bob, .cta-pulse{ animation:none!important; } }
 
-/* ===================== PRACTICE TEST (diploma quiz) ===================== */
 .toolbar{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:2rem;}
-/* ----- two-card test picker ----- */
 .picker{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-bottom:2rem;}
 .pcard{display:flex;flex-direction:column;background:linear-gradient(165deg,var(--walnut),var(--coffee));border:1px solid rgba(224,169,63,0.2);border-radius:16px;padding:1.8rem;box-shadow:0 14px 40px rgba(0,0,0,0.25);transition:border-color 0.2s,transform 0.2s;}
 .pcard:hover{border-color:rgba(224,169,63,0.45);transform:translateY(-3px);}
@@ -596,7 +539,6 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 .pcard-row{display:flex;gap:0.7rem;flex-wrap:wrap;}
 .again-btn.ghost2{background:transparent;color:var(--cream);border:1.5px solid rgba(243,231,208,0.35);}
 .again-btn.ghost2:hover{background:transparent;border-color:var(--gold);color:var(--gold);}
-@media (max-width:880px){.picker{grid-template-columns:1fr;}}
 .tool-btn{font-family:var(--font-head);font-weight:700;font-size:0.88rem;border:none;cursor:pointer;padding:0.7rem 1.3rem;border-radius:8px;transition:transform 0.28s cubic-bezier(.2,1.3,.3,1),box-shadow 0.28s,background 0.2s,color 0.2s,border-color 0.2s;}
 .tool-btn.primary{background:var(--gold);color:var(--espresso);}
 .tool-btn.primary:hover{background:var(--gold-soft);transform:translateY(-4px) scale(1.04);box-shadow:0 14px 34px -8px rgba(224,169,63,0.5);}
@@ -633,7 +575,6 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 
 .solution{margin-top:1.5rem;padding:1.3rem 1.4rem;background:var(--espresso);border-left:3px solid var(--gold);border-radius:8px;font-size:0.96rem;line-height:1.8;display:none;}
 .solution.show{display:block;animation:fade 0.3s;}
-@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 .solution .sol-label{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:0.6rem;}
 .next-btn{margin-top:1.4rem;width:100%;font-family:var(--font-head);font-weight:700;font-size:0.95rem;background:var(--gold);color:var(--espresso);border:none;padding:0.9rem;border-radius:8px;cursor:pointer;transition:all 0.2s;display:none;}
 .next-btn.show{display:block;}
@@ -658,21 +599,18 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 .frow{padding:0.45rem 0;font-size:1rem;color:var(--cream);}
 .frow .katex{font-size:1.05em;}
 @media (max-width:880px){.q{font-size:1.05rem;}.card{padding:1.5rem;}.fsheet{padding:1.5rem;}}
-
 </style>
 </head>
 <body>
 <canvas class="math-field-global" id="mathFieldGlobal" aria-hidden="true"></canvas>
 <div class="app">
 
-<!-- ===================== NAV ===================== -->
 <header class="nav">
   <div class="nav-inner">
     <div class="brand" onclick="go('home')">
       Eng<span class="spark"></span><span class="in">In</span>Quire
     </div>
     <button class="menu-btn" onclick="document.querySelector('.tabs').classList.toggle('open')">☰</button>
-    <!-- EDIT:NAV — tab labels (data-page must match a .page id) -->
     <nav class="tabs">
       <button class="tab active" data-page="home"      onclick="go('home')">Home</button>
       <button class="tab"        data-page="about"     onclick="go('about')">About</button>
@@ -686,14 +624,12 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   </div>
 </header>
 
-<!-- ===================== HOME ===================== -->
 <section class="page active" id="home">
   <div class="hero-wrap">
   <div class="hero-aura"></div>
   <div class="wrap hero">
-    <!-- EDIT:HOME -->
     <div class="plx" data-plx="0.018">
-      <span class="eyebrow">Schulich · UCalgary</span>
+      <span class="eyebrow">Schulich · UCalgary · Class of 2030</span>
       <h1>First-year engineering, <span class="gold">decoded</span> by people who <span class="em">just did it</span>.</h1>
       <p class="lead">EngInQuire runs pre-semester review sessions and free study resources for incoming Schulich engineering students — built by two upper-years who finished first year with 3.9+ GPAs and remember exactly what tripped people up.</p>
       <div class="btn-row">
@@ -776,12 +712,10 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   </div>
 </section>
 
-<!-- ===================== ABOUT ===================== -->
 <section class="page" id="about">
   <div class="wrap section-pad">
     <span class="eyebrow">About EngInQuire</span>
     <h2 style="margin:0.8rem 0 2.5rem; max-width:760px;">We're not a tutoring company. We're the upper-years you wish you'd known the summer before first year.</h2>
-    <!-- EDIT:ABOUT -->
     <div class="about-grid">
       <div class="quote-card">
         <p class="q">"First semester isn't hard because the material is impossible. It's hard because nobody tells you how it actually works."</p>
@@ -789,7 +723,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       </div>
       <div class="about-body">
         <p>The grading curves, the unspoken study habits, the gap between high-school studying and engineering studying, the courses that quietly decide your GPA before midterms even hit — <strong>that's the stuff that catches people off guard.</strong></p>
-        <p>We finished first year at Schulich with 3.97 and 3.94 GPAs while balancing part-time jobs, school, applications, a social life, and staying healthy. We remember exactly what we wish someone had sat us down and explained before first year started.</p>
+        <p>We finished first year at Schulich with 3.97 and 3.94 GPAs while doing engineering research, coaching, and building real projects. We remember exactly what we wish someone had sat us down and explained in August.</p>
         <p><strong>EngInQuire is that conversation, structured</strong> — pre-semester review sessions for students who want to start ahead, plus free resources that make the rest of the year less of a guessing game.</p>
       </div>
     </div>
@@ -817,14 +751,12 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   </div>
 </section>
 
-<!-- ===================== SESSIONS ===================== -->
 <section class="page" id="sessions">
   <div class="wrap section-pad">
     <span class="eyebrow">Pre-semester sessions</span>
     <h2 style="margin:0.8rem 0 0.6rem;">Start the year already ahead.</h2>
     <p class="lead" style="max-width:680px;">In-person sessions that turn the first six weeks of confusion into one focused afternoon. Pricing is being finalized — reserve a spot now and you'll be first to know.</p>
 
-    <!-- EDIT:SESSIONS — update dates, prices, features. Copy a .sess block to add another. -->
     <div class="sess-grid">
       <div class="sess reveal">
         <span class="sess-tag gold">Aug 18 – 22</span>
@@ -876,14 +808,12 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   </div>
 </section>
 
-<!-- ===================== RESOURCES ===================== -->
 <section class="page" id="resources">
   <div class="wrap section-pad">
     <span class="eyebrow">Free resources</span>
     <h2 style="margin:0.8rem 0 0.6rem;">What you get without paying a cent.</h2>
     <p class="lead" style="max-width:680px;">Most of what helped us hit 3.9+ GPAs wasn't behind a paywall — it was just hard to find. We're publishing it here, free, throughout the summer.</p>
 
-    <!-- EDIT:RESOURCES — flip status to "Available now" + wrap card in <a href="..."> when published -->
     <div class="res-grid">
       <div class="res gold">
         <div class="rn">01 / Guide</div>
@@ -903,7 +833,6 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
         <p>How we actually structured our weeks — study, gym, research, sleep. Real, not aspirational.</p>
         <div class="status">→ Coming August 2026</div>
       </div>
-      <!-- replaced "note-taking templates" with a simpler FAQ resource -->
       <div class="res gold">
         <div class="rn">04 / FAQ</div>
         <h4>Incoming Student FAQ</h4>
@@ -915,25 +844,20 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
         <h4>Q&amp;A in our DMs</h4>
         <p>Got a question right now? Message us on Instagram — we answer incoming students for free.</p>
         <div class="status">→ Always open</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ===================== TEAM ===================== -->
 <section class="page" id="team">
   <div class="wrap section-pad">
     <span class="eyebrow">The Team</span>
     <h2 style="margin:0.8rem 0 0.4rem;">Two students, two paths, one philosophy.</h2>
     <p class="lead" style="max-width:640px;">Both finished first year near the top of the class — here's who's actually teaching you.</p>
 
-    <!-- EDIT:TEAM — to add a photo, replace the .photo <div> with:
-         <img src="jacob.jpg" alt="Jacob" class="photo" style="object-fit:cover;"> -->
     <div class="team-grid">
       <div class="member">
-        <img src="jacob-linkedin-photo.jpg"
-     alt="Jacob Hailemariam"
-     class="photo"
-     style="object-fit: cover;">
+        <img src="jacob-linkedin-photo.jpg" alt="Jacob Hailemariam" class="photo" style="object-fit: cover;">
         <div>
           <h3>Jacob Hailemariam</h3>
           <div class="role">Co-Founder · Electrical Eng. + Computer Eng. Minor</div>
@@ -950,10 +874,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       </div>
 
       <div class="member">
-        <img src="thomas.jpg"
-     alt="Tom Kurian"
-     class="photo"
-     style="object-fit: cover;">
+        <img src="thomas.jpg" alt="Tom Kurian" class="photo" style="object-fit: cover;">
         <div>
           <h3>Tom Kurian</h3>
           <div class="role teal">Co-Founder · Mechanical Eng. + Energy &amp; Environment Minor</div>
@@ -974,9 +895,6 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   </div>
 </section>
 
-
-<!-- ===================== PRACTICE TEST ===================== -->
-<!-- EDIT:REVIEW — two diploma-style review tests (Pre-Calc + Calculus). Question banks (BANKS.precalc / BANKS.calc) live in the QZ script near the bottom of the file. -->
 <section class="page" id="review">
   <div class="wrap section-pad">
     <span class="eyebrow">Free practice tests</span>
@@ -1034,12 +952,10 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   </div>
 </section>
 
-<!-- ===================== CONTACT ===================== -->
 <section class="page" id="contact">
   <div class="wrap section-pad">
     <span class="eyebrow">Get in touch</span>
     <h2 style="margin:0.8rem 0 2.5rem;">Have a question? Want to be first on the list?</h2>
-    <!-- EDIT:CONTACT -->
     <div class="contact-grid">
       <div>
         <p class="lead" style="margin-bottom:1.6rem;">We're two students, not a company — replies come from real people, usually within a day. Reach out about sessions, free resources, or anything about engineering at Schulich.</p>
@@ -1074,7 +990,6 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       </div>
     </div>
 
-    <!-- EDIT:CONTACT — direct lines to Jacob & Tom (tel: lets mobile tap to call/text) -->
     <div class="team-direct">
       <h3>Prefer to reach us directly?</h3>
       <p class="sub">Call or text either of us, or email our UCalgary inboxes — for any inquiry, big or small, don't hesitate to reach out.</p>
@@ -1105,9 +1020,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
     </div>
   </div>
 </section>
-<!-- ===================== FOOTER ===================== -->
-<!-- ===================== PRIVACY POLICY ===================== -->
-<!-- EDIT:PRIVACY — plain-language policy matched to what this site actually collects (name/email/phone via the booking form, sent through Web3Forms + EmailJS to enginquire7@gmail.com). No cookies, no analytics, no accounts, no stored payments. Update the "Last updated" date whenever this is edited. -->
+
 <section class="page" id="privacy">
   <div class="wrap section-pad legal-page">
     <span class="eyebrow">Legal</span>
@@ -1146,8 +1059,6 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   </div>
 </section>
 
-<!-- ===================== TERMS & CONDITIONS ===================== -->
-<!-- EDIT:TERMS — the cancellation/refund clause below is left deliberately flexible until Jacob & Tom finalize pricing + refund policy. Search "REFUND POLICY — EDIT ME" to find and update that exact line once decided. -->
 <section class="page" id="terms">
   <div class="wrap section-pad legal-page">
     <span class="eyebrow">Legal</span>
@@ -1166,7 +1077,6 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
     <p>Reserving a spot through our booking form does not charge you immediately — it holds your interest in a session. Pricing and payment details, once finalized, will be communicated to you directly by email before any payment is due. No payment is collected through this website at this time.</p>
 
     <h3>Cancellations and refunds</h3>
-    <!-- REFUND POLICY — EDIT ME once Jacob & Tom decide the real policy -->
     <p>Our cancellation and refund policy will be confirmed at the time payment details are sent to you, and will be clearly stated before you're asked to pay. If your plans change before then, just let us know by email — reserving a spot carries no obligation or penalty.</p>
 
     <h3>Acceptable use</h3>
@@ -1235,7 +1145,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 
     <h4>Binomial Theorem</h4>
     <div class="frow">General term: $\;t_{k+1} = \dbinom{n}{k}\,x^{\,n-k}\,y^{\,k}$</div>
-    </div><!-- /sheet-precalc -->
+    </div>
 
     <div id="sheet-calc" style="display:none;">
     <h3>Calculus Review — Formula Sheet</h3>
@@ -1260,18 +1170,14 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
     <h4>Algebra</h4>
     <div class="frow">Line: $\;m(x-x_{1})=y-y_{1}$</div>
     <div class="frow">Quadratic: $\;x=\dfrac{-b\pm\sqrt{b^{2}-4ac}}{2a}$</div>
-    </div><!-- /sheet-calc -->
+    </div>
   </div>
 </div>
 
-<!-- ===================== BOOKING MODAL ===================== -->
-<!-- EDIT:BOOKING — see the big comment in the <script> for how to
-     connect Stripe / a Google Form / e-transfer when you go live. -->
 <div class="modal-overlay" id="bookingModal" onclick="if(event.target===this)closeBooking()">
   <div class="modal">
     <button class="close" onclick="closeBooking()">×</button>
 
-    <!-- FORM VIEW -->
     <div id="bk-form">
       <h3>Reserve your spot</h3>
       <p class="msub">No payment yet — pricing is being finalized. We'll text and email you the details before anything is due.</p>
@@ -1314,7 +1220,6 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       <p class="fineprint">Your name, email, phone, and chosen session go straight to enginquire7@gmail.com. We'll personally text you to confirm. Pricing &amp; payment come later — nothing is due now.</p>
     </div>
 
-    <!-- SUCCESS VIEW (shown after a reservation sends) -->
     <div id="bk-done" class="bk-done">
       <div class="check">✓</div>
       <h4>You're on the list.</h4>
@@ -1325,26 +1230,19 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 </div>
 
 <script>
-// ============================================================
-// TAB NAVIGATION — switches visible .page, updates active tab
-// ============================================================
 function go(page){
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(page).classList.add('active');
   document.querySelectorAll('.tab').forEach(t => {
     t.classList.toggle('active', t.dataset.page === page);
   });
-  document.querySelector('.tabs').classList.remove('open'); // close mobile menu
+  document.querySelector('.tabs').classList.remove('open');
   window.scrollTo({ top:0, behavior:'smooth' });
   if(page==='review' && window.renderMathInElement){ try{ renderMath(document.getElementById('review')); }catch(e){} }
 }
 
-// ============================================================
-// BOOKING MODAL
-// ============================================================
 function openBooking(presetSession){
   const modal = document.getElementById('bookingModal');
-  // reset to the form view (in case it was left on the success screen)
   document.getElementById('bk-form').style.display = 'block';
   document.getElementById('bk-done').style.display = 'none';
   const status = document.getElementById('bk-status');
@@ -1361,48 +1259,8 @@ function openBooking(presetSession){
 }
 function closeBooking(){ document.getElementById('bookingModal').classList.remove('open'); }
 
-// ============================================================
-// EDIT:BOOKING — RESERVATION EMAIL (Web3Forms)
-// ------------------------------------------------------------
-// HOW IT WORKS: when someone hits "Send reservation", the browser
-// POSTs their details to Web3Forms, which emails the whole thing
-// to enginquire7@gmail.com. No backend, no secret server needed —
-// the access key below is SAFE to be public because it can only
-// ever deliver to the one email address you verified.
-//
-// >>> ONE STEP TO GO LIVE <<<
-//   1. Go to https://web3forms.com  →  enter enginquire7@gmail.com
-//   2. They email that inbox an Access Key (looks like a UUID).
-//   3. Paste it between the quotes below, replacing the placeholder.
-// Until you do, submissions will fail with a friendly error and a
-// prompt to email you directly — so the site never looks broken.
-//
-// LATER — ADDING PAYMENT (when pricing is set):
-//   Easiest path is a Stripe Payment Link (one URL per session you
-//   generate in the Stripe dashboard, no code). After a successful
-//   send below, redirect to it, e.g.:
-//       window.location.href = STRIPE_LINKS[session];
-//   For true automation (mark-as-paid, receipts), a Stripe webhook
-//   hitting a small serverless function is the next step up.
-// ============================================================
-const WEB3FORMS_KEY = "c9b19a26-f90e-494e-b2c3-4f3fb681acb0";  // <-- paste your key here
+const WEB3FORMS_KEY = "c9b19a26-f90e-494e-b2c3-4f3fb681acb0";
 
-// ============================================================
-// EDIT:BOOKING — STUDENT CONFIRMATION EMAIL (EmailJS)
-// ------------------------------------------------------------
-// This sends the nice branded "You're in!" email to whoever
-// reserved. The email's LOOK lives in your EmailJS dashboard
-// template (see the separate confirmation-email.html I gave you);
-// this code just fires it with their name + session filled in.
-//
-// >>> THREE IDs TO PASTE (all from your EmailJS dashboard) <<<
-//   PUBLIC KEY : Account → General → Public Key
-//   SERVICE ID : Email Services → (your Gmail service)
-//   TEMPLATE ID: Email Templates → (the template you create)
-// The public key is safe to expose (lock it to your domain in
-// EmailJS → Account → Security). Until all three are set, the
-// site still works — it just skips the confirmation step.
-// ============================================================
 const EMAILJS_PUBLIC_KEY  = "NCO_4z8QKWneBPWVl";
 const EMAILJS_SERVICE_ID  = "service_2axu63s";
 const EMAILJS_TEMPLATE_ID = "template_0x9uwfp";
@@ -1412,7 +1270,6 @@ const EMAILJS_READY = EMAILJS_PUBLIC_KEY !== "YOUR_EMAILJS_PUBLIC_KEY"
 
 if(EMAILJS_READY && window.emailjs){ emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); }
 
-// best-effort: never blocks the reservation if it fails
 function sendUserConfirmation(params){
   if(!EMAILJS_READY || !window.emailjs){
     console.warn('[EngInQuire] EmailJS not configured yet — confirmation email skipped.');
@@ -1432,14 +1289,12 @@ async function submitBooking(){
   const status  = document.getElementById('bk-status');
   const btn     = document.getElementById('bk-submit');
 
-  // --- validate: all four contact fields are required ---
   if(!first || !last || !email || !phone){
     status.className = 'bk-status err';
     status.textContent = 'Please add your name, email, and phone so we can confirm your spot.';
     return;
   }
 
-  // --- guard: consent checkbox must be checked (not just relying on the disabled attribute) ---
   const consentBox = document.getElementById('bk-consent');
   if(!consentBox || !consentBox.checked){
     status.className = 'bk-status err';
@@ -1447,7 +1302,6 @@ async function submitBooking(){
     return;
   }
 
-  // --- guard: catch the un-pasted access key before we even try to send ---
   if(!WEB3FORMS_KEY || WEB3FORMS_KEY === 'YOUR_WEB3FORMS_ACCESS_KEY'){
     status.className = 'bk-status err';
     status.textContent = 'Setup: the Web3Forms access key hasn\u2019t been added yet (WEB3FORMS_KEY in index.html).';
@@ -1455,7 +1309,6 @@ async function submitBooking(){
     return;
   }
 
-  // --- show a sending state so the button can't be double-clicked ---
   btn.disabled = true;
   btn.innerHTML = 'Sending\u2026';
   status.className = 'bk-status';
@@ -1467,9 +1320,9 @@ async function submitBooking(){
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({
         access_key: WEB3FORMS_KEY,
-        subject: 'New reservation \u2014 ' + session,   // shows the session right in the email subject
+        subject: 'New reservation \u2014 ' + session,
         from_name: 'EngInQuire website',
-        replyto: email,                                 // hitting "reply" in Gmail goes to the student
+        replyto: email,
         'First name': first,
         'Last name': last,
         'Email': email,
@@ -1478,21 +1331,17 @@ async function submitBooking(){
       })
     });
     const data = await res.json();
-    console.log('[EngInQuire] Web3Forms response:', data);   // open DevTools console to see this
+    console.log('[EngInQuire] Web3Forms response:', data);
 
     if(data.success){
-      // swap the form for the success panel
       document.getElementById('bk-form').style.display = 'none';
       document.getElementById('bk-done').style.display = 'block';
-      // 🎉 celebratory confetti rain
       if(window.EngFX && window.EngFX.confettiFall) window.EngFX.confettiFall();
-      // and send the student their branded confirmation (best-effort)
       sendUserConfirmation({ first_name: first, last_name: last, user_email: email, session: session });
     } else {
       throw new Error(data.message || 'Submission failed');
     }
   } catch(err){
-    // re-enable and show the ACTUAL reason (e.g. "Invalid Access Key")
     btn.disabled = false;
     btn.innerHTML = 'Send reservation <span class="arr">&rarr;</span>';
     status.className = 'bk-status err';
@@ -1501,10 +1350,7 @@ async function submitBooking(){
   }
 }
 
-// Close modal on Escape
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeBooking(); });
-
-/* ===================== PRACTICE TEST LOGIC ===================== */
 
 let PT_TEST='precalc';
 function openSheet(which){
@@ -1530,290 +1376,50 @@ function renderMath(el){
 const QZ=(function(){
   const BANKS={};
   BANKS.precalc=[
-    {
-      topic:"Transformations · Domain",
-      q:"The graph of $y=f(x)$ has domain $\\{x \\mid x \\ge -4,\\ x\\in\\mathbb{R}\\}$. What is the domain of $y=f(-x+4)$?",
-      options:["$\\{x \\mid x \\le 8,\\ x\\in\\mathbb{R}\\}$","$\\{x \\mid x \\ge -8,\\ x\\in\\mathbb{R}\\}$","$\\{x \\mid x \\le 0,\\ x\\in\\mathbb{R}\\}$","$\\{x \\mid x \\ge 0,\\ x\\in\\mathbb{R}\\}$"],
-      correct:0,
-      sol:"Replace the input: we need $-x+4 \\ge -4$. Solve: $-x \\ge -8$, so $x \\le 8$. The reflection flips the inequality sign."
-    },
-    {
-      topic:"Transformations · Stretch",
-      q:"A graph of $y=f(x)$ is transformed to produce $y=f(2x)$. Compared with $y=f(x)$, the new graph is:",
-      options:["a horizontal stretch by factor $\\tfrac{1}{2}$","a horizontal stretch by factor $2$","a vertical stretch by factor $2$","a vertical stretch by factor $\\tfrac{1}{2}$"],
-      correct:0,
-      sol:"For $y=f(bx)$ the horizontal stretch factor is $\\tfrac{1}{b}$. Here $b=2$, so the factor is $\\tfrac{1}{2}$ — the graph is compressed toward the $y$-axis."
-    },
-    {
-      topic:"Transformations · Mapping",
-      q:"The point $A(2,1)$ on $y=f(x)$ maps to $A'(8,1)$ after a horizontal stretch about the $y$-axis, written $y=f\\big(m(x-2)\\big)$. The value of $m$ is:",
-      options:["$\\dfrac{1}{5}$","$\\dfrac{1}{3}$","$3$","$5$"],
-      correct:1,
-      sol:"The new $x$-value $8$ must satisfy $m(8-2)=$ the original input $2$. So $6m=2$, giving $m=\\tfrac{1}{3}$."
-    },
-    {
-      topic:"Inverse Functions",
-      q:"Given $f(x)=3^{\\,x-a}+b$ with $a\\neq 0$, the domain of the inverse $f^{-1}(x)$ is:",
-      options:["$\\{x \\mid x>0\\}$","$\\{x \\mid x>3\\}$","$\\{x \\mid x>a\\}$","$\\{x \\mid x>b\\}$"],
-      correct:3,
-      sol:"The domain of $f^{-1}$ equals the range of $f$. Since $3^{x-a}>0$, we have $f(x)>b$. So the range is $y>b$, and the inverse's domain is $\\{x \\mid x>b\\}$."
-    },
-    {
-      topic:"Logarithm Laws",
-      q:"An expression equivalent to $-\\log x - \\log y$ is:",
-      options:["$\\dfrac{-\\log x}{\\log y}$","$-\\log\\!\\left(\\dfrac{x}{y}\\right)$","$\\log\\!\\left(\\dfrac{1}{xy}\\right)$","$\\dfrac{1}{\\log x \\log y}$"],
-      correct:2,
-      sol:"$-\\log x - \\log y = -(\\log x + \\log y) = -\\log(xy) = \\log\\!\\big((xy)^{-1}\\big) = \\log\\!\\left(\\dfrac{1}{xy}\\right).$"
-    },
-    {
-      topic:"Rational Functions · Asymptotes",
-      q:"Which function does <b>not</b> share the vertical asymptote $x=3$ with the others?",
-      options:["$f(x)=\\log_2(x-3)+6$","$g(x)=\\log_2(2x-6)+3$","$h(x)=\\dfrac{2x^2+6x}{x^2-3x}$","$k(x)=\\dfrac{x-3}{2x^2-6x}$"],
-      correct:3,
-      sol:"Factor $k(x)=\\dfrac{x-3}{2x(x-3)}$. The $(x-3)$ cancels, leaving a <i>hole</i> at $x=3$ and a vertical asymptote at $x=0$. The other three all have a vertical asymptote at $x=3$."
-    },
-    {
-      topic:"Logarithmic Functions",
-      q:"For $f(x)=\\log_a x$ and $g(x)=\\log_b x$: $f$ increases to the right while $g$ decreases. Which statement is true?",
-      options:["$a\\lt b$","$b\\gt 1$","$a\\gt b$","$a\\lt 1$"],
-      correct:2,
-      sol:"An increasing logarithm has base $a\\gt 1$; a decreasing logarithm has base $0\\lt b\\lt 1$. Therefore $a\\gt b$."
-    },
-    {
-      topic:"Logarithmic Equations",
-      q:"Hala solves $\\log_3(x+3)+\\log_3(x-5)=2$ and finds one extraneous root. The extraneous root is:",
-      options:["$x=-6$","$x=-5$","$x=-4$","$x=-3$"],
-      correct:2,
-      sol:"Combine: $\\log_3\\big((x+3)(x-5)\\big)=2$, so $(x+3)(x-5)=9$. Then $x^2-2x-24=0 \\Rightarrow (x-6)(x+4)=0$. So $x=6$ or $x=-4$. At $x=-4$, $\\log_3(x-5)=\\log_3(-9)$ is undefined — so $x=-4$ is extraneous."
-    },
-    {
-      topic:"Logarithms · Application",
-      q:"Star magnitude is $M = 6 - 2.5\\log\\!\\left(\\dfrac{L}{L_0}\\right)$. How many times greater is the light flux $L$ of a star with $M=-1.5$ than one with $M=3.5$?",
-      options:["$100$","$1\\,000$","$10\\,000$","$100\\,000$"],
-      correct:0,
-      sol:"The difference gives $M_2-M_1 = 2.5\\log\\!\\left(\\dfrac{L_1}{L_2}\\right)$. So $3.5-(-1.5)=5=2.5\\log\\!\\left(\\dfrac{L_1}{L_2}\\right)$, giving $\\log\\!\\left(\\dfrac{L_1}{L_2}\\right)=2$, so the ratio is $10^2=100$."
-    },
-    {
-      topic:"Polynomials · Factor Theorem",
-      q:"For $P(x)=x^3-2x^2-13x-10$, which two statements are correct?<br>① Dividing by $(x+1)$ gives quotient $x^2-3x-10$.<br>② $(x-1)$ is a factor.<br>③ $P(-2)=0$, so $(x-2)$ is a factor.<br>④ $P(-3)=-16$, the remainder on division by $(x+3)$.",
-      options:["① and ③","① and ④","② and ③","② and ④"],
-      correct:1,
-      sol:"① Synthetic division by $(x+1)$ gives $x^2-3x-10$ with remainder $0$ — true. ④ $P(-3)=-27-18+39-10=-16$ — true, and by the Remainder Theorem that is the remainder. (② is false since $P(1)\\neq 0$; ③ misstates the factor — $P(-2)=0$ implies $(x+2)$ is a factor, not $(x-2)$.)"
-    },
-    {
-      topic:"Polynomials · Graphs",
-      q:"Michael graphs $y=a(x-b)^2(x+c)$ with $a,b,c\\gt 0$. If he changes only $a$ to be $a\\lt 0$, what changes?",
-      options:["domain","range","$x$-intercepts","$y$-intercept"],
-      correct:3,
-      sol:"The $x$-intercepts come from the zeros (unchanged), and the domain and range of a cubic are all real numbers either way. Flipping the sign of $a$ reflects the graph vertically, which changes the sign of the $y$-intercept."
-    },
-    {
-      topic:"Polynomials · Parameters",
-      q:"The graph of $P(x)=a(x-r)(x-1)^2(x-4)$ passes through $(0,6)$. The value of $a$ in terms of $r$ is:",
-      options:["$a=\\dfrac{3}{2r}$","$a=-\\dfrac{3}{2r}$","$a=\\dfrac{2}{3r}$","$a=-\\dfrac{2}{3r}$"],
-      correct:0,
-      sol:"Substitute $(0,6)$: $6=a(0-r)(0-1)^2(0-4)=a(-r)(1)(-4)=4ar$. So $a=\\dfrac{6}{4r}=\\dfrac{3}{2r}$."
-    },
-    {
-      topic:"Composite Functions",
-      q:"Given $f(x)=8-3x$, $g(x)=\\left|\\tfrac{1}{2}x-5\\right|$, and $h(x)=\\log_{1/2}x$, find $(f\\circ g\\circ h)(16)$.",
-      options:["$-13$","$-5$","$29$","$480$"],
-      correct:0,
-      sol:"Work from the inside out. $h(16)=\\log_{1/2}16=-4$. Then $g(-4)=\\left|\\tfrac{1}{2}(-4)-5\\right|=|-7|=7$. Then $f(7)=8-3(7)=-13$."
-    },
-    {
-      topic:"Trigonometry · Reciprocal Ratios",
-      q:"Angle $\\theta$ in standard position has the point $P\\!\\left(x,-\\tfrac{8}{17}\\right)$ on its terminal arm on the unit circle, where $x>0$. The exact value of $\\cot\\theta$ is:",
-      options:["$-\\dfrac{8}{\\sqrt{353}}$","$-\\dfrac{\\sqrt{353}}{8}$","$-\\dfrac{8}{15}$","$-\\dfrac{15}{8}$"],
-      correct:3,
-      sol:"On the unit circle $x^2+y^2=1$, so $x=\\sqrt{1-\\tfrac{64}{289}}=\\sqrt{\\tfrac{225}{289}}=\\tfrac{15}{17}$ (positive, since $x>0$). Then $\\cot\\theta=\\dfrac{x}{y}=\\dfrac{15/17}{-8/17}=-\\dfrac{15}{8}.$"
-    },
-    {
-      topic:"Trigonometry · Exact Values",
-      q:"If $\\csc\\!\\left(\\dfrac{4\\pi}{3}\\right)+k=\\cot\\!\\left(\\dfrac{8\\pi}{3}\\right)$, the exact value of $k$ is:",
-      options:["$-\\sqrt{3}$","$-\\dfrac{1}{\\sqrt{3}}$","$\\dfrac{1}{\\sqrt{3}}$","$\\sqrt{3}$"],
-      correct:2,
-      sol:"$\\csc\\tfrac{4\\pi}{3}=\\dfrac{1}{\\sin 240^\\circ}=-\\dfrac{2}{\\sqrt3}$. And $\\tfrac{8\\pi}{3}$ is coterminal with $\\tfrac{2\\pi}{3}$, so $\\cot\\tfrac{8\\pi}{3}=-\\dfrac{1}{\\sqrt3}$. Then $k=-\\dfrac{1}{\\sqrt3}-\\left(-\\dfrac{2}{\\sqrt3}\\right)=\\dfrac{1}{\\sqrt3}.$"
-    },
-    {
-      topic:"Trigonometry · Mapping",
-      q:"The mapping $(x,y)\\to(x-2,\\,-y+5)$ transforms $y=f(x)$ into $y=g(x)$. Which sequence of transformations does this represent?",
-      options:["reflection in the $x$-axis, then translate $2$ left and $5$ up","reflection in the $y$-axis, then translate $2$ right and $5$ down","reflection in the $x$-axis, then translate $2$ right and $5$ up","reflection in the $y$-axis, then translate $2$ left and $5$ down"],
-      correct:0,
-      sol:"$x\\to x-2$ moves every point $2$ left. $y\\to -y+5$ reflects in the $x$-axis (the $-y$) and then shifts up $5$. So: reflect in the $x$-axis, translate $2$ left and $5$ up."
-    },
-    {
-      topic:"Trigonometry · General Solution",
-      q:"The general solution to $10\\cos^2\\theta = 5$ (with $n\\in\\mathbb{I}$) is:",
-      options:["$\\theta=\\dfrac{\\pi}{4}+n\\pi$","$\\theta=\\dfrac{\\pi}{4}+\\dfrac{n\\pi}{2}$","$\\theta=\\dfrac{\\pi}{4}+2n\\pi$ and $\\theta=\\dfrac{7\\pi}{4}+2n\\pi$","$\\theta=\\dfrac{\\pi}{4}+n\\pi$ and $\\theta=\\dfrac{3\\pi}{4}+n\\pi$"],
-      correct:1,
-      sol:"$\\cos^2\\theta=\\tfrac12 \\Rightarrow \\cos\\theta=\\pm\\tfrac{1}{\\sqrt2}$. The four solutions in $[0,2\\pi)$ are $\\tfrac{\\pi}{4},\\tfrac{3\\pi}{4},\\tfrac{5\\pi}{4},\\tfrac{7\\pi}{4}$ — each $\\tfrac{\\pi}{2}$ apart. So $\\theta=\\dfrac{\\pi}{4}+\\dfrac{n\\pi}{2}$ captures all of them."
-    },
-    {
-      topic:"Trigonometry · Identities",
-      q:"A student simplifies $\\dfrac{\\frac{2\\cot x}{\\csc^2 x}}{\\cos^2 x+\\sin^2 x}$. In one step they rewrite the denominator $\\cos^2 x+\\sin^2 x$ as $1+\\sin^2 x+\\sin^2 x$. In which step does the first error occur?",
-      options:["Step 1","Step 2","Step 3","Step 4"],
-      correct:1,
-      sol:"In Step 2 the student replaced $\\cos^2 x$ with $1+\\sin^2 x$. The correct identity is $\\cos^2 x = 1-\\sin^2 x$ (so that $\\cos^2x+\\sin^2x=1$). Substituting the wrong identity is the first error — Step 2."
-    },
-    {
-      topic:"Trig & Log · Intersection",
-      q:"The point $\\left(a,-\\tfrac12\\right)$ lies on $y=\\log_3 x$, and $(k,a)$ lies on $y=\\tan x$. The value of $k$ is:",
-      options:["$120^\\circ$","$150^\\circ$","$210^\\circ$","$240^\\circ$"],
-      correct:2,
-      sol:"From $\\log_3 a=-\\tfrac12$: $a=3^{-1/2}=\\tfrac{1}{\\sqrt3}$. Then $\\tan k=a=\\tfrac{1}{\\sqrt3}$. Tangent is positive in QI and QIII; the quadrant III solution is $k=210^\\circ$."
-    },
-    {
-      topic:"Binomial Theorem",
-      q:"In the expansion of $(x-2y)^8$ in descending powers of $x$, the coefficient of the middle term is:",
-      options:["$1\\,120$","$-1\\,120$","$1\\,792$","$-1\\,792$"],
-      correct:0,
-      sol:"The middle term of $(x-2y)^8$ is the 5th term: $t_5=\\dbinom{8}{4}x^4(-2y)^4=70\\cdot 16\\,x^4y^4=1120\\,x^4y^4$. The $(-2)^4$ is positive, so the coefficient is $+1120$."
-    }
-  ]; /* end precalc bank */
+    {topic:"Transformations · Domain",q:"The graph of $y=f(x)$ has domain $\\{x \\mid x \\ge -4,\\ x\\in\\mathbb{R}\\}$. What is the domain of $y=f(-x+4)$?",options:["$\\{x \\mid x \\le 8,\\ x\\in\\mathbb{R}\\}$","$\\{x \\mid x \\ge -8,\\ x\\in\\mathbb{R}\\}$","$\\{x \\mid x \\le 0,\\ x\\in\\mathbb{R}\\}$","$\\{x \\mid x \\ge 0,\\ x\\in\\mathbb{R}\\}$"],correct:0,sol:"Replace the input: we need $-x+4 \\ge -4$. Solve: $-x \\ge -8$, so $x \\le 8$. The reflection flips the inequality sign."},
+    {topic:"Transformations · Stretch",q:"A graph of $y=f(x)$ is transformed to produce $y=f(2x)$. Compared with $y=f(x)$, the new graph is:",options:["a horizontal stretch by factor $\\tfrac{1}{2}$","a horizontal stretch by factor $2$","a vertical stretch by factor $2$","a vertical stretch by factor $\\tfrac{1}{2}$"],correct:0,sol:"For $y=f(bx)$ the horizontal stretch factor is $\\tfrac{1}{b}$. Here $b=2$, so the factor is $\\tfrac{1}{2}$ — the graph is compressed toward the $y$-axis."},
+    {topic:"Transformations · Mapping",q:"The point $A(2,1)$ on $y=f(x)$ maps to $A'(8,1)$ after a horizontal stretch about the $y$-axis, written $y=f\\big(m(x-2)\\big)$. The value of $m$ is:",options:["$\\dfrac{1}{5}$","$\\dfrac{1}{3}$","$3$","$5$"],correct:1,sol:"The new $x$-value $8$ must satisfy $m(8-2)=$ the original input $2$. So $6m=2$, giving $m=\\tfrac{1}{3}$."},
+    {topic:"Inverse Functions",q:"Given $f(x)=3^{\\,x-a}+b$ with $a\\neq 0$, the domain of the inverse $f^{-1}(x)$ is:",options:["$\\{x \\mid x>0\\}$","$\\{x \\mid x>3\\}$","$\\{x \\mid x>a\\}$","$\\{x \\mid x>b\\}$"],correct:3,sol:"The domain of $f^{-1}$ equals the range of $f$. Since $3^{x-a}>0$, we have $f(x)>b$. So the range is $y>b$, and the inverse's domain is $\\{x \\mid x>b\\}$."},
+    {topic:"Logarithm Laws",q:"An expression equivalent to $-\\log x - \\log y$ is:",options:["$\\dfrac{-\\log x}{\\log y}$","$-\\log\\!\\left(\\dfrac{x}{y}\\right)$","$\\log\\!\\left(\\dfrac{1}{xy}\\right)$","$\\dfrac{1}{\\log x \\log y}$"],correct:2,sol:"$-\\log x - \\log y = -(\\log x + \\log y) = -\\log(xy) = \\log\\!\\big((xy)^{-1}\\big) = \\log\\!\\left(\\dfrac{1}{xy}\\right).$"},
+    {topic:"Rational Functions · Asymptotes",q:"Which function does <b>not</b> share the vertical asymptote $x=3$ with the others?",options:["$f(x)=\\log_2(x-3)+6$","$g(x)=\\log_2(2x-6)+3$","$h(x)=\\dfrac{2x^2+6x}{x^2-3x}$","$k(x)=\\dfrac{x-3}{2x^2-6x}$"],correct:3,sol:"Factor $k(x)=\\dfrac{x-3}{2x(x-3)}$. The $(x-3)$ cancels, leaving a <i>hole</i> at $x=3$ and a vertical asymptote at $x=0$. The other three all have a vertical asymptote at $x=3$."},
+    {topic:"Logarithmic Functions",q:"For $f(x)=\\log_a x$ and $g(x)=\\log_b x$: $f$ increases to the right while $g$ decreases. Which statement is true?",options:["$a\\lt b$","$b\\gt 1$","$a\\gt b$","$a\\lt 1$"],correct:2,sol:"An increasing logarithm has base $a\\gt 1$; a decreasing logarithm has base $0\\lt b\\lt 1$. Therefore $a\\gt b$."},
+    {topic:"Logarithmic Equations",q:"Hala solves $\\log_3(x+3)+\\log_3(x-5)=2$ and finds one extraneous root. The extraneous root is:",options:["$x=-6$","$x=-5$","$x=-4$","$x=-3$"],correct:2,sol:"Combine: $\\log_3\\big((x+3)(x-5)\\big)=2$, so $(x+3)(x-5)=9$. Then $x^2-2x-24=0 \\Rightarrow (x-6)(x+4)=0$. So $x=6$ or $x=-4$. At $x=-4$, $\\log_3(x-5)=\\log_3(-9)$ is undefined — so $x=-4$ is extraneous."},
+    {topic:"Logarithms · Application",q:"Star magnitude is $M = 6 - 2.5\\log\\!\\left(\\dfrac{L}{L_0}\\right)$. How many times greater is the light flux $L$ of a star with $M=-1.5$ than one with $M=3.5$?",options:["$100$","$1\\,000$","$10\\,000$","$100\\,000$"],correct:0,sol:"The difference gives $M_2-M_1 = 2.5\\log\\!\\left(\\dfrac{L_1}{L_2}\\right)$. So $3.5-(-1.5)=5=2.5\\log\\!\\left(\\dfrac{L_1}{L_2}\\right)$, giving $\\log\\!\\left(\\dfrac{L_1}{L_2}\\right)=2$, so the ratio is $10^2=100$."},
+    {topic:"Polynomials · Factor Theorem",q:"For $P(x)=x^3-2x^2-13x-10$, which two statements are correct?<br>① Dividing by $(x+1)$ gives quotient $x^2-3x-10$.<br>② $(x-1)$ is a factor.<br>③ $P(-2)=0$, so $(x-2)$ is a factor.<br>④ $P(-3)=-16$, the remainder on division by $(x+3)$.",options:["① and ③","① and ④","② and ③","② and ④"],correct:1,sol:"① Synthetic division by $(x+1)$ gives $x^2-3x-10$ with remainder $0$ — true. ④ $P(-3)=-27-18+39-10=-16$ — true, and by the Remainder Theorem that is the remainder. (② is false since $P(1)\\neq 0$; ③ misstates the factor — $P(-2)=0$ implies $(x+2)$ is a factor, not $(x-2)$.)"},
+    {topic:"Polynomials · Graphs",q:"Michael graphs $y=a(x-b)^2(x+c)$ with $a,b,c\\gt 0$. If he changes only $a$ to be $a\\lt 0$, what changes?",options:["domain","range","$x$-intercepts","$y$-intercept"],correct:3,sol:"The $x$-intercepts come from the zeros (unchanged), and the domain and range of a cubic are all real numbers either way. Flipping the sign of $a$ reflects the graph vertically, which changes the sign of the $y$-intercept."},
+    {topic:"Polynomials · Parameters",q:"The graph of $P(x)=a(x-r)(x-1)^2(x-4)$ passes through $(0,6)$. The value of $a$ in terms of $r$ is:",options:["$a=\\dfrac{3}{2r}$","$a=-\\dfrac{3}{2r}$","$a=\\dfrac{2}{3r}$","$a=-\\dfrac{2}{3r}$"],correct:0,sol:"Substitute $(0,6)$: $6=a(0-r)(0-1)^2(0-4)=a(-r)(1)(-4)=4ar$. So $a=\\dfrac{6}{4r}=\\dfrac{3}{2r}$."},
+    {topic:"Composite Functions",q:"Given $f(x)=8-3x$, $g(x)=\\left|\\tfrac{1}{2}x-5\\right|$, and $h(x)=\\log_{1/2}x$, find $(f\\circ g\\circ h)(16)$.",options:["$-13$","$-5$","$29$","$480$"],correct:0,sol:"Work from the inside out. $h(16)=\\log_{1/2}16=-4$. Then $g(-4)=\\left|\\tfrac{1}{2}(-4)-5\\right|=|-7|=7$. Then $f(7)=8-3(7)=-13$."},
+    {topic:"Trigonometry · Reciprocal Ratios",q:"Angle $\\theta$ in standard position has the point $P\\!\\left(x,-\\tfrac{8}{17}\\right)$ on its terminal arm on the unit circle, where $x>0$. The exact value of $\\cot\\theta$ is:",options:["$-\\dfrac{8}{\\sqrt{353}}$","$-\\dfrac{\\sqrt{353}}{8}$","$-\\dfrac{8}{15}$","$-\\dfrac{15}{8}$"],correct:3,sol:"On the unit circle $x^2+y^2=1$, so $x=\\sqrt{1-\\tfrac{64}{289}}=\\sqrt{\\tfrac{225}{289}}=\\tfrac{15}{17}$ (positive, since $x>0$). Then $\\cot\\theta=\\dfrac{x}{y}=\\dfrac{15/17}{-8/17}=-\\dfrac{15}{8}.$"},
+    {topic:"Trigonometry · Exact Values",q:"If $\\csc\\!\\left(\\dfrac{4\\pi}{3}\\right)+k=\\cot\\!\\left(\\dfrac{8\\pi}{3}\\right)$, the exact value of $k$ is:",options:["$-\\sqrt{3}$","$-\\dfrac{1}{\\sqrt{3}}$","$\\dfrac{1}{\\sqrt{3}}$","$\\sqrt{3}$"],correct:2,sol:"$\\csc\\tfrac{4\\pi}{3}=\\dfrac{1}{\\sin 240^\\circ}=-\\dfrac{2}{\\sqrt3}$. And $\\tfrac{8\\pi}{3}$ is coterminal with $\\tfrac{2\\pi}{3}$, so $\\cot\\tfrac{8\\pi}{3}=-\\dfrac{1}{\\sqrt3}$. Then $k=-\\dfrac{1}{\\sqrt3}-\\left(-\\dfrac{2}{\\sqrt3}\\right)=\\dfrac{1}{\\sqrt3}.$"},
+    {topic:"Trigonometry · Mapping",q:"The mapping $(x,y)\\to(x-2,\\,-y+5)$ transforms $y=f(x)$ into $y=g(x)$. Which sequence of transformations does this represent?",options:["reflection in the $x$-axis, then translate $2$ left and $5$ up","reflection in the $y$-axis, then translate $2$ right and $5$ down","reflection in the $x$-axis, then translate $2$ right and $5$ up","reflection in the $y$-axis, then translate $2$ left and $5$ down"],correct:0,sol:"$x\\to x-2$ moves every point $2$ left. $y\\to -y+5$ reflects in the $x$-axis (the $-y$) and then shifts up $5$. So: reflect in the $x$-axis, translate $2$ left and $5$ up."},
+    {topic:"Trigonometry · General Solution",q:"The general solution to $10\\cos^2\\theta = 5$ (with $n\\in\\mathbb{I}$) is:",options:["$\\theta=\\dfrac{\\pi}{4}+n\\pi$","$\\theta=\\dfrac{\\pi}{4}+\\dfrac{n\\pi}{2}$","$\\theta=\\dfrac{\\pi}{4}+2n\\pi$ and $\\theta=\\dfrac{7\\pi}{4}+2n\\pi$","$\\theta=\\dfrac{\\pi}{4}+n\\pi$ and $\\theta=\\dfrac{3\\pi}{4}+n\\pi$"],correct:1,sol:"$\\cos^2\\theta=\\tfrac12 \\Rightarrow \\cos\\theta=\\pm\\tfrac{1}{\\sqrt2}$. The four solutions in $[0,2\\pi)$ are $\\tfrac{\\pi}{4},\\tfrac{3\\pi}{4},\\tfrac{5\\pi}{4},\\tfrac{7\\pi}{4}$ — each $\\tfrac{\\pi}{2}$ apart. So $\\theta=\\dfrac{\\pi}{4}+\\dfrac{n\\pi}{2}$ captures all of them."},
+    {topic:"Trigonometry · Identities",q:"A student simplifies $\\dfrac{\\frac{2\\cot x}{\\csc^2 x}}{\\cos^2 x+\\sin^2 x}$. In one step they rewrite the denominator $\\cos^2 x+\\sin^2 x$ as $1+\\sin^2 x+\\sin^2 x$. In which step does the first error occur?",options:["Step 1","Step 2","Step 3","Step 4"],correct:1,sol:"In Step 2 the student replaced $\\cos^2 x$ with $1+\\sin^2 x$. The correct identity is $\\cos^2 x = 1-\\sin^2 x$ (so that $\\cos^2x+\\sin^2x=1$). Substituting the wrong identity is the first error — Step 2."},
+    {topic:"Trig & Log · Intersection",q:"The point $\\left(a,-\\tfrac12\\right)$ lies on $y=\\log_3 x$, and $(k,a)$ lies on $y=\\tan x$. The value of $k$ is:",options:["$120^\\circ$","$150^\\circ$","$210^\\circ$","$240^\\circ$"],correct:2,sol:"From $\\log_3 a=-\\tfrac12$: $a=3^{-1/2}=\\tfrac{1}{\\sqrt3}$. Then $\\tan k=a=\\tfrac{1}{\\sqrt3}$. Tangent is positive in QI and QIII; the quadrant III solution is $k=210^\\circ$."},
+    {topic:"Binomial Theorem",q:"In the expansion of $(x-2y)^8$ in descending powers of $x$, the coefficient of the middle term is:",options:["$1\\,120$","$-1\\,120$","$1\\,792$","$-1\\,792$"],correct:0,sol:"The middle term of $(x-2y)^8$ is the 5th term: $t_5=\\dbinom{8}{4}x^4(-2y)^4=70\\cdot 16\\,x^4y^4=1120\\,x^4y^4$. The $(-2)^4$ is positive, so the coefficient is $+1120$."}
+  ];
 
   BANKS.calc=[
-    {
-      topic:"Limits · At Infinity",
-      q:"Evaluate $\\displaystyle\\lim_{t\\to\\infty}\\dfrac{2t^{2}-2t+3}{2t^{2}+5t-3}$.",
-      options:["$0$","$-1$","$1$","$\\tfrac{1}{2}$"],
-      correct:2,
-      sol:"For a rational function as $t\\to\\infty$, the leading terms dominate. Divide top and bottom by $t^{2}$: every $\\tfrac{1}{t}$ term goes to $0$, leaving $\\dfrac{2}{2}=1$ — the ratio of leading coefficients."
-    },
-    {
-      topic:"Limits · Factoring",
-      q:"Evaluate $\\displaystyle\\lim_{h\\to 1}\\dfrac{h^{2}+3h-4}{h-1}$.",
-      options:["$0$","$-3$","$5$","undefined"],
-      correct:2,
-      sol:"Direct substitution gives $\\tfrac{0}{0}$, so factor: $h^{2}+3h-4=(h+4)(h-1)$. Cancel $(h-1)$ to get $\\displaystyle\\lim_{h\\to 1}(h+4)=5$."
-    },
-    {
-      topic:"Derivatives · Quotient Rule",
-      q:"Differentiate $y=\\dfrac{x-1}{x(x+1)}$.",
-      options:["$\\dfrac{-x^{2}-1}{(x^{2}+x)^{2}}$","$\\dfrac{x^{2}-1}{(x^{2}+x)^{2}}$","$\\dfrac{-x^{2}+2x+1}{(x^{2}+x)^{2}}$","$\\dfrac{-x^{2}-2x+1}{(x^{2}+x)^{2}}$"],
-      correct:2,
-      sol:"Denominator $=x^{2}+x$. With $u=x-1,\\ v=x^{2}+x$: $y'=\\dfrac{u'v-v'u}{v^{2}}=\\dfrac{(x^{2}+x)-(2x+1)(x-1)}{(x^{2}+x)^{2}}$. Since $(2x+1)(x-1)=2x^{2}-x-1$, the numerator is $-x^{2}+2x+1$."
-    },
-    {
-      topic:"Derivatives · Quotient Rule",
-      q:"Differentiate $\\dfrac{x^{3}-7}{x^{2}+4}$.",
-      options:["$\\dfrac{5x^{4}+12x^{2}-14x}{(x^{2}+4)^{2}}$","$\\dfrac{x^{4}+12x^{2}+14x}{(x^{2}+4)^{2}}$","$\\dfrac{-x^{4}+12x^{2}-14x}{(x^{2}+4)^{2}}$","none of these"],
-      correct:1,
-      sol:"$\\dfrac{3x^{2}(x^{2}+4)-2x(x^{3}-7)}{(x^{2}+4)^{2}}=\\dfrac{3x^{4}+12x^{2}-2x^{4}+14x}{(x^{2}+4)^{2}}=\\dfrac{x^{4}+12x^{2}+14x}{(x^{2}+4)^{2}}$."
-    },
-    {
-      topic:"Derivatives · Product + Chain",
-      q:"Differentiate $y=x\\sqrt{1-x^{2}}$.",
-      options:["$\\tfrac{1}{2}x(1-x^{2})^{-1/2}+(1-x^{2})^{1/2}$","$-x^{2}(1-x^{2})^{-1/2}+(1-x^{2})^{1/2}$","$-x(1-x^{2})^{-1/2}$","$x-x(1-x^{2})^{3/2}$"],
-      correct:1,
-      sol:"Product rule with $f=x,\\ g=(1-x^{2})^{1/2}$. By the chain rule $g'=-x(1-x^{2})^{-1/2}$. So $y'=(1-x^{2})^{1/2}-x^{2}(1-x^{2})^{-1/2}$."
-    },
-    {
-      topic:"Derivatives · Second Derivative",
-      q:"If $y=\\dfrac{1}{\\sqrt{1+x}}$, find $\\dfrac{d^{2}y}{dx^{2}}$.",
-      options:["$\\dfrac{-1}{4\\sqrt{(1+x)^{3}}}$","$\\dfrac{3}{4\\sqrt{(1+x)^{5}}}$","$\\dfrac{-1}{2\\sqrt{(1+x)^{3}}}$","$\\dfrac{1}{4\\sqrt{(1+x)^{3}}}$"],
-      correct:1,
-      sol:"$y=(1+x)^{-1/2}\\Rightarrow y'=-\\tfrac{1}{2}(1+x)^{-3/2}\\Rightarrow y''=\\tfrac{3}{4}(1+x)^{-5/2}=\\dfrac{3}{4\\sqrt{(1+x)^{5}}}$."
-    },
-    {
-      topic:"Implicit Differentiation",
-      q:"For $2x^{2}+3xy-y^{2}=20$, find $\\dfrac{dy}{dx}$.",
-      options:["$\\dfrac{-(4x+3y)}{3x-2y}$","$\\dfrac{4x+3y}{3x-2y}$","$4x+3-2y$","$-7x-y$"],
-      correct:0,
-      sol:"Differentiate implicitly (product rule on $3xy$): $4x+3y+3x\\,y'-2y\\,y'=0$. Group: $y'(3x-2y)=-(4x+3y)$."
-    },
-    {
-      topic:"Implicit Differentiation",
-      q:"If $y^{3}-a^{2}(x-y)=0$ ($a$ constant), find $\\dfrac{dy}{dx}$.",
-      options:["$\\dfrac{a^{2}}{3y^{2}-a^{2}}$","$\\dfrac{a^{2}}{3y^{2}+a^{2}}$","$\\dfrac{a^{2}}{3y^{2}+ya^{2}}$","$\\dfrac{a^{2}}{3y^{2}-ya^{2}}$"],
-      correct:1,
-      sol:"Expand to $y^{3}-a^{2}x+a^{2}y=0$. Then $3y^{2}y'-a^{2}+a^{2}y'=0$, so $y'(3y^{2}+a^{2})=a^{2}$."
-    },
-    {
-      topic:"Tangent Lines",
-      q:"The tangent to the circle $x^{2}+y^{2}=25$ at $(3,4)$ is:",
-      options:["$3x-4y-25=0$","$3x+4y-25=0$","$3x+4y+25=0$","$3x-4y+25=0$"],
-      correct:1,
-      sol:"Implicitly $2x+2y\\,y'=0\\Rightarrow y'=-\\tfrac{x}{y}=-\\tfrac{3}{4}$. Then $y-4=-\\tfrac{3}{4}(x-3)\\Rightarrow 3x+4y-25=0$."
-    },
-    {
-      topic:"Tangent Lines",
-      q:"A tangent to $y=3x+\\dfrac{1}{x}$ that is parallel to $y=-x+6$ is:",
-      options:["$y=3-\\dfrac{1}{x^{2}}$","$y=-x+7\\sqrt{\\tfrac{1}{3}}$","$y=-x+4$","$y=x+4$"],
-      correct:2,
-      sol:"Parallel means slope $-1$: $y'=3-\\dfrac{1}{x^{2}}=-1\\Rightarrow x=\\pm\\tfrac{1}{2}$. At $x=\\tfrac{1}{2}$, $y=\\tfrac{7}{2}$, giving $y=-x+4$."
-    },
-    {
-      topic:"Related Rates · Sphere",
-      q:"A spherical balloon is inflated at $100\\ \\text{dm}^{3}/\\text{min}$. When the radius is $3\\ \\text{dm}$, the radius is increasing at:",
-      options:["$\\dfrac{25}{9\\pi}$","$\\dfrac{9\\pi}{25}$","$25\\pi$","$9\\pi$"],
-      correct:0,
-      sol:"$V=\\tfrac{4}{3}\\pi r^{3}\\Rightarrow \\dfrac{dV}{dt}=4\\pi r^{2}\\dfrac{dr}{dt}$. So $100=36\\pi\\dfrac{dr}{dt}\\Rightarrow \\dfrac{dr}{dt}=\\dfrac{25}{9\\pi}$ dm/min."
-    },
-    {
-      topic:"Related Rates · Cube",
-      q:"A cube's edge grows at $5\\ \\text{cm/s}$. When the edge is $4\\ \\text{cm}$, the volume changes at:",
-      options:["$192$","$48$","$375$","$240$"],
-      correct:3,
-      sol:"$V=s^{3}\\Rightarrow \\dfrac{dV}{dt}=3s^{2}\\dfrac{ds}{dt}=3(16)(5)=240\\ \\text{cm}^{3}/\\text{s}$."
-    },
-    {
-      topic:"Related Rates · Triangle",
-      q:"The hypotenuse of a right isosceles triangle grows at $2\\ \\text{cm/min}$. When it is $8\\ \\text{cm}$, the area changes at ($\\text{cm}^{2}/\\text{min}$):",
-      options:["$8$","$10$","$12$","$14$"],
-      correct:0,
-      sol:"Each leg is $\\tfrac{h}{\\sqrt2}$, so $A=\\tfrac{1}{2}\\left(\\tfrac{h}{\\sqrt2}\\right)^{2}=\\tfrac{h^{2}}{4}$. Then $\\dfrac{dA}{dt}=\\tfrac{h}{2}\\dfrac{dh}{dt}=\\tfrac{8}{2}(2)=8$."
-    },
-    {
-      topic:"Optimization",
-      q:"Two natural numbers sum to $48$. The square of one times the other is greatest when the numbers are:",
-      options:["$24$ and $24$","$8$ and $40$","$28$ and $20$","$32$ and $16$"],
-      correct:3,
-      sol:"Maximize $P=x^{2}(48-x)=48x^{2}-x^{3}$. Then $P'=96x-3x^{2}=3x(32-x)=0\\Rightarrow x=32$, so the other is $16$. ($P''=96-6x\\lt 0$ at $x=32$ confirms a maximum.)"
-    },
-    {
-      topic:"Optimization",
-      q:"A rectangular field is fenced and split into two plots by a fence parallel to one side. With $1200\\ \\text{ft}$ of fence, the largest field has dimensions:",
-      options:["$150\\times 350$","$200\\times 600$","$300\\times 300$","$200\\times 300$"],
-      correct:3,
-      sol:"The divider runs parallel to the side of length $x$, so $3x+2y=1200$. Maximize $A=xy=x\\cdot\\dfrac{1200-3x}{2}$. Then $A'=\\dfrac{1200-6x}{2}=0\\Rightarrow x=200,\\ y=300$."
-    },
-    {
-      topic:"Curve Analysis · Intervals",
-      q:"The function $y=x^{2}-\\dfrac{1}{2}x^{4}$ is decreasing on:",
-      options:["$0\\lt x\\lt 1$ or $x\\lt -1$","$x\\lt 0$ or $x\\gt 1$","$x\\gt 0$ or $x\\lt -1$","$-1\\lt x\\lt 0$ or $x\\gt 1$"],
-      correct:3,
-      sol:"$y'=2x-2x^{3}=2x(1-x)(1+x)$. It is negative (decreasing) where the sign test gives $-$: on $-1\\lt x\\lt 0$ and on $x\\gt 1$."
-    },
-    {
-      topic:"Curve Analysis · Extrema",
-      q:"A local maximum value of $y=x^{3}+3+\\dfrac{3}{x}$ is:",
-      options:["$7$","$3$","$-1$","$1$"],
-      correct:2,
-      sol:"$y'=3x^{2}-\\dfrac{3}{x^{2}}=0\\Rightarrow x^{4}=1\\Rightarrow x=\\pm 1$. With $y''=6x+\\dfrac{6}{x^{3}}$, at $x=-1$ we get $y''=-12\\lt 0$ (a maximum), and $y(-1)=-1+3-3=-1$."
-    },
-    {
-      topic:"Curve Analysis · Inflection",
-      q:"A point of inflection on $y=2x^{1/3}+x^{4/3}$ is:",
-      options:["$(0,0)$","$(8,20)$","$(1,3)$","there is no point of inflection"],
-      correct:2,
-      sol:"$y''=-\\tfrac{4}{9}x^{-5/3}+\\tfrac{4}{9}x^{-2/3}=\\tfrac{4}{9}x^{-5/3}(x-1)$, which changes sign at $x=1$. Since $y(1)=2+1=3$, the inflection point is $(1,3)$."
-    },
-    {
-      topic:"Antiderivatives",
-      q:"The antiderivative of $f(x)=(2x^{2}-1)^{2}\\,x$ is:",
-      options:["$(2x^{2}-1)^{3}+c$","$\\dfrac{(2x^{2}-1)^{3}}{6}$","$(2x^{2}-1)^{3}$","$\\dfrac{(2x^{2}-1)^{3}}{12}+c$"],
-      correct:3,
-      sol:"Let $u=2x^{2}-1$, so $du=4x\\,dx$ and $x\\,dx=\\tfrac{1}{4}du$. Then $\\displaystyle\\int(2x^{2}-1)^{2}x\\,dx=\\tfrac{1}{4}\\cdot\\dfrac{u^{3}}{3}=\\dfrac{(2x^{2}-1)^{3}}{12}+c$."
-    },
-    {
-      topic:"Area Between Curves",
-      q:"The area bounded by $y=2x+4$ and $y=x^{2}+2x$ is:",
-      options:["$\\dfrac{20}{3}$","$\\dfrac{28}{3}$","$\\dfrac{4}{3}$","$\\dfrac{32}{3}$"],
-      correct:3,
-      sol:"They meet where $x^{2}=4$, i.e. $x=\\pm 2$, with the line on top. $\\displaystyle\\int_{-2}^{2}(4-x^{2})\\,dx=\\left[4x-\\tfrac{x^{3}}{3}\\right]_{-2}^{2}=16-\\tfrac{16}{3}=\\dfrac{32}{3}$."
-    }
-  ]; /* end calc bank */
+    {topic:"Limits · At Infinity",q:"Evaluate $\\displaystyle\\lim_{t\\to\\infty}\\dfrac{2t^{2}-2t+3}{2t^{2}+5t-3}$.",options:["$0$","$-1$","$1$","$\\tfrac{1}{2}$"],correct:2,sol:"For a rational function as $t\\to\\infty$, the leading terms dominate. Divide top and bottom by $t^{2}$: every $\\tfrac{1}{t}$ term goes to $0$, leaving $\\dfrac{2}{2}=1$ — the ratio of leading coefficients."},
+    {topic:"Limits · Factoring",q:"Evaluate $\\displaystyle\\lim_{h\\to 1}\\dfrac{h^{2}+3h-4}{h-1}$.",options:["$0$","$-3$","$5$","undefined"],correct:2,sol:"Direct substitution gives $\\tfrac{0}{0}$, so factor: $h^{2}+3h-4=(h+4)(h-1)$. Cancel $(h-1)$ to get $\\displaystyle\\lim_{h\\to 1}(h+4)=5$."},
+    {topic:"Derivatives · Quotient Rule",q:"Differentiate $y=\\dfrac{x-1}{x(x+1)}$.",options:["$\\dfrac{-x^{2}-1}{(x^{2}+x)^{2}}$","$\\dfrac{x^{2}-1}{(x^{2}+x)^{2}}$","$\\dfrac{-x^{2}+2x+1}{(x^{2}+x)^{2}}$","$\\dfrac{-x^{2}-2x+1}{(x^{2}+x)^{2}}$"],correct:2,sol:"Denominator $=x^{2}+x$. With $u=x-1,\\ v=x^{2}+x$: $y'=\\dfrac{u'v-v'u}{v^{2}}=\\dfrac{(x^{2}+x)-(2x+1)(x-1)}{(x^{2}+x)^{2}}$. Since $(2x+1)(x-1)=2x^{2}-x-1$, the numerator is $-x^{2}+2x+1$."},
+    {topic:"Derivatives · Quotient Rule",q:"Differentiate $\\dfrac{x^{3}-7}{x^{2}+4}$.",options:["$\\dfrac{5x^{4}+12x^{2}-14x}{(x^{2}+4)^{2}}$","$\\dfrac{x^{4}+12x^{2}+14x}{(x^{2}+4)^{2}}$","$\\dfrac{-x^{4}+12x^{2}-14x}{(x^{2}+4)^{2}}$","none of these"],correct:1,sol:"$\\dfrac{3x^{2}(x^{2}+4)-2x(x^{3}-7)}{(x^{2}+4)^{2}}=\\dfrac{3x^{4}+12x^{2}-2x^{4}+14x}{(x^{2}+4)^{2}}=\\dfrac{x^{4}+12x^{2}+14x}{(x^{2}+4)^{2}}$."},
+    {topic:"Derivatives · Product + Chain",q:"Differentiate $y=x\\sqrt{1-x^{2}}$.",options:["$\\tfrac{1}{2}x(1-x^{2})^{-1/2}+(1-x^{2})^{1/2}$","$-x^{2}(1-x^{2})^{-1/2}+(1-x^{2})^{1/2}$","$-x(1-x^{2})^{-1/2}$","$x-x(1-x^{2})^{3/2}$"],correct:1,sol:"Product rule with $f=x,\\ g=(1-x^{2})^{1/2}$. By the chain rule $g'=-x(1-x^{2})^{-1/2}$. So $y'=(1-x^{2})^{1/2}-x^{2}(1-x^{2})^{-1/2}$."},
+    {topic:"Derivatives · Second Derivative",q:"If $y=\\dfrac{1}{\\sqrt{1+x}}$, find $\\dfrac{d^{2}y}{dx^{2}}$.",options:["$\\dfrac{-1}{4\\sqrt{(1+x)^{3}}}$","$\\dfrac{3}{4\\sqrt{(1+x)^{5}}}$","$\\dfrac{-1}{2\\sqrt{(1+x)^{3}}}$","$\\dfrac{1}{4\\sqrt{(1+x)^{3}}}$"],correct:1,sol:"$y=(1+x)^{-1/2}\\Rightarrow y'=-\\tfrac{1}{2}(1+x)^{-3/2}\\Rightarrow y''=\\tfrac{3}{4}(1+x)^{-5/2}=\\dfrac{3}{4\\sqrt{(1+x)^{5}}}$."},
+    {topic:"Implicit Differentiation",q:"For $2x^{2}+3xy-y^{2}=20$, find $\\dfrac{dy}{dx}$.",options:["$\\dfrac{-(4x+3y)}{3x-2y}$","$\\dfrac{4x+3y}{3x-2y}$","$4x+3-2y$","$-7x-y$"],correct:0,sol:"Differentiate implicitly (product rule on $3xy$): $4x+3y+3x\\,y'-2y\\,y'=0$. Group: $y'(3x-2y)=-(4x+3y)$."},
+    {topic:"Implicit Differentiation",q:"If $y^{3}-a^{2}(x-y)=0$ ($a$ constant), find $\\dfrac{dy}{dx}$.",options:["$\\dfrac{a^{2}}{3y^{2}-a^{2}}$","$\\dfrac{a^{2}}{3y^{2}+a^{2}}$","$\\dfrac{a^{2}}{3y^{2}+ya^{2}}$","$\\dfrac{a^{2}}{3y^{2}-ya^{2}}$"],correct:1,sol:"Expand to $y^{3}-a^{2}x+a^{2}y=0$. Then $3y^{2}y'-a^{2}+a^{2}y'=0$, so $y'(3y^{2}+a^{2})=a^{2}$."},
+    {topic:"Tangent Lines",q:"The tangent to the circle $x^{2}+y^{2}=25$ at $(3,4)$ is:",options:["$3x-4y-25=0$","$3x+4y-25=0$","$3x+4y+25=0$","$3x-4y+25=0$"],correct:1,sol:"Implicitly $2x+2y\\,y'=0\\Rightarrow y'=-\\tfrac{x}{y}=-\\tfrac{3}{4}$. Then $y-4=-\\tfrac{3}{4}(x-3)\\Rightarrow 3x+4y-25=0$."},
+    {topic:"Tangent Lines",q:"A tangent to $y=3x+\\dfrac{1}{x}$ that is parallel to $y=-x+6$ is:",options:["$y=3-\\dfrac{1}{x^{2}}$","$y=-x+7\\sqrt{\\tfrac{1}{3}}$","$y=-x+4$","$y=x+4$"],correct:2,sol:"Parallel means slope $-1$: $y'=3-\\dfrac{1}{x^{2}}=-1\\Rightarrow x=\\pm\\tfrac{1}{2}$. At $x=\\tfrac{1}{2}$, $y=\\tfrac{7}{2}$, giving $y=-x+4$."},
+    {topic:"Related Rates · Sphere",q:"A spherical balloon is inflated at $100\\ \\text{dm}^{3}/\\text{min}$. When the radius is $3\\ \\text{dm}$, the radius is increasing at:",options:["$\\dfrac{25}{9\\pi}$","$\\dfrac{9\\pi}{25}$","$25\\pi$","$9\\pi$"],correct:0,sol:"$V=\\tfrac{4}{3}\\pi r^{3}\\Rightarrow \\dfrac{dV}{dt}=4\\pi r^{2}\\dfrac{dr}{dt}$. So $100=36\\pi\\dfrac{dr}{dt}\\Rightarrow \\dfrac{dr}{dt}=\\dfrac{25}{9\\pi}$ dm/min."},
+    {topic:"Related Rates · Cube",q:"A cube's edge grows at $5\\ \\text{cm/s}$. When the edge is $4\\ \\text{cm}$, the volume changes at:",options:["$192$","$48$","$375$","$240$"],correct:3,sol:"$V=s^{3}\\Rightarrow \\dfrac{dV}{dt}=3s^{2}\\dfrac{ds}{dt}=3(16)(5)=240\\ \\text{cm}^{3}/\\text{s}$."},
+    {topic:"Related Rates · Triangle",q:"The hypotenuse of a right isosceles triangle grows at $2\\ \\text{cm/min}$. When it is $8\\ \\text{cm}$, the area changes at ($\\text{cm}^{2}/\\text{min}$):",options:["$8$","$10$","$12$","$14$"],correct:0,sol:"Each leg is $\\tfrac{h}{\\sqrt2}$, so $A=\\tfrac{1}{2}\\left(\\tfrac{h}{\\sqrt2}\\right)^{2}=\\tfrac{h^{2}}{4}$. Then $\\dfrac{dA}{dt}=\\tfrac{h}{2}\\dfrac{dh}{dt}=\\tfrac{8}{2}(2)=8$."},
+    {topic:"Optimization",q:"Two natural numbers sum to $48$. The square of one times the other is greatest when the numbers are:",options:["$24$ and $24$","$8$ and $40$","$28$ and $20$","$32$ and $16$"],correct:3,sol:"Maximize $P=x^{2}(48-x)=48x^{2}-x^{3}$. Then $P'=96x-3x^{2}=3x(32-x)=0\\Rightarrow x=32$, so the other is $16$. ($P''=96-6x\\lt 0$ at $x=32$ confirms a maximum.)"},
+    {topic:"Optimization",q:"A rectangular field is fenced and split into two plots by a fence parallel to one side. With $1200\\ \\text{ft}$ of fence, the largest field has dimensions:",options:["$150\\times 350$","$200\\times 600$","$300\\times 300$","$200\\times 300$"],correct:3,sol:"The divider runs parallel to the side of length $x$, so $3x+2y=1200$. Maximize $A=xy=x\\cdot\\dfrac{1200-3x}{2}$. Then $A'=\\dfrac{1200-6x}{2}=0\\Rightarrow x=200,\\ y=300$."},
+    {topic:"Curve Analysis · Intervals",q:"The function $y=x^{2}-\\dfrac{1}{2}x^{4}$ is decreasing on:",options:["$0\\lt x\\lt 1$ or $x\\lt -1$","$x\\lt 0$ or $x\\gt 1$","$x\\gt 0$ or $x\\lt -1$","$-1\\lt x\\lt 0$ or $x\\gt 1$"],correct:3,sol:"$y'=2x-2x^{3}=2x(1-x)(1+x)$. It is negative (decreasing) where the sign test gives $-$: on $-1\\lt x\\lt 0$ and on $x\\gt 1$."},
+    {topic:"Curve Analysis · Extrema",q:"A local maximum value of $y=x^{3}+3+\\dfrac{3}{x}$ is:",options:["$7$","$3$","$-1$","$1$"],correct:2,sol:"$y'=3x^{2}-\\dfrac{3}{x^{2}}=0\\Rightarrow x^{4}=1\\Rightarrow x=\\pm 1$. With $y''=6x+\\dfrac{6}{x^{3}}$, at $x=-1$ we get $y''=-12\\lt 0$ (a maximum), and $y(-1)=-1+3-3=-1$."},
+    {topic:"Curve Analysis · Inflection",q:"A point of inflection on $y=2x^{1/3}+x^{4/3}$ is:",options:["$(0,0)$","$(8,20)$","$(1,3)$","there is no point of inflection"],correct:2,sol:"$y''=-\\tfrac{4}{9}x^{-5/3}+\\tfrac{4}{9}x^{-2/3}=\\tfrac{4}{9}x^{-5/3}(x-1)$, which changes sign at $x=1$. Since $y(1)=2+1=3$, the inflection point is $(1,3)$."},
+    {topic:"Antiderivatives",q:"The antiderivative of $f(x)=(2x^{2}-1)^{2}\\,x$ is:",options:["$(2x^{2}-1)^{3}+c$","$\\dfrac{(2x^{2}-1)^{3}}{6}$","$(2x^{2}-1)^{3}$","$\\dfrac{(2x^{2}-1)^{3}}{12}+c$"],correct:3,sol:"Let $u=2x^{2}-1$, so $du=4x\\,dx$ and $x\\,dx=\\tfrac{1}{4}du$. Then $\\displaystyle\\int(2x^{2}-1)^{2}x\\,dx=\\tfrac{1}{4}\\cdot\\dfrac{u^{3}}{3}=\\dfrac{(2x^{2}-1)^{3}}{12}+c$."},
+    {topic:"Area Between Curves",q:"The area bounded by $y=2x+4$ and $y=x^{2}+2x$ is:",options:["$\\dfrac{20}{3}$","$\\dfrac{28}{3}$","$\\dfrac{4}{3}$","$\\dfrac{32}{3}$"],correct:3,sol:"They meet where $x^{2}=4$, i.e. $x=\\pm 2$, with the line on top. $\\displaystyle\\int_{-2}^{2}(4-x^{2})\\,dx=\\left[4x-\\tfrac{x^{3}}{3}\\right]_{-2}^{2}=16-\\tfrac{16}{3}=\\dfrac{32}{3}$."}
+  ];
 
   let state=null;
 
@@ -1873,7 +1479,6 @@ const QZ=(function(){
     document.getElementById('score').textContent=state.correct+' / '+total;
     const m=document.getElementById('msg');const p=state.correct/total;
     m.textContent = p===1?'Perfect \u2014 outstanding work.':p>=0.8?'Excellent. You\u2019re in strong shape for first-year math.':p>=0.6?'Solid. Review the ones you missed and you\u2019re set.':p>=0.4?'Good practice \u2014 the worked solutions are where the learning is.':'This is exactly the kind of prep our sessions cover. Keep at it.';
-    // celebratory confetti rain for a passing score (above 50%)
     if(p > 0.5 && window.EngFX){ setTimeout(function(){ window.EngFX.confettiFall(); }, 350); }
   }
 
@@ -1889,22 +1494,17 @@ const QZ=(function(){
   return {start,next,again,back};
 })();
 
-/* ============================================================
-   EDIT:ANIMATIONS — interaction engine
-   3D tilt · scroll reveal · count-up. Respects reduced-motion.
-============================================================ */
 (function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-  /* ---- 3D tilt on [data-tilt] cards ---- */
   if(!reduce){
-    var MAX = 9; // max tilt degrees — kept subtle on purpose
+    var MAX = 9;
     document.querySelectorAll('[data-tilt]').forEach(function(card){
       card.style.perspective = '900px';
       function move(e){
         var r = card.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width;   // 0..1
-        var py = (e.clientY - r.top) / r.height;   // 0..1
+        var px = (e.clientX - r.left) / r.width;
+        var py = (e.clientY - r.top) / r.height;
         var rx = (0.5 - py) * MAX * 2;
         var ry = (px - 0.5) * MAX * 2;
         card.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateZ(0)';
@@ -1921,7 +1521,6 @@ const QZ=(function(){
     });
   }
 
-  /* ---- Scroll reveal via IntersectionObserver ---- */
   var reveals = document.querySelectorAll('.reveal');
   if(reduce || !('IntersectionObserver' in window)){
     reveals.forEach(function(el){ el.classList.add('in'); });
@@ -1934,16 +1533,15 @@ const QZ=(function(){
     reveals.forEach(function(el){ io.observe(el); });
   }
 
-  /* ---- Count-up numbers when they scroll into view ---- */
   var nums = document.querySelectorAll('.countup');
   function runCount(el){
     var target = parseFloat(el.getAttribute('data-target'));
     var dec = parseInt(el.getAttribute('data-dec')||'0', 10);
     if(reduce){ el.textContent = target.toFixed(dec); return; }
-    var start = performance.now(), dur = 2200; // slower so the climb is clearly visible
+    var start = performance.now(), dur = 2200;
     function tick(now){
       var t = Math.min((now-start)/dur, 1);
-      var eased = 1 - Math.pow(1-t, 2); // gentler ease-out (quad) — climbs more evenly
+      var eased = 1 - Math.pow(1-t, 2);
       el.textContent = (target*eased).toFixed(dec);
       if(t<1) requestAnimationFrame(tick); else el.textContent = target.toFixed(dec);
     }
@@ -1958,7 +1556,6 @@ const QZ=(function(){
     nums.forEach(runCount);
   }
 
-  /* ---- Mouse parallax on hero layers ---- */
   if(!reduce){
     var hero = document.querySelector('.hero');
     var layers = document.querySelectorAll('.plx');
@@ -1989,29 +1586,20 @@ const QZ=(function(){
   }
 })();
 
-/* ============================================================
-   EDIT:MATHFIELD — animated warping grid with cursor shockwaves
-   Canvas behind the hero. Reacts to the cursor like a gravity
-   well bending a coordinate mesh. Brand-colored. Auto-pauses
-   off-screen and disables under reduced-motion.
-============================================================ */
 (function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var canvas = document.getElementById('mathFieldGlobal');
   if(!canvas) return;
   var ctx = canvas.getContext('2d');
   var DPR = Math.min(window.devicePixelRatio || 1, 2);
-  var W=0, H=0, cols=0, rows=0, SP=46; // grid spacing in px
-  var pts = [];           // grid points
+  var W=0, H=0, cols=0, rows=0, SP=46;
+  var pts = [];
   var mouse = {x:-9999, y:-9999, active:false};
   var t = 0, running = true, rafId = null;
 
-  // brand palette
   var GOLD='224,169,63', TERRA='207,106,60', TEAL='77,139,127', GOLDSOFT='240,201,118';
 
-  // cursor trail history for the glowing comet sweep
   var trail = [];
-  // expanding ripple rings spawned as the cursor moves fast
   var ripples = [];
   var lastMx=null, lastMy=null;
 
@@ -2036,7 +1624,6 @@ const QZ=(function(){
     t += 0.012;
     ctx.clearRect(0,0,W,H);
 
-    // spawn ripples based on cursor speed
     if(mouse.active){
       if(lastMx!==null){
         var sp = Math.hypot(mouse.x-lastMx, mouse.y-lastMy);
@@ -2046,15 +1633,12 @@ const QZ=(function(){
         }
       }
       lastMx=mouse.x; lastMy=mouse.y;
-      // feed the comet trail
       trail.push({x:mouse.x, y:mouse.y, life:1});
       if(trail.length>22) trail.shift();
     }
-    // age trail + ripples
     for(var ti=trail.length-1; ti>=0; ti--){ trail[ti].life -= 0.05; if(trail[ti].life<=0) trail.splice(ti,1); }
     for(var ri=ripples.length-1; ri>=0; ri--){ var rp=ripples[ri]; rp.rad += 7; rp.life -= 0.014; if(rp.life<=0||rp.rad>rp.max) ripples.splice(ri,1); }
 
-    // --- update grid points: ambient wave + cursor well + ripple shockwaves ---
     for(var i=0;i<pts.length;i++){
       var p = pts[i];
       var wave = Math.sin((p.ox*0.018)+(t)) * 12 + Math.cos((p.oy*0.02)-(t*0.8)) * 12;
@@ -2072,7 +1656,6 @@ const QZ=(function(){
           ty += Math.sin(ang)*pull;
         }
       }
-      // ripple shockwaves push points radially as the ring passes through them
       for(var k=0;k<ripples.length;k++){
         var rp=ripples[k];
         var rdx=p.ox-rp.x, rdy=p.oy-rp.y;
@@ -2092,7 +1675,6 @@ const QZ=(function(){
 
     ctx.lineWidth = 1;
     ctx.lineCap='round';
-    // additive blending makes overlapping glows blaze — the WOW core
     ctx.globalCompositeOperation = 'lighter';
 
     for(var r=0;r<rows;r++){
@@ -2104,7 +1686,6 @@ const QZ=(function(){
           var md=Math.sqrt(mdx*mdx+mdy*mdy);
           glow = Math.max(0.04, 0.9*(1 - Math.min(md/340,1)));
         }
-        // ripple rings also light up the mesh they pass through
         for(var k2=0;k2<ripples.length;k2++){
           var rp2=ripples[k2];
           var rd2=Math.hypot(p.x-rp2.x, p.y-rp2.y);
@@ -2129,7 +1710,6 @@ const QZ=(function(){
       }
     }
 
-    // --- glowing comet trail following the cursor ---
     for(var tr=0; tr<trail.length; tr++){
       var pt=trail[tr];
       var a = pt.life * (tr/trail.length);
@@ -2141,7 +1721,6 @@ const QZ=(function(){
       ctx.fillStyle=g;
       ctx.beginPath(); ctx.arc(pt.x,pt.y, rad*2.4, 0, 6.283); ctx.fill();
     }
-    // bright core at the cursor
     if(mouse.active){
       var cg = ctx.createRadialGradient(mouse.x,mouse.y,0, mouse.x,mouse.y,60);
       cg.addColorStop(0,'rgba('+GOLDSOFT+',0.55)');
@@ -2151,7 +1730,6 @@ const QZ=(function(){
       ctx.beginPath(); ctx.arc(mouse.x,mouse.y,60,0,6.283); ctx.fill();
     }
 
-    // --- draw expanding ripple rings ---
     for(var k3=0;k3<ripples.length;k3++){
       var rp3=ripples[k3];
       ctx.lineWidth = 1.5;
@@ -2163,7 +1741,6 @@ const QZ=(function(){
     rafId = requestAnimationFrame(frame);
   }
 
-  // pointer tracking — canvas is fixed to the viewport, so use clientX/Y directly
   function onMove(e){
     mouse.x = e.clientX;
     mouse.y = e.clientY;
@@ -2174,14 +1751,12 @@ const QZ=(function(){
   if(!reduce){
     window.addEventListener('mousemove', onMove);
     document.addEventListener('mouseleave', onLeave);
-    // touch: let finger warp it too
     window.addEventListener('touchmove', function(e){
       if(e.touches[0]){ mouse.x=e.touches[0].clientX; mouse.y=e.touches[0].clientY; mouse.active=true; }
     }, {passive:true});
     window.addEventListener('touchend', onLeave);
   }
 
-  // pause the animation when the browser tab isn't visible (perf/battery)
   document.addEventListener('visibilitychange', function(){
     running = !document.hidden;
     if(running && !rafId && !reduce){ rafId=requestAnimationFrame(frame); }
@@ -2192,16 +1767,12 @@ const QZ=(function(){
 
   build();
   if(reduce){
-    // static single frame: draw the mesh once, no animation
     running=false; t=0; frame();
   } else {
     rafId = requestAnimationFrame(frame);
   }
 })();
 
-/* ============================================================
-   EDIT:CTAFX — sparkle burst, falling confetti, soft click
-============================================================ */
 (function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var COLORS = ['#e0a93f','#f0c976','#cf6a3c','#4d8b7f','#f3e7d0'];
@@ -2219,7 +1790,6 @@ const QZ=(function(){
       o.start(); o.stop(AC.currentTime+0.14);
     }catch(e){}
   }
-  // little ascending chime for celebrations
   function chime(){ blip(523); setTimeout(function(){blip(659);},90); setTimeout(function(){blip(784);},180); }
 
   function sparkle(x, y){
@@ -2238,7 +1808,6 @@ const QZ=(function(){
     }
   }
 
-  // FALLING confetti — celebratory rain, like the cabin presentation
   function confettiFall(){
     if(reduce) return;
     chime();
@@ -2259,10 +1828,8 @@ const QZ=(function(){
     }
   }
 
-  // expose globally so quiz + booking can trigger it
   window.EngFX = { sparkle:sparkle, confettiFall:confettiFall, blip:blip, chime:chime };
 
-  // wire sparkle+click to CTAs across ALL tabs, including quiz/tool buttons
   document.querySelectorAll('.btn-primary, .btn-terra, .btn-ghost, .nav-cta, .tool-btn, .again-btn, .next-btn').forEach(function(b){
     b.addEventListener('click', function(e){
       sparkle(e.clientX, e.clientY);
@@ -2271,9 +1838,6 @@ const QZ=(function(){
   });
 })();
 
-/* ============================================================
-   EDIT:COPYEMAIL — copy address without triggering the mailto link
-============================================================ */
 (function(){
   var btn = document.getElementById('copyEmailBtn');
   if(!btn) return;
@@ -2284,7 +1848,7 @@ const QZ=(function(){
   var resetTimer = null;
 
   btn.addEventListener('click', function(e){
-    e.preventDefault();   // don't let the click bubble into the parent <a href="mailto:...">
+    e.preventDefault();
     e.stopPropagation();
 
     function showCopied(){
@@ -2318,7 +1882,6 @@ const QZ=(function(){
     document.body.removeChild(ta);
   }
 })();
-
 </script>
 </body>
 </html>
