@@ -528,6 +528,8 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   .menu-btn{ display:block; }
   .hero{ grid-template-columns:1fr; }
   .highlights, .steps, .values, .sess-grid, .res-grid{ grid-template-columns:1fr; }
+  .sess-grid.two{ grid-template-columns:minmax(0,440px); justify-content:center; }
+  .picker{ grid-template-columns:1fr; }
   .about-grid, .team-grid, .contact-grid{ grid-template-columns:1fr; }
   .member{ grid-template-columns:1fr; }
   .photo{ width:130px; }
@@ -574,11 +576,41 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   .hero-panel{ padding:1.3rem; }
   .stat-val{ font-size:1.5rem; }
   .modal{ padding:1.3rem; }
+
+  /* ---- MOBILE TYPE FIX ----
+     On phones the desktop sizes ballooned into tall "e-book" columns.
+     Pull body text down to a comfortable phone reading size, tighten
+     line-height, trim card padding, and drop desktop min-heights so
+     each card is a compact rectangle instead of a tall ribbon. */
+  .lead{ font-size:0.98rem; line-height:1.55; }
+  .hero .lead{ max-width:none; }
+
+  .sess{ padding:1.4rem; }
+  .sess h3{ font-size:1.25rem; }
+  .sess .desc{ font-size:0.92rem; line-height:1.5; min-height:0; margin-bottom:1rem; }
+  .sess-sub{ font-size:0.72rem; line-height:1.35; margin-bottom:0.8rem; }
+  .feats{ margin-bottom:1.2rem; }
+  .feats li{ font-size:0.92rem; line-height:1.4; padding-top:0.28rem; padding-bottom:0.28rem; }
+  .price{ font-size:1.3rem; margin:0.6rem 0; }
+
+  .pcard{ padding:1.4rem; }
+  .pcard h3{ font-size:1.2rem; }
+  .pcard p, .pcard .pcard-desc{ font-size:0.92rem; line-height:1.5; }
+  .pcard-tag{ font-size:0.66rem; }
+
+  /* quiz question + options readable, not oversized */
+  .q{ font-size:1rem !important; line-height:1.5; }
+  .opt{ font-size:0.95rem; }
+
+  /* card-based sections (values, resources, steps) */
+  .card p, .res p, .value p, .step p, .highlight p{ font-size:0.92rem; line-height:1.5; }
+  .card h3, .card h4{ font-size:1.15rem; }
+}
 }
 @media (prefers-reduced-motion:reduce){ *{ animation-duration:0.01ms!important; transition-duration:0.01ms!important; } .reveal{ opacity:1!important; transform:none!important; } .tilt{ transform:none!important; } .hero-aura{ animation:none!important; } .cta-bob, .cta-pulse{ animation:none!important; } }
 
 .toolbar{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:2rem;}
-.picker{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-bottom:2rem;}
+.picker{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-bottom:2rem;}
 .pcard{display:flex;flex-direction:column;background:linear-gradient(165deg,var(--walnut),var(--coffee));border:1px solid rgba(224,169,63,0.2);border-radius:16px;padding:1.8rem;box-shadow:0 14px 40px rgba(0,0,0,0.25);transition:border-color 0.2s,transform 0.2s;}
 .pcard:hover{border-color:rgba(224,169,63,0.45);transform:translateY(-3px);}
 .pcard-tag{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.7rem;}
