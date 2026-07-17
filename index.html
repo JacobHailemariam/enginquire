@@ -16,7 +16,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -43,6 +43,7 @@
   --text-dim:   #c9b186;
   --text-mute:  #9a865f;
   --font-head: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: 'Anton', system-ui, sans-serif;
   --font-body: 'Manrope', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --max: 1180px;
@@ -156,9 +157,14 @@ h4{ font-size:1.05rem; }
   padding:4.5rem 0 3.5rem;
   display:grid; grid-template-columns:1.45fr 1fr; gap:3rem; align-items:center;
 }
-.hero h1{ margin:1.1rem 0 1.3rem; }
+.hero h1{
+  font-family:var(--font-display); font-weight:400;
+  font-size:clamp(3rem,7vw,6rem); line-height:0.94;
+  letter-spacing:0.005em; text-transform:uppercase;
+  margin:1.1rem 0 1.3rem;
+}
 .hero h1 .gold{ color:var(--gold); }
-.hero h1 .em{ font-style:italic; font-weight:500; color:var(--terra); }
+.hero h1 .em{ font-style:normal; color:var(--terra); }
 .hero .lead{ max-width:520px; margin-bottom:2rem; }
 
 .btn-row{ display:flex; gap:0.9rem; flex-wrap:wrap; }
@@ -302,6 +308,7 @@ h4{ font-size:1.05rem; }
 .value p{ font-size:0.88rem; color:var(--text-dim); }
 
 .sess-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:2.5rem; }
+.sess-grid.two{ grid-template-columns:repeat(2,minmax(0,440px)); justify-content:center; }
 .sess{
   background:var(--walnut); border:1px solid rgba(224,169,63,0.16);
   border-radius:14px; padding:1.9rem; position:relative; overflow:hidden;
@@ -313,7 +320,8 @@ h4{ font-size:1.05rem; }
 .sess.feat{ background:linear-gradient(165deg,var(--coffee),var(--walnut)); border-color:var(--gold); }
 .sess.feat::before{ transform:scaleX(1); background:var(--terra); }
 
-.sess-tag{ align-self:flex-start; font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.3rem 0.7rem; border-radius:5px; margin-bottom:1.1rem; }
+.sess-tag{ align-self:flex-start; font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.3rem 0.7rem; border-radius:5px; margin-bottom:0.55rem; }
+.sess-sub{ display:block; font-family:var(--font-mono); font-size:0.72rem; line-height:1.4; color:var(--terra); margin-bottom:1rem; letter-spacing:0.01em; }
 .sess-tag.gold{ background:rgba(224,169,63,0.18); color:var(--gold); }
 .sess-tag.terra{ background:var(--terra); color:var(--cream); }
 .sess-tag.teal{ background:rgba(77,139,127,0.2); color:var(--teal-soft); }
@@ -680,7 +688,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
     <div class="hero-panel tilt floaty plx" data-tilt data-plx="0.04">
       <div class="glare"></div>
       <div class="tilt-inner">
-      <div class="panel-label">// the people teaching you</div>
+      <div class="panel-label">The people teaching you</div>
       <div class="stat-row">
         <span class="stat-name">Jacob<b>Electrical + Computer Eng.</b></span>
         <span class="stat-val g countup" data-target="3.97" data-dec="2">3.97</span>
@@ -772,17 +780,17 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       <span class="eyebrow">What we stand for</span>
       <div class="values">
         <div class="value gold">
-          <div class="v-tag">// no fluff</div>
+          <div class="v-tag">No fluff</div>
           <h4>Straight talk</h4>
           <p>Real schedules, real mistakes, real advice. Nothing aspirational that doesn't actually work.</p>
         </div>
         <div class="value teal">
-          <div class="v-tag">// accessible</div>
+          <div class="v-tag">Accessible</div>
           <h4>Free where it counts</h4>
           <p>The core knowledge stays free. Sessions are for those who want structured, in-person depth.</p>
         </div>
         <div class="value terra">
-          <div class="v-tag">// fresh</div>
+          <div class="v-tag">Fresh</div>
           <h4>One year ahead</h4>
           <p>We just lived it. The memory is fresh, the courses are current, the advice is relevant.</p>
         </div>
@@ -795,41 +803,28 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   <div class="wrap section-pad">
     <span class="eyebrow">Pre-semester sessions</span>
     <h2 style="margin:0.8rem 0 0.6rem;">Start the year already ahead.</h2>
-    <p class="lead" style="max-width:680px;">In-person sessions that turn the first six weeks of confusion into one focused afternoon. Pricing is being finalized — reserve a spot now and you'll be first to know.</p>
+    <p class="lead" style="max-width:680px;">One in-person week before classes start — open to every incoming student, not just engineering majors. Plus optional 1-on-1 mentorship through first semester. Pricing is being finalized; reserve now and you'll be first to know.</p>
 
-    <div class="sess-grid">
-      <div class="sess reveal">
-        <span class="sess-tag gold">Aug 18 – 22</span>
-        <h3>Session One</h3>
-        <p class="desc">For local and early-arrival students. Smaller cohort, more one-on-one time.</p>
+    <div class="sess-grid two">
+      <div class="sess feat reveal">
+        <span class="sess-tag gold">Aug 23 – 29</span>
+        <span class="sess-sub">One 4-hour session on a single day in this range — exact date announced soon</span>
+        <h3>Pre-Semester Session</h3>
+        <p class="desc">One focused 4-hour session, open to <b>every</b> incoming student — not just engineering majors. We cover the first-year math and core courses that trip people up most.</p>
         <div class="price"><span class="tbd">Price TBD</span><span class="note">/ announced soon</span></div>
         <ul class="feats">
-          <li>3-hour in-person session</li>
-          <li>Two anchor first-semester courses</li>
-          <li>Printed cheat-sheet handout</li>
-          <li>Q&amp;A with two 3.9+ students</li>
+          <li>Calculus &amp; Linear Algebra fundamentals</li>
+          <li>ENGG 225 &mdash; core concepts &amp; problem sets</li>
+          <li>ENGG 204 &mdash; coverage planned</li>
+          <li>Q&amp;A with two 3.9+ students + printed cheat-sheets</li>
         </ul>
-        <button class="btn btn-ghost cta-bob" onclick="openBooking('Session One — Aug 18–22')">Reserve spot <span class="arr">→</span></button>
+        <button class="btn btn-primary cta-bob" onclick="openBooking('Pre-Semester Session — Aug 23–29')">Reserve your spot <span class="arr">→</span></button>
       </div>
 
-      <div class="sess feat reveal d1">
-        <span class="sess-tag terra">Aug 26 – 29</span>
-        <h3>Session Two</h3>
-        <p class="desc">For international students and anyone who missed Session 1. Same content, refined.</p>
-        <div class="price"><span class="tbd">Price TBD</span><span class="note">/ announced soon</span></div>
-        <ul class="feats">
-          <li>3-hour in-person session</li>
-          <li>Two anchor first-semester courses</li>
-          <li>Printed cheat-sheet handout</li>
-          <li>Refined from Session 1 feedback</li>
-        </ul>
-        <button class="btn btn-terra cta-bob" onclick="openBooking('Session Two — Aug 26–29')">Reserve spot <span class="arr">→</span></button>
-      </div>
-
-      <div class="sess reveal d2">
-        <span class="sess-tag teal">Coming soon</span>
+      <div class="sess reveal d1">
+        <span class="sess-tag teal" style="margin-bottom:1.1rem;">Coming soon</span>
         <h3>1-on-1 Mentorship</h3>
-        <p class="desc">Personal, one-on-one support through first semester. Limited spots, opens after the group sessions.</p>
+        <p class="desc">Personal, one-on-one support through first semester. Limited spots, opens after the group session.</p>
         <div class="price"><span class="tbd">Price TBD</span><span class="note">/ details coming</span></div>
         <ul class="feats">
           <li>In person or online — your choice</li>
@@ -978,7 +973,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 
   <div class="results" id="results">
     <div class="results-card">
-      <div class="results-tag">// test complete</div>
+      <div class="results-tag">Test complete</div>
       <h2 id="score">0 / 20</h2>
       <p class="results-msg" id="msg"></p>
       <div class="pcard-row" style="justify-content:center;">
@@ -1261,8 +1256,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       <div class="field">
         <label>Which session?</label>
         <select id="bk-session">
-          <option>Session One — Aug 18–22</option>
-          <option>Session Two — Aug 26–29</option>
+          <option>Pre-Semester Session — Aug 23–29</option>
           <option>1-on-1 Mentorship — interest</option>
           <option>Not sure yet — just keep me posted</option>
         </select>
