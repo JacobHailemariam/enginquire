@@ -493,6 +493,7 @@ h4{ font-size:1.05rem; }
   background:rgba(20,11,4,0.75); backdrop-filter:blur(6px);
   align-items:center; justify-content:center; padding:1.5rem;
   overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
+  touch-action:pan-y;
 }
 .modal-overlay.open{ display:flex; animation:fade 0.25s; }
 .modal{
@@ -500,8 +501,8 @@ h4{ font-size:1.05rem; }
   border:1px solid rgba(224,169,63,0.3); border-radius:16px;
   max-width:460px; width:100%; padding:2.2rem; position:relative;
   box-shadow:0 30px 70px rgba(0,0,0,0.5);
-  max-height:calc(100dvh - 3rem); overflow-y:auto; -webkit-overflow-scrolling:touch;
-  margin:auto;
+  max-height:calc(100vh - 3rem); max-height:calc(100dvh - 3rem); overflow-y:auto; -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain; touch-action:pan-y; margin:auto;
 }
 .modal .close{ position:sticky; float:right; top:0; margin:-0.6rem -0.6rem 0 0; background:none; border:none; color:var(--text-dim); font-size:1.6rem; cursor:pointer; line-height:1; z-index:5; width:2.75rem; height:2.75rem; display:flex; align-items:center; justify-content:center; border-radius:50%; -webkit-tap-highlight-color:transparent; }
 .modal .close:hover{ color:var(--gold); background:rgba(224,169,63,0.12); }
@@ -697,7 +698,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
 .again-btn{font-family:var(--font-head);font-weight:700;font-size:0.95rem;background:var(--gold);color:var(--espresso);border:none;padding:0.85rem 1.6rem;border-radius:8px;cursor:pointer;}
 .again-btn:hover{background:var(--gold-soft);}
 
-.fsheet-overlay{position:fixed;inset:0;z-index:1000;display:none;background:rgba(20,11,4,0.8);backdrop-filter:blur(6px);align-items:flex-start;justify-content:center;padding:2rem 1.5rem;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+.fsheet-overlay{position:fixed;inset:0;z-index:1000;display:none;background:rgba(20,11,4,0.8);backdrop-filter:blur(6px);align-items:flex-start;justify-content:center;padding:2rem 1.5rem;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;}
 .fsheet-overlay.open{display:flex;animation:fade 0.25s;}
 .fsheet{background:linear-gradient(165deg,var(--coffee),var(--walnut));border:1px solid rgba(224,169,63,0.3);border-radius:16px;max-width:680px;width:100%;padding:2.2rem;position:relative;box-shadow:0 30px 70px rgba(0,0,0,0.5);margin:auto;}
 .fsheet .close{position:sticky;float:right;top:0;margin:-0.6rem -0.6rem 0 0;background:none;border:none;color:var(--text-dim);font-size:1.7rem;cursor:pointer;line-height:1;z-index:5;width:2.75rem;height:2.75rem;display:flex;align-items:center;justify-content:center;border-radius:50%;-webkit-tap-highlight-color:transparent;}
@@ -1375,21 +1376,21 @@ function openBooking(presetSession){
 function closeBooking(){ document.getElementById('bookingModal').classList.remove('open'); unlockBodyScroll(); }
 
 let _scrollY = 0;
+let _lockCount = 0;
 function lockBodyScroll(){
-  _scrollY = window.scrollY || document.documentElement.scrollTop;
-  document.body.style.position = 'fixed';
-  document.body.style.top = `-${_scrollY}px`;
-  document.body.style.left = '0';
-  document.body.style.right = '0';
-  document.body.style.width = '100%';
+  _lockCount++;
+  if(_lockCount > 1) return;
+  _scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+  document.body.style.touchAction = 'none';
 }
 function unlockBodyScroll(){
-  document.body.style.position = '';
-  document.body.style.top = '';
-  document.body.style.left = '';
-  document.body.style.right = '';
-  document.body.style.width = '';
-  window.scrollTo(0, _scrollY);
+  _lockCount = Math.max(0, _lockCount - 1);
+  if(_lockCount > 0) return;
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+  document.body.style.touchAction = '';
 }
 
 const WEB3FORMS_KEY = "c9b19a26-f90e-494e-b2c3-4f3fb681acb0";
