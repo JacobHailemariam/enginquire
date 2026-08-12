@@ -1368,6 +1368,24 @@ function openBooking(presetSession){
 }
 function closeBooking(){ document.getElementById('bookingModal').classList.remove('open'); }
 
+<script>
+/* enginquire.com/#reserve opens the Aug 26 reservation form */
+(function(){
+  function openReserve(){
+    var h=(location.hash||'').toLowerCase().replace('#','');
+    if(h!=='reserve' && h!=='book') return;
+    try{
+      go('sessions');
+      var sel=document.getElementById('bk-session');
+      if(sel){for(var i=0;i<sel.options.length;i++){if(/aug\s*26/i.test(sel.options[i].text)){sel.selectedIndex=i;break;}}}
+      openBooking('');
+    }catch(e){}
+  }
+  openReserve();
+  window.addEventListener('DOMContentLoaded', openReserve);
+  window.addEventListener('hashchange', openReserve);
+})();
+</script>     
 const WEB3FORMS_KEY = "c9b19a26-f90e-494e-b2c3-4f3fb681acb0";
 
 const EMAILJS_PUBLIC_KEY  = "NCO_4z8QKWneBPWVl";
