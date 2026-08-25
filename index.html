@@ -511,12 +511,13 @@ h4{ font-size:1.05rem; }
 .modal .msub{ font-size:0.9rem; color:var(--text-dim); margin-bottom:1.6rem; }
 .field{ margin-bottom:1.1rem; }
 .field label{ display:block; font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold); margin-bottom:0.4rem; }
-.field input, .field select{
+.field input, .field select, .field textarea{
   width:100%; padding:0.75rem 0.9rem; border-radius:8px;
   background:var(--espresso); border:1px solid rgba(224,169,63,0.25);
   color:var(--cream); font-family:var(--font-body); font-size:0.95rem;
 }
-.field input:focus, .field select:focus{ outline:none; border-color:var(--gold); }
+.field textarea{ resize:vertical; }
+.field input:focus, .field select:focus, .field textarea:focus{ outline:none; border-color:var(--gold); }
 .modal .btn{ width:100%; justify-content:center; margin-top:0.5rem; }
 .modal .fineprint{ font-size:0.78rem; color:var(--text-mute); margin-top:1rem; text-align:center; line-height:1.5; }
 .consent-row{
@@ -866,7 +867,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
   <div class="wrap section-pad">
     <span class="eyebrow">Pre-semester sessions</span>
     <h2 style="margin:0.8rem 0 0.6rem;">Start the year already ahead.</h2>
-    <p class="lead" style="max-width:680px;">One in-person session before classes start — open to every incoming student, not just engineering majors. Plus optional 1-on-1 mentorship through first semester. Our first session is confirmed and completely free — reserve your spot below.</p>
+    <p class="lead" style="max-width:680px;">One in-person session before classes start — open to every incoming student, not just engineering majors. Plus optional in-person 1-on-1 mentorship through first semester at $25/hr, personalized to exactly what you need. Our first session is confirmed and completely free — reserve your spot below.</p>
 
     <div class="sess-grid two">
       <div class="sess feat reveal">
@@ -885,23 +886,23 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       </div>
 
       <div class="sess reveal d1">
-        <span class="sess-tag teal" style="margin-bottom:1.1rem;">Coming soon</span>
+        <span class="sess-tag teal" style="margin-bottom:1.1rem;">Available</span>
         <h3>1-on-1 Mentorship</h3>
-        <p class="desc">Personal, one-on-one support through first semester. Limited spots, opens after the group session.</p>
-        <div class="price"><span class="tbd">Price TBD</span><span class="note">/ details coming</span></div>
+        <p class="desc">Personal, one-on-one support through first semester. Limited spots — book the hours you need.</p>
+        <div class="price"><span class="tbd">$25</span><span class="note">/ hour</span></div>
         <ul class="feats">
-          <li>In person or online — your choice</li>
+          <li>In person only</li>
           <li>Course-specific guidance</li>
           <li>Study-system review</li>
-          <li>Format &amp; frequency still being finalized</li>
+          <li>Personalized for exactly what you need</li>
         </ul>
-        <button class="btn btn-ghost" onclick="openBooking('1-on-1 Mentorship — interest')">Express interest <span class="arr">→</span></button>
+        <button class="btn btn-ghost" onclick="openBooking('1-on-1 Mentorship — $25/hr')">Book mentorship <span class="arr">→</span></button>
       </div>
     </div>
 
     <div class="notice">
       <span class="ic">🛈</span>
-      <p><b>The Aug 26 session is free.</b> Reserve a spot with no commitment — we'll text and email you to confirm the location and details. 1-on-1 mentorship pricing is still being finalized; express interest and you'll be first to know.</p>
+      <p><b>The Aug 26 session is free.</b> Reserve a spot with no commitment — we'll text and email you to confirm the location and details. 1-on-1 mentorship is $25/hr, in person only — tell us how many hours, when, and what you need help with when you book.</p>
     </div>
   </div>
 </section>
@@ -1318,11 +1319,28 @@ footer{ background:var(--espresso); border-top:1px solid rgba(224,169,63,0.15); 
       </div>
       <div class="field">
         <label>Which session?</label>
-        <select id="bk-session">
+        <select id="bk-session" onchange="toggleMentorFields()">
           <option>Pre-Semester Session — Wed, Aug 26 (2–6 PM)</option>
-          <option>1-on-1 Mentorship — interest</option>
+          <option>1-on-1 Mentorship — $25/hr</option>
           <option>Not sure yet — just keep me posted</option>
         </select>
+      </div>
+
+      <div id="bk-mentor-fields" style="display:none;">
+        <div class="field-row">
+          <div class="field">
+            <label>How many hours?</label>
+            <input type="number" id="bk-hours" min="1" step="0.5" placeholder="e.g. 2" />
+          </div>
+          <div class="field">
+            <label>When do you need it?</label>
+            <input type="date" id="bk-date" />
+          </div>
+        </div>
+        <div class="field">
+          <label>What do you need help with?</label>
+          <textarea id="bk-desc" rows="3" placeholder="Briefly describe the course, topic, or what you'd like to work on."></textarea>
+        </div>
       </div>
 
       <label class="consent-row">
@@ -1366,12 +1384,22 @@ function openBooking(presetSession){
   if(consent) consent.checked = false;
   const btn = document.getElementById('bk-submit');
   btn.disabled = true; btn.innerHTML = 'Send reservation <span class="arr">&rarr;</span>';
+  ['bk-hours','bk-date','bk-desc'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
   if(presetSession){
     const sel = document.getElementById('bk-session');
     for(const opt of sel.options){ if(opt.value === presetSession){ opt.selected = true; break; } }
   }
+  toggleMentorFields();
   modal.classList.add('open');
   lockBodyScroll();
+}
+
+function isMentorship(){
+  return /Mentorship/i.test(document.getElementById('bk-session').value);
+}
+function toggleMentorFields(){
+  const box = document.getElementById('bk-mentor-fields');
+  if(box) box.style.display = isMentorship() ? 'block' : 'none';
 }
 function closeBooking(){ document.getElementById('bookingModal').classList.remove('open'); unlockBodyScroll(); }
 
@@ -1423,9 +1451,20 @@ async function submitBooking(){
   const status  = document.getElementById('bk-status');
   const btn     = document.getElementById('bk-submit');
 
+  const mentor  = isMentorship();
+  const hours   = document.getElementById('bk-hours').value.trim();
+  const date    = document.getElementById('bk-date').value.trim();
+  const desc    = document.getElementById('bk-desc').value.trim();
+
   if(!first || !last || !email || !phone){
     status.className = 'bk-status err';
     status.textContent = 'Please add your name, email, and phone so we can confirm your spot.';
+    return;
+  }
+
+  if(mentor && (!hours || !date || !desc)){
+    status.className = 'bk-status err';
+    status.textContent = 'For mentorship, please add how many hours, a date, and a brief description of what you need.';
     return;
   }
 
@@ -1452,7 +1491,7 @@ async function submitBooking(){
     const res = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
+      body: JSON.stringify(Object.assign({
         access_key: WEB3FORMS_KEY,
         subject: 'New reservation \u2014 ' + session,
         from_name: 'EngInQuire website',
@@ -1462,7 +1501,11 @@ async function submitBooking(){
         'Email': email,
         'Phone': phone,
         'Session requested': session
-      })
+      }, mentor ? {
+        'Hours requested': hours,
+        'Date needed': date,
+        'What they need help with': desc
+      } : {}))
     });
     const data = await res.json();
     console.log('[EngInQuire] Web3Forms response:', data);
@@ -1471,7 +1514,7 @@ async function submitBooking(){
       document.getElementById('bk-form').style.display = 'none';
       document.getElementById('bk-done').style.display = 'block';
       if(window.EngFX && window.EngFX.confettiFall) window.EngFX.confettiFall();
-      sendUserConfirmation({ first_name: first, last_name: last, user_email: email, session: session });
+      sendUserConfirmation({ first_name: first, last_name: last, user_email: email, session: session, hours: mentor ? hours : '', date_needed: mentor ? date : '', help_with: mentor ? desc : '' });
     } else {
       throw new Error(data.message || 'Submission failed');
     }
