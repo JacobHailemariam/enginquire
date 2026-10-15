@@ -972,7 +972,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(247,147,30,0.15); 
           <li>Full practice midterms, worked through together</li>
           <li>Midterm-ready problems &amp; exam strategy</li>
         </ul>
-        <span class="ptr-wrap" data-ptr="top"><button class="btn btn-primary cta-bob" onclick="openBooking('Free Midterm Prep (ENGG 204 & 225) — Sat, Oct 17 (4–8 PM)')">Reserve your spot <span class="arr">→</span></button></span>
+        <span class="ptr-wrap" data-ptr="top"><button id="midterm-cta" class="btn btn-primary cta-bob" onclick="openBooking('Free Midterm Prep (ENGG 204 & 225) — Sat, Oct 17 (4–8 PM)')">Reserve your spot <span class="arr">→</span></button></span>
       </div>
       </div>
 
@@ -1411,7 +1411,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(247,147,30,0.15); 
       <div class="field">
         <label>Which session?</label>
         <select id="bk-session" onchange="toggleMentorFields()">
-          <option>Free Midterm Prep (ENGG 204 &amp; 225) — Sat, Oct 17 (4–8 PM)</option>
+          <option id="bk-midterm-opt">Free Midterm Prep (ENGG 204 &amp; 225) — Sat, Oct 17 (4–8 PM)</option>
           <option>1-on-1 Mentorship — $25/hr</option>
           <option>Not sure yet — just keep me posted</option>
         </select>
@@ -1514,6 +1514,53 @@ function unlockBodyScroll(){
 
 const WEB3FORMS_KEY = "c9b19a26-f90e-494e-b2c3-4f3fb681acb0";
 
+// ---- Midterm seat cap (152) ----
+// Paste your Google Apps Script web-app URL here (see setup steps). Leave as-is to disable the cap.
+const SEATS_URL = "https://script.google.com/macros/s/AKfycbwdDDws83vjGfaY790E4ZCrpfxQS7gSq_sJoQpPAmD1CnLvCFdu3wXvXaWXNN5ToZ-W/exec";
+const SEATS_ON  = SEATS_URL && SEATS_URL !== "YOUR_APPS_SCRIPT_URL";
+const MIDTERM_LABEL = "Free Midterm Prep (ENGG 204 & 225) — Sat, Oct 17 (4–8 PM)";
+let MIDTERM_FULL = false;
+
+function isMidterm(){ return document.getElementById('bk-session').value === MIDTERM_LABEL; }
+
+function markMidtermFull(){
+  MIDTERM_FULL = true;
+  const cta = document.getElementById('midterm-cta');
+  if(cta){ cta.disabled = true; cta.innerHTML = 'SEATS ARE FULL'; cta.removeAttribute('onclick'); cta.style.opacity = '0.6'; cta.style.cursor = 'not-allowed'; }
+  const opt = document.getElementById('bk-midterm-opt');
+  if(opt){
+    opt.disabled = true;
+    opt.textContent = 'Free Midterm Prep — SEATS ARE FULL';
+    const sel = document.getElementById('bk-session');
+    if(sel.value === MIDTERM_LABEL || opt.selected){ sel.value = '1-on-1 Mentorship — $25/hr'; toggleMentorFields(); }
+  }
+}
+
+async function checkSeats(){
+  if(!SEATS_ON) return;
+  try{
+    const r = await fetch(SEATS_URL);
+    const d = await r.json();
+    if(d.full) markMidtermFull();
+  }catch(e){ console.warn('[EngInQuire] seat check failed:', e); }
+}
+checkSeats();
+
+// Atomically claims a seat. Returns true if a seat was granted.
+async function claimSeat(){
+  if(!SEATS_ON) return true;
+  try{
+    const r = await fetch(SEATS_URL, { method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body: 'claim' });
+    const d = await r.json();
+    if(d.full && !d.ok){ markMidtermFull(); return false; }
+    if(d.full) markMidtermFull();
+    return !!d.ok;
+  }catch(e){
+    console.warn('[EngInQuire] seat claim failed, allowing booking:', e);
+    return true; // fail open so a counter outage never blocks signups
+  }
+}
+
 const EMAILJS_PUBLIC_KEY  = "NCO_4z8QKWneBPWVl";
 const EMAILJS_SERVICE_ID  = "service_2axu63s";
 const EMAILJS_TEMPLATE_ID = "template_0x9uwfp";
@@ -1577,6 +1624,17 @@ async function submitBooking(){
   btn.innerHTML = 'Sending\u2026';
   status.className = 'bk-status';
   status.textContent = '';
+
+  if(session === MIDTERM_LABEL){
+    const ok = await claimSeat();
+    if(!ok){
+      btn.disabled = false;
+      btn.innerHTML = 'Send reservation <span class="arr">&rarr;</span>';
+      status.className = 'bk-status err';
+      status.textContent = 'SEATS ARE FULL \u2014 the midterm prep session has reached capacity. You can still book 1-on-1 mentorship.';
+      return;
+    }
+  }
 
   try{
     const res = await fetch('https://api.web3forms.com/submit', {
