@@ -1422,6 +1422,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(247,147,30,0.15); 
         <label>Which session?</label>
         <select id="bk-session" onchange="toggleMentorFields()">
           <option id="bk-midterm-opt">Free Midterm Prep (ENGG 204 &amp; 225) — Sat, Oct 17 (4–8 PM)</option>
+          <option id="bk-queue-opt" hidden disabled>Midterm Prep QUEUE (waitlist) — Sat, Oct 17</option>
           <option>1-on-1 Mentorship — $25/hr</option>
           <option>Not sure yet — just keep me posted</option>
         </select>
@@ -1529,6 +1530,9 @@ const WEB3FORMS_KEY = "c9b19a26-f90e-494e-b2c3-4f3fb681acb0";
 const SEATS_URL = "https://script.google.com/macros/s/AKfycbwdDDws83vjGfaY790E4ZCrpfxQS7gSq_sJoQpPAmD1CnLvCFdu3wXvXaWXNN5ToZ-W/exec";
 const SEATS_ON  = SEATS_URL && SEATS_URL !== "YOUR_APPS_SCRIPT_URL";
 const MIDTERM_LABEL = "Free Midterm Prep (ENGG 204 & 225) — Sat, Oct 17 (4–8 PM)";
+const QUEUE_LABEL = "Midterm Prep QUEUE (waitlist) — Sat, Oct 17";
+// Signups are CLOSED (queue only). Override: open the site with ?override=1 to reopen normal midterm signups.
+const MIDTERM_CLOSED = !/[?&]override=1/.test(location.search);
 let MIDTERM_FULL = false;
 
 function isMidterm(){ return document.getElementById('bk-session').value === MIDTERM_LABEL; }
@@ -1537,13 +1541,15 @@ function markMidtermFull(){
   MIDTERM_FULL = true;
   document.body.classList.add('mt-full');
   const cta = document.getElementById('midterm-cta');
-  if(cta){ cta.disabled = true; cta.innerHTML = 'SEATS ARE FULL'; cta.removeAttribute('onclick'); cta.style.opacity = '0.6'; cta.style.cursor = 'not-allowed'; }
+  if(cta){ cta.innerHTML = 'SEATS ARE FULL &mdash; Join the queue <span class="arr">→</span>'; cta.setAttribute('onclick', "openBooking('" + QUEUE_LABEL + "')"); }
+  const qopt = document.getElementById('bk-queue-opt');
+  if(qopt){ qopt.hidden = false; qopt.disabled = false; }
   const opt = document.getElementById('bk-midterm-opt');
   if(opt){
     opt.disabled = true;
-    opt.textContent = 'Free Midterm Prep — SEATS ARE FULL';
+    opt.hidden = true;
     const sel = document.getElementById('bk-session');
-    if(sel.value === MIDTERM_LABEL || opt.selected){ sel.value = '1-on-1 Mentorship — $25/hr'; toggleMentorFields(); }
+    if(sel.value === MIDTERM_LABEL || opt.selected){ sel.value = QUEUE_LABEL; toggleMentorFields(); }
   }
 }
 
@@ -1555,7 +1561,7 @@ async function checkSeats(){
     if(d.full) markMidtermFull();
   }catch(e){ console.warn('[EngInQuire] seat check failed:', e); }
 }
-checkSeats();
+if(MIDTERM_CLOSED) markMidtermFull(); else checkSeats();
 
 // Atomically claims a seat. Returns true if a seat was granted.
 async function claimSeat(){
