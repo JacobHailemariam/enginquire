@@ -1529,8 +1529,8 @@ const WEB3FORMS_KEY = "c9b19a26-f90e-494e-b2c3-4f3fb681acb0";
 const SEATS_URL = "https://script.google.com/macros/s/AKfycbwdDDws83vjGfaY790E4ZCrpfxQS7gSq_sJoQpPAmD1CnLvCFdu3wXvXaWXNN5ToZ-W/exec";
 const SEATS_ON  = SEATS_URL && SEATS_URL !== "YOUR_APPS_SCRIPT_URL";
 const MIDTERM_LABEL = "Free Midterm Prep (ENGG 204 & 225) — Sat, Oct 17 (4–8 PM)";
-// Midterm signups are CLOSED. Override: open the site with ?override=1 to reopen normal midterm signups.
-const MIDTERM_CLOSED = !/[?&]override=1/.test(location.search);
+// Midterm signups are hard-CLOSED (no dependency on the seat counter).
+const MIDTERM_CLOSED = true;
 let MIDTERM_FULL = false;
 
 function isMidterm(){ return document.getElementById('bk-session').value === MIDTERM_LABEL; }
@@ -1638,6 +1638,13 @@ async function submitBooking(){
   status.className = 'bk-status';
   status.textContent = '';
 
+  if(session === MIDTERM_LABEL && MIDTERM_CLOSED){
+    btn.disabled = false;
+    btn.innerHTML = 'Send reservation <span class="arr">&rarr;</span>';
+    status.className = 'bk-status err';
+    status.textContent = 'SEATS ARE FULL — the midterm prep session has reached capacity. You can still book 1-on-1 mentorship.';
+    return;
+  }
   if(session === MIDTERM_LABEL){
     const ok = await claimSeat();
     if(!ok){
