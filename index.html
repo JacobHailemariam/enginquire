@@ -891,7 +891,7 @@ footer{ background:var(--espresso); border-top:1px solid rgba(247,147,30,0.15); 
           <div class="glare"></div>
           <div class="tilt-inner">
           <div class="hl-ic terra">↗</div>
-          <h4>Real mentorship</h4>
+          <h4>Real people</h4>
           <p>Honest advice from students one year ahead, not a faceless service. Replies come from actual people.</p>
           </div>
         </div>
@@ -964,9 +964,9 @@ footer{ background:var(--espresso); border-top:1px solid rgba(247,147,30,0.15); 
   <div class="wrap section-pad">
     <span class="eyebrow">Midterm prep sessions</span>
     <h2 class="back-h" style="margin:0.8rem 0 0.9rem;"><span class="t">We're back</span> for midterms.</h2>
-    <p class="lead" style="max-width:680px;">A free in-person midterm prep session for ENGG 204 and ENGG 225 in EEEL 161, open to every first-year student. We'll work through practice midterms and midterm-ready questions together. Plus optional in-person 1-on-1 mentorship through first semester at $25/hr, personalized to exactly what you need. Reserve your spot below.</p>
+    <p class="lead" style="max-width:680px;">A free in-person midterm prep session for ENGG 204 and ENGG 225 in EEEL 161, open to every first-year student. We'll work through practice midterms and midterm-ready questions together. Reserve your spot below.</p>
 
-    <div class="sess-grid two">
+    <div class="sess-grid two" style="grid-template-columns:minmax(0,440px);">
       <div class="ptr-card ptr-wide" data-ptr="left">
       <div class="sess feat reveal">
         <span class="were-back">We're back!</span>
@@ -985,25 +985,11 @@ footer{ background:var(--espresso); border-top:1px solid rgba(247,147,30,0.15); 
         <span class="ptr-wrap" data-ptr="top"><button id="midterm-cta" class="btn btn-primary cta-bob" onclick="openBooking('Free Midterm Prep (ENGG 204 & 225) — Sat, Oct 17 (4–8 PM)')">Reserve your spot <span class="arr">→</span></button></span>
       </div>
       </div>
-
-      <div class="sess reveal d1">
-        <span class="sess-tag teal" style="margin-bottom:1.1rem;">Available</span>
-        <h3>1-on-1 Mentorship</h3>
-        <p class="desc">Personal, one-on-one support through first semester. Limited spots — book the hours you need.</p>
-        <div class="price"><span class="tbd">$25</span><span class="note">/ hour</span></div>
-        <ul class="feats">
-          <li>In person only</li>
-          <li>Course-specific guidance</li>
-          <li>Study-system review</li>
-          <li>Personalized for exactly what you need</li>
-        </ul>
-        <button class="btn btn-ghost" onclick="openBooking('1-on-1 Mentorship — $25/hr')">Book mentorship <span class="arr">→</span></button>
-      </div>
     </div>
 
     <div class="notice">
       <span class="ic">🎃</span>
-      <p><b>We're back, and the Oct 17 midterm prep session is free.</b> It runs 4 to 8 PM in EEEL 161. Spots are limited, so reserve yours with no commitment and we'll text and email you to confirm. 1-on-1 mentorship is $25/hr, in person only — tell us how many hours, when, and what you need help with when you book.</p>
+      <p><b>We're back, and the Oct 17 midterm prep session is free.</b> It runs 4 to 8 PM in EEEL 161. Spots are limited, so reserve yours with no commitment and we'll text and email you to confirm.</p>
     </div>
   </div>
 </section>
@@ -1283,10 +1269,10 @@ footer{ background:var(--espresso); border-top:1px solid rgba(247,147,30,0.15); 
     <h2 style="margin:0.8rem 0 0.4rem;">Terms &amp; Conditions</h2>
     <p class="legal-updated">Last updated: July 10, 2026</p>
 
-    <p class="lead">These terms govern your use of the EngInQuire website and our tutoring services. By reserving a spot, expressing interest in mentorship, or otherwise using this site, you agree to the terms below. We're two students running a small tutoring business, not a law firm — this is written to be genuinely readable.</p>
+    <p class="lead">These terms govern your use of the EngInQuire website and our tutoring services. By reserving a spot or otherwise using this site, you agree to the terms below. We're two students running a small tutoring business, not a law firm — this is written to be genuinely readable.</p>
 
     <h3>What we offer</h3>
-    <p>EngInQuire provides pre-semester review sessions, free study resources (including our online First-Year Blueprint schedule generator and practice tests), and optional 1-on-1 mentoring for incoming first-year students at the Schulich School of Engineering, University of Calgary. We are not affiliated with the University of Calgary, the Schulich School of Engineering, or any official university program — we are independent students offering supplementary academic support.</p>
+    <p>EngInQuire provides pre-semester review sessions, free study resources (including our online First-Year Blueprint schedule generator and practice tests) for incoming first-year students at the Schulich School of Engineering, University of Calgary. We are not affiliated with the University of Calgary, the Schulich School of Engineering, or any official university program — we are independent students offering supplementary academic support.</p>
 
     <h3>No guarantee of results</h3>
     <p>Our sessions and resources are designed to help you prepare for first-year engineering coursework. They are educational support, not a guarantee of any particular grade, outcome, or academic result. Your results depend on many factors outside our control, including your own effort, attendance, and coursework.</p>
@@ -1420,26 +1406,10 @@ footer{ background:var(--espresso); border-top:1px solid rgba(247,147,30,0.15); 
       </div>
       <div class="field">
         <label>Which session?</label>
-        <select id="bk-session" onchange="toggleMentorFields()">
-          <option>1-on-1 Mentorship — $25/hr</option>
+        <select id="bk-session">
+          <option id="bk-midterm-opt">Free Midterm Prep (ENGG 204 &amp; 225) — Sat, Oct 17 (4–8 PM)</option>
+          <option>Not sure yet — just keep me posted</option>
         </select>
-      </div>
-
-      <div id="bk-mentor-fields" style="display:none;">
-        <div class="field-row">
-          <div class="field">
-            <label>How many hours?</label>
-            <input type="number" id="bk-hours" min="1" step="0.5" placeholder="e.g. 2" />
-          </div>
-          <div class="field">
-            <label>When do you need it?</label>
-            <input type="date" id="bk-date" />
-          </div>
-        </div>
-        <div class="field">
-          <label>What do you need help with?</label>
-          <textarea id="bk-desc" rows="3" placeholder="Briefly describe the course, topic, or what you'd like to work on."></textarea>
-        </div>
       </div>
 
       <label class="consent-row">
@@ -1483,23 +1453,14 @@ function openBooking(presetSession){
   if(consent) consent.checked = false;
   const btn = document.getElementById('bk-submit');
   btn.disabled = true; btn.innerHTML = 'Send reservation <span class="arr">&rarr;</span>';
-  ['bk-hours','bk-date','bk-desc'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
   if(presetSession){
     const sel = document.getElementById('bk-session');
     for(const opt of sel.options){ if(opt.value === presetSession){ opt.selected = true; break; } }
   }
-  toggleMentorFields();
   modal.classList.add('open');
   lockBodyScroll();
 }
 
-function isMentorship(){
-  return /Mentorship/i.test(document.getElementById('bk-session').value);
-}
-function toggleMentorFields(){
-  const box = document.getElementById('bk-mentor-fields');
-  if(box) box.style.display = isMentorship() ? 'block' : 'none';
-}
 function closeBooking(){ document.getElementById('bookingModal').classList.remove('open'); unlockBodyScroll(); }
 
 let _scrollY = 0;
@@ -1543,7 +1504,7 @@ function markMidtermFull(){
     opt.disabled = true;
     opt.hidden = true;
     const sel = document.getElementById('bk-session');
-    if(sel.value === MIDTERM_LABEL || opt.selected){ sel.value = '1-on-1 Mentorship — $25/hr'; toggleMentorFields(); }
+    if(sel.value === MIDTERM_LABEL || opt.selected){ sel.selectedIndex = 1; }
   }
 }
 
@@ -1600,20 +1561,10 @@ async function submitBooking(){
   const status  = document.getElementById('bk-status');
   const btn     = document.getElementById('bk-submit');
 
-  const mentor  = isMentorship();
-  const hours   = document.getElementById('bk-hours').value.trim();
-  const date    = document.getElementById('bk-date').value.trim();
-  const desc    = document.getElementById('bk-desc').value.trim();
 
   if(!first || !last || !email || !phone){
     status.className = 'bk-status err';
     status.textContent = 'Please add your name, email, and phone so we can confirm your spot.';
-    return;
-  }
-
-  if(mentor && (!hours || !date || !desc)){
-    status.className = 'bk-status err';
-    status.textContent = 'For mentorship, please add how many hours, a date, and a brief description of what you need.';
     return;
   }
 
@@ -1640,7 +1591,7 @@ async function submitBooking(){
     btn.disabled = false;
     btn.innerHTML = 'Send reservation <span class="arr">&rarr;</span>';
     status.className = 'bk-status err';
-    status.textContent = 'SEATS ARE FULL — the midterm prep session has reached capacity. You can still book 1-on-1 mentorship.';
+    status.textContent = 'SEATS ARE FULL — the midterm prep session has reached capacity.';
     return;
   }
   if(session === MIDTERM_LABEL){
@@ -1649,7 +1600,7 @@ async function submitBooking(){
       btn.disabled = false;
       btn.innerHTML = 'Send reservation <span class="arr">&rarr;</span>';
       status.className = 'bk-status err';
-      status.textContent = 'SEATS ARE FULL \u2014 the midterm prep session has reached capacity. You can still book 1-on-1 mentorship.';
+      status.textContent = 'SEATS ARE FULL \u2014 the midterm prep session has reached capacity.';
       return;
     }
   }
@@ -1668,11 +1619,7 @@ async function submitBooking(){
         'Email': email,
         'Phone': phone,
         'Session requested': session
-      }, mentor ? {
-        'Hours requested': hours,
-        'Date needed': date,
-        'What they need help with': desc
-      } : {}))
+      }))
     });
     const data = await res.json();
     console.log('[EngInQuire] Web3Forms response:', data);
@@ -1681,7 +1628,7 @@ async function submitBooking(){
       document.getElementById('bk-form').style.display = 'none';
       document.getElementById('bk-done').style.display = 'block';
       if(window.EngFX && window.EngFX.confettiFall) window.EngFX.confettiFall();
-      sendUserConfirmation({ first_name: first, last_name: last, user_email: email, session: session, hours: mentor ? hours : '', date_needed: mentor ? date : '', help_with: mentor ? desc : '' });
+      sendUserConfirmation({ first_name: first, last_name: last, user_email: email, session: session });
     } else {
       throw new Error(data.message || 'Submission failed');
     }
